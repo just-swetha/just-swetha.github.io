@@ -92,11 +92,10 @@ nav > ul > li > a {
     color: rgba(242,239,240,1);
 } 
 nav > ul > li:hover {
-    background-color: rgba(252,176,69,1);
+    background-color: rgba(235, 92, 40, 1);
 }
 nav> ul > li > a:hover {
-    background-color: rgba(252,176,69,1);
-    color: rgba(0, 0, 0, 1);
+    background-color: rgba(235, 92, 40, 1);
 }
 nav > ul > li > a:active {
     color: rgba(252,176,69,1);
