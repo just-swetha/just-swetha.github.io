@@ -172,6 +172,10 @@ caption {
     grid-template-rows: minmax(50px, auto);
     
 }
+
+#geo h2 {
+    color: rgba(0, 0, 0, 1);
+}
 /* People and Society */
 #ppl {
     display: grid;
