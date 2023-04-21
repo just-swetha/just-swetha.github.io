@@ -3,7 +3,6 @@
     margin: 0;
     padding: 0;
     border: 0;
-    text-decoration: none;
     scroll-behavior: smooth;
     box-sizing: border-box;
     max-width: 100vw;
@@ -12,6 +11,7 @@
 /* links */
 a{
     color: rgba(252,176,69,1);
+    text-decoration: none;
 }
 a:active {
     color: rgba(253,29,29,1);
@@ -28,7 +28,8 @@ a:hover {
 /* Abbreviations */
 
 abbr {
-    color: rgba(252,176,69,1);
+    text-decoration: underline;
+    text-decoration-color: rgba(235, 92, 40, 1);
 }
 /* Header */
 
