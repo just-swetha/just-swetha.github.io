@@ -415,7 +415,6 @@ footer
   background-position: center;
   height: 100vh;
   background-attachment: fixed;
-  padding: 5%
 } 
 #landing section {
   grid-column: 2/5;
@@ -435,4 +434,6 @@ align-items: center;
   /* Menu Trigger */
 header img {
   width: 5vh;
+  padding: 20%;
 }
+
