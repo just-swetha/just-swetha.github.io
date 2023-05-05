@@ -1,26 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="landing">
     <head>
         <meta charset="utf-8" />
+        <link rel="icon" href="images/landscape-svgrepo-com.png" type="image/x-icon" />
         <title>Swetha S.</title>
         <link href="css/style.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="js-offcanvas.pkgd.min.js"></script>
+        <script>
+        $( function(){
+            $(document).trigger("enhance");
+        });
+        </script>
     </head>
 
     <body>
-        <header>
-            <h1>Swetha S.</h1>
+        <header id="landing">
+            <a  class="js-offcanvas-trigger" data-offcanvas-trigger="off-canvas-id" href="#off-canvas"> <img src="images/menu.svg" alt="menu"></a>
+            <h1 class="english">Swetha Siva</h1> 
+            <h1 lang="ta" class="tamil">சுவேதா சிவா</h1> 
         </header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="works.html">Works</a></li>
-                <li><a href="books.html">Books</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
+        <div class="c-offcanvas-content-wrap">
+            <aside class="js-offcanvas" data-offcanvas-options='{"modifiers": "left,overlay"}' id="off-canvas-id"> 
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="works.html">Works</a></li>
+                    <li><a href="books.html">Books</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </aside>
         <main>
         </main>
+        </div>
         <footer>
             Swetha Siva 2023
         </footer>

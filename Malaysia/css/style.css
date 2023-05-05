@@ -13,16 +13,19 @@ a{
     color: rgba(252,176,69,1);
     text-decoration: none;
 }
-a:active {
-    color: rgba(253,29,29,1);
+a:link {
+    color: rgba(252,176,69,1);
+    text-decoration: none;
 }
-
 a:visited {
     color:rgba(235, 92, 40, 1);
 }
 a:hover {
     background-color: rgba(235, 92, 40, 1);
     color: rgba(242,239,240,1);
+}
+a:active {
+    color: rgba(253,29,29,1);
 }
 
 /* Abbreviations */
@@ -97,12 +100,14 @@ nav > ul > li:hover {
 nav> ul > li > a:hover {
     background-color: rgba(235, 92, 40, 1);
 }
-nav > ul > li > a:active {
-    color: rgba(252,176,69,1);
-}
 nav > ul > li >a:visited {
     color: #F2EFF0;
 }
+nav > ul > li > a:active {
+    color: rgba(252,176,69,1);
+}
+
+
 /* Section */
 section {
     padding-top: 60px;
