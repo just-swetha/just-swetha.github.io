@@ -12,13 +12,41 @@
             $(document).trigger("enhance");
         });
         </script>
+        <script src="js-landing-page-animation.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     </head>
 
     <body>
         <header id="landing">
             <a  class="js-offcanvas-trigger" data-offcanvas-trigger="off-canvas-id" href="#off-canvas"> <img src="images/menu.svg" alt="menu"></a>
-            <h1 class="english">Swetha Siva</h1> 
-            <h1 lang="ta" class="tamil">சுவேதா சிவா</h1> 
+           <!-- <h1 class="">Swetha Siva</h1> 
+            <h1 class="" lang="ta">சுவேதா சிவா</h1> -->
+            <div class="wrap">
+                <div class="line">
+                  <div class="left">
+                    <div class="content">
+                      <span class="spanFast">Swetha</span>
+                    </div>
+                  </div><!--
+                  --><div class="right">
+                    <div class="content">
+                      <span class="spanFast">சுவேதா</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="line">
+                  <div class="left">
+                    <div class="content">
+                      <span class="spanFast">Siva</span>
+                    </div>
+                  </div><!--
+                  --><div class="right">
+                    <div class="content">
+                      <span class="spanFast">சிவா</span>
+                    </div>
+                  </div>
+                  </div>
+            </div> 
         </header>
         <div class="c-offcanvas-content-wrap">
             <aside class="js-offcanvas" data-offcanvas-options='{"modifiers": "left,overlay"}' id="off-canvas-id"> 
