@@ -23,3 +23,4 @@ function handleWindowResize() {
   width = window.innerWidth;
 }
 });
+

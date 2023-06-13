@@ -4,62 +4,168 @@
         <meta charset="utf-8" />
         <title>Swetha S.</title>
         <link href="css/style.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="js/js-offcanvas.pkgd.min.js"></script>
         <script src="js/js-text-effect.js"></script>
-        <script>
-        $( function(){
-            $(document).trigger("enhance");
-        });
-        </script>
-    </head>
 
+    </head>
     <body>
         <header id="landing">
-          <a  class="js-offcanvas-trigger" data-offcanvas-trigger="off-canvas-id" href="#off-canvas"><img src="images/menu.png" alt="menu"></a>
-          <section id="landing-h1">
-            <div class="wrap">
-              <div class="line">
-                <div class="left">
-                  <div class="content">
-                    <span class="spanFast">Swetha</span>
-                  </div>
-                </div><!--
-                --><div class="right">
-                  <div class="content">
-                    <span class="spanFast">சுவேதா</span>
-                  </div>
+            <p id="greeting">Hi, I'm</p>
+            <section id="landing-h1">
+                <div class="wrap">
+                <div class="line">
+                    <div class="left">
+                    <div class="content">
+                        <span class="spanFast">Swetha</span>
+                    </div>
+                    </div><!--
+                    --><div class="right">
+                    <div class="content">
+                        <span class="spanFast">சுவேதா</span>
+                    </div>
+                    </div>
                 </div>
-              </div>
-              <div class="line">
-                <div class="left">
-                  <div class="content">
-                    <span class="spanFast">Siva</span>
-                  </div>
-                </div><!--
-                --><div class="right">
-                  <div class="content">
-                    <span class="spanFast">சிவா</span>
-                  </div>
+                <div class="line">
+                    <div class="left">
+                    <div class="content">
+                        <span class="spanFast">Siva</span>
+                    </div>
+                    </div><!--
+                    --><div class="right">
+                    <div class="content">
+                        <span class="spanFast">சிவா</span>
+                    </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </section>
+                </div>
+            </section>
+            <p id="profile">I'm a writer and editor.</p>
         </header>
-        <div class="c-offcanvas-content-wrap">
-          <nav class="js-offcanvas" data-offcanvas-options='{"modifiers": "left,overlay"}' id="off-canvas-id"> 
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="works.html">Works</a></li>
-                <li><a href="resume.html">Resume</a></li>
+        <nav id="mainnav" class="">
+            <ul class="dotnav dotnav-vertical dotnav-right nav">
+                <li class="awesome-tooltip" title="Home"><a href="#landing">Home</a></li>
+                <li class="awesome-tooltip" title="About"><a href="#about">About</a></li>
+                <li class="awesome-tooltip" title="Book"><a href="#books">Book</a></li>
+                <li class="awesome-tooltip" title="Works"><a href="#short-fiction">Works</a></li>
+                <li class="awesome-tooltip" title="Experience"><a href="#resume">Experience</a></li>   
+                <li class="awesome-tooltip" title="Education"><a href="#education">Education</a></li>    
             </ul>
-          </nav>
-        </div>
+        </nav>     
         <main>
+            <section class="content">
+                <section id="about">
+                    <h2>About Me</h2>
+                    <section id="bio">
+
+                        <p>Swetha S. was born and raised in Coimbatore, India.</p> 
+
+                        <p>She derives her love for nature from her summers at Kanyakumari, a coastal town with buzzing beaches and nonchalant lotus ponds, and the three years she spent in the hilly town of Semenyih where she earned her B.A. in English with Creative Writing from the University of Nottingham Malaysia.</p> 
+
+                        <p>She is currently pursuing an MFA in Creative Writing at the University of Miami, Florida.</p> 
+
+                        <p>When she is not reading or writing, she can be found playing Stardew Valley, hoarding more packets of tea, and perfecting her cold brew.</p>
+                    
+                    </section>
+
+                    <div data-aos="fade-left"><img src="images/swetha.jpeg" alt="A picture of Swetha."></div>
+                </section> 
+                <section id="works">
+                    <section id="books">
+                        <h2>Book</h2>
+                        <h3><a href="https://merakipresspub.wixsite.com/merakipress/online-store/Goldspun-by-Swetha-S-p464877011">Goldspun</a></h3>
+                        <div data-aos="fade-right"><img src="images/Goldspun Cover.png"></div>
+                        <section id="book-desc">
+                            <p>Every story started with a prayer to the gods—except mine. In fact, a peasant’s story wasn’t written at all.</p>
+
+                            <p>But I was going to change that.</p>
+                        
+                            <p>When the Golden Kurinji flowers filled the fields at the foot of the mountains, a peasant girl’s father brought her a petal and told her how the flower had the power to make one a scholar. But that was years ago, and the girl with no name is tired of hiding outside her town’s school and peeking into its compounds to learn what she needed to be worthy of the flower. Being born a peasant, she is not allowed to read or write, let alone touch the flower. But everything changes when she meets Aavirai, a scholar entrusted with gifting the Golden Kurinji to the crown princess.</p>
+                        
+                            <p>Aavirai is angry at the royal family for destroying forests and livelihoods in their selfish conquest. She is angry at her mother, the commander, for folding to the queen’s every whim. In defiance, she gives the last Golden Kurinji meant for the royal princess to a peasant girl she’d met days ago. Now the royal family is out for blood and have sent her own mother in pursuit. The duo must embark on an adventure across the kingdom to complete an impossible task that will secure the scholars’ support, or lose their lives and everything they’ve fought for.</p>
+                        </section>
+                    </section>
+                    <section id="short-fiction">
+                        <h2>Fiction</h2>
+
+                        <p>Chock full of speculative elements and mommy issues.</p>
+
+                        <ul>
+                            <li><a href="https://speculativelyqueer.com/our-books/it-gets-even-better-stories-of-queer-possibility/">unchartered territories</a> <em>It Gets Even Better: Stories of Queer Possibility</em> </li>
+                            <li><a href="https://www.nottingham.edu.my/English/documents/Particle-Autumn-Issue-15.pdf">The Moon</a> <em>Particle</em> Magazine</li>
+                            <li><a href="http://outofprintmagazine.co.in/archive/july_2019_issue/swethas-my-old-hometown.html">My Old Hometown</a> <em>Out of Print</em> magazine</li>
+                        </ul>
+                    </section>
+                    <section id="poetry">
+                        <h2>Poetry</h2>
+                        <p>Queer, feminist, and meant to be screamed into a void.</p>
+                        <ul>
+                            <li><a href="https://www.dustpoetry.co.uk/post/the-parambarai-by-swetha-s">Parambarai</a> <em> Dust Poetry</em> magazine</li>
+                            <li><a href="https://varietypack.net/issue-ii/">Voices</a> <em>Variety Pack</em> literary magazine</li>
+                        </ul>
+                    </section>
+                </section>
+                <section id="resume">
+                    <section id="experience">
+                        <h2>Résumé</h2>
+                        <h2>Work Experience</h2>
+                        <h3>Graduate Teaching Assistant – University of Miami (2022 – Present)</h3>
+                        <ul>
+                            <li>Tutored students at the Writing Center.</li>
+                            <li>Ran workshops and lead discussions in a 209 Creative Writing class.</li>
+                            <li>Read writing—essays, fiction, poetry, and non-fiction—and provided feedback.</li>
+                            <li>Planned and organized lessons keeping time constraints in mind.</li>
+                            <li>Researched and developed readings, handouts, and prompts.</li>
+                        </ul>
+                        <h3>Freelance Editor – Tessera Editorial (2020 – 2022)</h3>
+                        <ul>
+                            <li>Worked as a copyeditor, developmental editor, sensitivity reader, and proofreader.</li>
+                            <li>Managed, communicated, and billed clients.</li>
+                            <li>Worked with Macmillan, small press publishers, and independent authors.</li>
+                            <li>Communicated with authors to explain issues and answer questions.</li>
+                        </ul>
+                        <h3>Designer – TEDxUoNMalaysia – University of Nottingham (Oct 2019 – Feb 2020)</h3>
+                        <ul>
+                            <li>Worked with marketing and social media teams, and developed templates based on theme.</li>
+                            <li>Designed merchandise, promotional posters, and tickets using Adobe Photoshop and Illustrator.</li>
+                            <li>Assisted in backstage operations.</li>
+                        </ul>
+                    </section>
+                    <section id="education">
+                        <h2>Education</h2>
+
+                        <h3>Master of Fine Arts in Creative Writing, Fiction</h3>
+                        <p>University of Miami (2022 – Present)</p>
+                        <h3>Bachelor of Arts in English with Creative Writing</h3>
+                        <p>University of Nottingham (2018 – 2021)</p>
+                    </section>
+                    <section id="skills">
+                        <h2>Skills</h2>
+                        <ul>
+                            <li>Copyediting, proofreading, developmental editing</li>
+                            <li>Chicago Manual of Style</li>
+                            <li>HTML, CSS</li>
+                            <li>Photoshop, Illustrator</li>
+                            <li>Microsoft Office</li>
+                        </ul>
+                    </section>
+                    <section id="awards">
+                        <h2>Awards</h2>
+                        <ul>
+                            <li>Dean's Summer MFA Fellowship 2023 - University of Miami</li>
+                            <li>Vice Chancellor's Medal 2021 - University of Nottingham</li>
+                            <li>Dean's Excellence Scholarship 2020 - University of Nottingham</li>
+                        </ul>
+                    </section>
+                </section>
+            </section>
         </main>
         <footer>
           <p>(c) Swetha Siva 2023</p>
         </footer>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
       </body>
 </html>
