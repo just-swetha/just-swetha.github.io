@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Swetha Siva — Communications Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@700&family=Poppins:wght@400;700;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #BF047E;
+      --teal: #038C8C;
+      --navy: #091740;
+      --white: #ffffff;
+      --offwhite: #f7f4f0;
+    }
+    * { margin: 0; padding: 0; border: 0; box-sizing: border-box; list-style: none; }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--offwhite); color: var(--navy); font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: var(--offwhite);
+      border-bottom: 3px dashed var(--navy);
+    }
+    .nav-home { font-family: 'Hind Madurai', sans-serif; font-size: 1.1rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--navy); transition: color 0.2s; }
+    .nav-home:hover { color: var(--pink); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy); padding-bottom: 2px; border-bottom: 2px solid transparent; transition: border-color 0.2s, color 0.2s; }
+    .nav-links a:hover { color: var(--pink); border-color: var(--pink); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: grid; grid-template-columns: repeat(6, 1fr);
+      background: linear-gradient(345deg, hsl(0deg 36% 61%) 0%, hsl(347deg 48% 56%) 12%, hsl(334deg 57% 49%) 22%, hsl(309deg 56% 44%) 32%, hsl(206deg 100% 43%) 41%, hsl(188deg 100% 35%) 49%, hsl(174deg 94% 34%) 57%, hsl(174deg 94% 34%) 66%, hsl(174deg 94% 34%) 74%, hsl(187deg 100% 28%) 83%, hsl(202deg 100% 23%) 91%, hsl(225deg 75% 14%) 100%);
+      overflow: hidden;
+    }
+    .hero-text { grid-column: 1/5; align-self: center; padding: 8rem 3rem 4rem 5rem; color: var(--white); }
+    .hero-eyebrow { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.7; margin-bottom: 1.5rem; }
+    .hero-name { font-family: 'Hind Madurai', sans-serif; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.9; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .hero-name em { font-style: normal; color: var(--navy); -webkit-text-stroke: 2px var(--white); }
+    .hero-tagline { font-family: 'DM Serif Display', serif; font-size: clamp(1.1rem, 2vw, 1.5rem); font-style: italic; max-width: 480px; line-height: 1.5; opacity: 0.9; }
+    .hero-deco { grid-column: 5/7; align-self: stretch; display: flex; align-items: center; justify-content: center; padding: 8rem 2rem 4rem; }
+    .hero-deco-box { border: 3px dashed rgba(255,255,255,0.4); padding: 2.5rem 2rem; text-align: center; color: var(--white); max-width: 240px; }
+    .hero-deco-box p { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.7; margin-bottom: 1rem; }
+    .hero-deco-box .stat { font-family: 'Hind Madurai', sans-serif; font-size: 3.5rem; line-height: 1; display: block; }
+    .hero-deco-box .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; display: block; margin-top: 0.25rem; }
+    .hero-scroll { grid-column: 1/7; text-align: center; padding-bottom: 2rem; color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; align-self: end; }
+
+    /* INTRO */
+    .intro { background: var(--navy); color: var(--white); padding: 5rem; border-bottom: 4px dashed var(--teal); }
+    .intro-inner { max-width: 800px; }
+    .intro p { font-family: 'DM Serif Display', serif; font-size: clamp(1.3rem, 2.5vw, 1.8rem); line-height: 1.55; font-style: italic; }
+    .intro-meta { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+    .intro-tag { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--teal); border: 2px solid var(--teal); padding: 0.4rem 1rem; }
+
+    /* SECTION LABEL */
+    .section-label { display: flex; align-items: center; gap: 1.5rem; padding: 3rem 5% 1.5rem; }
+    .section-label-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.25em; color: var(--pink); white-space: nowrap; }
+    .section-label-line { flex: 1; height: 2px; background: var(--pink); opacity: 0.3; }
+
+    /* CARDS */
+    .projects { padding: 0 5% 6rem; display: flex; flex-direction: column; }
+
+    .project-card {
+      display: grid; grid-template-columns: repeat(6, 1fr);
+      border: 4px dashed var(--navy); background: var(--white);
+      position: relative; transition: transform 0.2s, box-shadow 0.2s;
+      color: inherit;
+    }
+    .project-card:not(:last-child) { border-bottom: none; }
+    .project-card:hover { transform: translate(-4px, -4px); box-shadow: 8px 8px 0 var(--navy); z-index: 2; }
+
+    .card-number {
+      position: absolute; top: 1rem; left: 1.5rem;
+      font-family: 'Hind Madurai', sans-serif; font-size: 5rem; line-height: 1;
+      color: var(--pink); opacity: 0.08; pointer-events: none; user-select: none; z-index: 0;
+    }
+
+    .card-visual { grid-column: 1/3; min-height: 360px; overflow: hidden; position: relative; background: var(--navy); }
+    .card-visual img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform 0.4s ease; }
+    .project-card:hover .card-visual img { transform: scale(1.03); }
+
+    .card-visual-grid {
+      grid-column: 1/3; min-height: 360px;
+      display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+      overflow: hidden; gap: 3px; background: var(--navy);
+    }
+    .card-visual-grid img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform 0.4s ease; }
+    .card-visual-grid img:first-child { grid-row: 1/3; }
+    .project-card:hover .card-visual-grid img { transform: scale(1.03); }
+
+    .card-visual-duo { grid-column: 1/3; min-height: 360px; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; gap: 3px; background: var(--navy); }
+    .card-visual-duo img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform 0.4s ease; }
+    .project-card:hover .card-visual-duo img { transform: scale(1.03); }
+
+    .card-body { grid-column: 3/7; padding: 3rem 3rem 3rem 2.5rem; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 1; }
+
+    .card-type { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: var(--pink); margin-bottom: 0.75rem; }
+    .card-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.4rem, 2.2vw, 2rem); line-height: 1.2; color: var(--navy); margin-bottom: 1rem; }
+    .card-desc { font-size: 0.92rem; line-height: 1.7; color: #444; max-width: 520px; margin-bottom: 1.5rem; }
+    .card-detail { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); }
+    .card-link { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.25rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--pink); border-bottom: 2px solid var(--pink); padding-bottom: 2px; width: fit-content; }
+
+    /* SKILLS */
+    .skills-strip { background: var(--pink); border-top: 4px dashed var(--navy); border-bottom: 4px dashed var(--navy); padding: 3rem 5%; display: flex; align-items: center; gap: 3rem; flex-wrap: wrap; }
+    .skills-strip-label { font-family: 'Hind Madurai', sans-serif; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--white); opacity: 0.7; white-space: nowrap; }
+    .skills-list { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .skill-tag { background: var(--white); color: var(--pink); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.45rem 1rem; }
+
+    /* FOOTER */
+    footer { background: var(--navy); color: var(--white); padding: 5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; border-top: 4px dashed var(--teal); }
+    .footer-left h2 { font-family: 'Hind Madurai', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); text-transform: uppercase; line-height: 0.95; margin-bottom: 1.5rem; }
+    .footer-left h2 em { font-style: normal; color: var(--teal); }
+    .footer-left p { font-size: 0.95rem; line-height: 1.6; opacity: 0.7; max-width: 380px; }
+    .footer-right { display: flex; flex-direction: column; justify-content: center; gap: 1.5rem; }
+    .footer-link { display: flex; align-items: center; gap: 1rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--white); opacity: 0.7; transition: opacity 0.2s; }
+    .footer-link:hover { opacity: 1; }
+    .footer-link-arrow { width: 32px; height: 2px; background: var(--teal); position: relative; flex-shrink: 0; }
+    .footer-link-arrow::after { content: ''; position: absolute; right: 0; top: -4px; width: 10px; height: 10px; border-right: 2px solid var(--teal); border-top: 2px solid var(--teal); transform: rotate(45deg); }
+    .footer-copy { grid-column: 1/3; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.3; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+
+    .thumb { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; cursor: zoom-in; transition: transform 0.3s ease, opacity 0.2s; }
+    .thumb:hover { transform: scale(1.04); opacity: 0.9; }
+    .card-hint { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--teal); margin-top: 1.25rem; opacity: 0.8; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-eyebrow { animation: fadeUp 0.6s ease both; }
+    .hero-name    { animation: fadeUp 0.6s 0.15s ease both; }
+    .hero-tagline { animation: fadeUp 0.6s 0.3s ease both; }
+    .hero-deco-box { animation: fadeUp 0.6s 0.45s ease both; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero-text { grid-column: 1/7; padding: 7rem 2rem 2rem; }
+      .hero-deco { display: none; }
+      .intro { padding: 3rem 2rem; }
+      .section-label { padding: 2.5rem 2rem 1rem; }
+      .projects { padding: 0 2% 4rem; }
+      .card-visual, .card-visual-grid, .card-visual-duo { grid-column: 1/7 !important; grid-row: 1 !important; min-height: 220px; }
+      .card-body { grid-column: 1/7 !important; grid-row: 2 !important; padding: 2rem !important; }
+      footer { grid-template-columns: 1fr; padding: 3rem 2rem; gap: 2rem; }
+      .footer-copy { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="https://swethasiva.com" class="nav-home">Swetha Siva</a>
+    <div class="nav-links">
+      <a href="#projects">Work</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Communications Portfolio</p>
+      <h1 class="hero-name">Swetha<br><em>Siva</em></h1>
+      <p class="hero-tagline">Translating complex information into accessible, audience-specific content — across newsletters, features, social media, and beyond.</p>
+    </div>
+    <div class="hero-deco">
+      <div class="hero-deco-box">
+        <p>Content types</p>
+        <span class="stat">5</span>
+        <span class="stat-label">across two institutions</span>
+      </div>
+    </div>
+    <p class="hero-scroll">↓ Scroll to explore</p>
+  </header>
+
+  <section class="intro">
+    <div class="intro-inner">
+      <p>Having worked with Communication and Outreach at Sponsored Projects Administration, Ball State, and University of Miami HR Internal Communications, I understand how to translate complex information into accessible media and share it through the right channels.</p>
+      <div class="intro-meta">
+        <span class="intro-tag">Ball State University</span>
+        <span class="intro-tag">Sponsored Projects Administration</span>
+        <span class="intro-tag">University of Miami</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-label" id="projects">
+    <span class="section-label-text">Selected Work</span>
+    <div class="section-label-line"></div>
+  </div>
+
+  <div class="projects">
+
+    <!-- 01: Blog Post -->
+    <a class="project-card" href="https://blogs.bsu.edu/research/2026/02/17/bringing-greek-myths-to-nebraska-how-celia-used-the-aspire-grants-to-bring-place-to-life-in-her-novel/" target="_blank" rel="noopener">
+      <span class="card-number">01</span>
+      <div class="card-visual">
+        <img src="images/comms/blog-post.png" alt="Blog post screenshot: Bringing Greek Myths to Nebraska" onerror="this.parentElement.style.background='#BF047E';this.style.display='none'">
+      </div>
+      <div class="card-body">
+        <p class="card-type">Blog Post · Ball State University Research</p>
+        <h2 class="card-title">Bringing Greek Myths to Nebraska — How Celia Used the Aspire Grant to Bring Place to Life in Her Novel</h2>
+        <p class="card-desc">A feature story written for the Ball State Research blog, translating a graduate student's creative research process into an accessible narrative for a general university audience. The post centers a novel uplifting LGBTQ+ and BIPOC characters and highlights how institutional funding enables underrepresented voices.</p>
+        <p class="card-detail">Audience: General university community · Format: Long-form feature</p>
+        <span class="card-link">Read the post ↗</span>
+      </div>
+    </a>
+
+    <!-- 02: Newsletter -->
+    <article class="project-card" style="flex-direction: column; display: flex;">
+      <div style="display: grid; grid-template-columns: repeat(6, 1fr); width: 100%;">
+        <span class="card-number">02</span>
+        <div class="card-visual" style="grid-column:5/7; grid-row:1; cursor: pointer;" onclick="toggleNewsletter()">
+          <div style="width:100%; height:100%; background: var(--navy); display:flex; flex-direction:column; align-items:center; justify-content:center; gap: 1rem; padding: 2rem;">
+            <div style="border: 3px dashed rgba(255,255,255,0.3); padding: 1.5rem 2rem; text-align:center;">
+              <p style="font-family:'Hind Madurai',sans-serif; font-size:1.8rem; color:white; line-height:1; margin-bottom:0.5rem;">Research<br>Updates</p>
+              <p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.15em; color:rgba(255,255,255,0.5);">Vol. 1, No. 1 · March 2026</p>
+            </div>
+            <button id="newsletter-toggle-btn" style="background:var(--teal); color:white; border:none; padding:0.6rem 1.4rem; font-family:'Poppins',sans-serif; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; cursor:pointer; transition: background 0.2s;">
+              View full newsletter ↓
+            </button>
+          </div>
+        </div>
+        <div class="card-body" style="grid-column:1/5; grid-row:1; padding:3rem 2.5rem 3rem 3rem;">
+          <p class="card-type">Newsletter · Sponsored Projects Administration</p>
+          <h2 class="card-title">Research Updates — Vol. 1, No. 1</h2>
+          <p class="card-desc">A research newsletter designed for faculty, staff, and administrators at Ball State, communicating grant opportunities, funding deadlines, and research highlights to a diverse academic audience. News sections pull from RSS feeds — a sustainable design decision built to serve future staff long after handoff.</p>
+          <p class="card-detail">Audience: Faculty & administrators · Channel: Email via MailerLite · Tool: RSS automation</p>
+        </div>
+      </div>
+      <!-- Expandable embed -->
+      <div id="newsletter-embed" style="display:none; width:100%; border-top: 3px dashed var(--navy); background: var(--offwhite); padding: 2rem; position:relative;">
+        <p style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:var(--pink); margin-bottom:1rem;">Live Newsletter Preview</p>
+        <iframe
+          src="https://preview.mailerlite.io/preview/2071675/emails/177873811520095687"
+          style="width:100%; height:700px; border: 2px dashed var(--navy); background:white;"
+          title="Research Updates Newsletter Vol. 1 No. 1"
+          loading="lazy">
+        </iframe>
+        <button onclick="toggleNewsletter()" style="margin-top:1rem; background:transparent; color:var(--navy); border: 2px dashed var(--navy); padding:0.5rem 1.2rem; font-family:'Poppins',sans-serif; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; cursor:pointer;">
+          Collapse ↑
+        </button>
+      </div>
+    </article>
+
+    <script>
+      function toggleNewsletter() {
+        const embed = document.getElementById('newsletter-embed');
+        const btn = document.getElementById('newsletter-toggle-btn');
+        const isHidden = embed.style.display === 'none';
+        embed.style.display = isHidden ? 'block' : 'none';
+        btn.textContent = isHidden ? 'Collapse ↑' : 'View full newsletter ↓';
+        if (isHidden) {
+          setTimeout(() => embed.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+        }
+      }
+    </script>
+
+    <!-- 03: Social Media -->
+    <article class="project-card" style="display:flex; flex-direction:column;">
+      <div style="display:grid; grid-template-columns:repeat(6,1fr); width:100%;">
+        <span class="card-number">03</span>
+        <div class="card-body" style="grid-column:1/4; grid-row:1;">
+          <p class="card-type">Social Media · LinkedIn · Facebook · Instagram</p>
+          <h2 class="card-title">Multi-Platform Social Content for Sponsored Projects</h2>
+          <p class="card-desc">Social media content created for Ball State's Sponsored Projects Administration, promoting research awards, grant opportunities, and student achievement. Adapted across platforms — from student spotlight videos on Instagram to formal institutional announcements on LinkedIn — while maintaining a consistent voice.</p>
+          <p class="card-detail">Platforms: LinkedIn · Facebook · Instagram · Audience: Faculty, staff, broader university community</p>
+          <p class="card-hint">Click any image to expand →</p>
+        </div>
+        <div style="grid-column:4/7; grid-row:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:3px; background:var(--navy); min-height:320px; overflow:hidden;">
+          <img src="images/comms/social-instagram.png" alt="Instagram — Emma Gsell student feature" class="thumb" onclick="openLightbox(this.src, this.alt)">
+          <img src="images/comms/social-linkedin.png" alt="LinkedIn — Benefacta Gala" class="thumb" onclick="openLightbox(this.src, this.alt)">
+          <img src="images/comms/social-facebook.png" alt="Facebook — Teacher-Scholar Program" class="thumb" onclick="openLightbox(this.src, this.alt)">
+        </div>
+      </div>
+    </article>
+
+    <!-- 04: Flyers -->
+    <article class="project-card" style="display:flex; flex-direction:column;">
+      <div style="display:grid; grid-template-columns:repeat(6,1fr); width:100%;">
+        <span class="card-number">04</span>
+        <div style="grid-column:1/3; grid-row:1; display:grid; grid-template-columns:1fr 1fr; gap:3px; background:var(--pink); min-height:320px; overflow:hidden;">
+          <img src="images/comms/flyer-faculty.png" alt="Faculty grant administration process flyer" class="thumb" onclick="openLightbox(this.src, this.alt)">
+          <img src="images/comms/flyer-student.png" alt="Aspire Student Grants promotional flyer" class="thumb" onclick="openLightbox(this.src, this.alt)">
+        </div>
+        <div class="card-body" style="grid-column:3/7; grid-row:1;">
+          <p class="card-type">Flyers · Sponsored Projects Administration</p>
+          <h2 class="card-title">Audience-Specific Informational Flyers</h2>
+          <p class="card-desc">Informational flyers designed for two distinct audiences: a detailed process overview for faculty navigating grant administration, and a clean promotional piece targeting students seeking research funding. Designing for both required clear audience segmentation — different vocabulary, visual hierarchy, and calls to action for each.</p>
+          <p class="card-detail">Audiences: Faculty (process overview) · Students (promotion) · Tools: Adobe Illustrator</p>
+          <p class="card-hint">← Click any image to expand</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 05: Other Assets -->
+    <article class="project-card" style="display:flex; flex-direction:column;">
+      <div style="display:grid; grid-template-columns:repeat(6,1fr); width:100%;">
+        <span class="card-number">05</span>
+        <div class="card-body" style="grid-column:1/4; grid-row:1;">
+          <p class="card-type">Additional Assets · Sponsored Projects Administration</p>
+          <h2 class="card-title">Website Carousels & Administrator Reference Magnets</h2>
+          <p class="card-desc">Additional communications materials including website carousel images spotlighting grant recipients, and a reference magnet for administrators — designed to make complex grant accounting information visually digestible and permanently accessible. The magnet was a practical artifact: something that lives on a desk and answers questions without requiring a search.</p>
+          <p class="card-detail">Formats: Digital (web carousel) · Print (magnet) · Audience: Administrators</p>
+          <p class="card-hint">Click any image to expand →</p>
+        </div>
+        <div style="grid-column:4/7; grid-row:1; display:grid; grid-template-columns:1fr 1fr; gap:3px; background:var(--teal); min-height:320px; overflow:hidden;">
+          <img src="images/comms/carousel-alpha.png" alt="Alpha Support website carousel image" class="thumb" onclick="openLightbox(this.src, this.alt)">
+          <img src="images/comms/magnet.png" alt="RIA Grant Expenses administrator reference magnet" class="thumb" onclick="openLightbox(this.src, this.alt)">
+        </div>
+      </div>
+    </article>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" onclick="closeLightbox()" style="display:none; position:fixed; inset:0; background:rgba(9,23,64,0.95); z-index:1000; align-items:center; justify-content:center; padding:2rem; cursor:zoom-out;">
+      <div style="position:relative; max-width:90vw; max-height:90vh;" onclick="event.stopPropagation()">
+        <img id="lightbox-img" src="" alt="" style="max-width:100%; max-height:82vh; object-fit:contain; border:4px dashed white; display:block;">
+        <p id="lightbox-caption" style="color:rgba(255,255,255,0.5); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; margin-top:1rem; text-align:center;"></p>
+        <button onclick="closeLightbox()" style="position:absolute; top:-1rem; right:-1rem; background:var(--pink); color:white; border:none; width:36px; height:36px; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:700;">✕</button>
+      </div>
+    </div>
+
+    <script>
+      function openLightbox(src, alt) {
+        const lb = document.getElementById('lightbox');
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox-img').alt = alt;
+        document.getElementById('lightbox-caption').textContent = alt;
+        lb.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLightbox() {
+        document.getElementById('lightbox').style.display = 'none';
+        document.body.style.overflow = '';
+      }
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    </script>
+
+  </div>
+
+  <section class="skills-strip" id="skills">
+    <span class="skills-strip-label">Skills</span>
+    <div class="skills-list">
+      <span class="skill-tag">Writing for public audiences</span>
+      <span class="skill-tag">Feature writing</span>
+      <span class="skill-tag">Newsletter design</span>
+      <span class="skill-tag">Social media</span>
+      <span class="skill-tag">Audience segmentation</span>
+      <span class="skill-tag">Adobe Illustrator</span>
+      <span class="skill-tag">Adobe Photoshop</span>
+      <span class="skill-tag">HTML & CSS</span>
+      <span class="skill-tag">Copyediting</span>
+      <span class="skill-tag">Chicago Manual of Style</span>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer-left">
+      <h2>Let's<br><em>work</em><br>together.</h2>
+      <p>I'm currently open to communications, outreach, and editorial opportunities. Get in touch — I'd love to hear about your work.</p>
+    </div>
+    <div class="footer-right">
+      <a href="https://www.linkedin.com/in/swetha-siva" class="footer-link" target="_blank"><span class="footer-link-arrow"></span>LinkedIn</a>
+      <a href="https://swethasiva.com" class="footer-link"><span class="footer-link-arrow"></span>Main site</a>
+    </div>
+    <p class="footer-copy">© Swetha Siva 2026 · swethasiva.com/for-co
