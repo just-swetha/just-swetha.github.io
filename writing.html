@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Swetha Siva — Writing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@700&family=Poppins:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #ffffff;
+      --deep: #f7f4f0;
+      --mid: #eeeae3;
+      --pink: #BF047E;
+      --teal: #038C8C;
+      --navy: #091740;
+      --gold: #C8923A;
+      --white: #091740;
+      --cream: #091740;
+      --muted: rgba(9,23,64,0.55);
+      --faint: rgba(9,23,64,0.15);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; border:0; box-sizing:border-box; list-style:none; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #f7f4f0;
+      color: #091740;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      display: flex; align-items:center; justify-content:space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(247,244,240,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px dashed rgba(9,23,64,0.15);
+    }
+    .nav-home {
+      font-family: 'Hind Madurai', sans-serif;
+      font-size: 1rem; letter-spacing: 0.05em;
+      text-transform: uppercase; color: rgba(9,23,64,0.5);
+      transition: color 0.2s;
+    }
+    .nav-home:hover { color: #091740; }
+    .nav-links { display:flex; gap:2rem; }
+    .nav-links a {
+      font-size: 0.78rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.1em; color:rgba(9,23,64,0.5);
+      border-bottom:1px solid transparent; padding-bottom:2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav-links a:hover { color:#091740; border-color:#091740; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction:column; justify-content:center;
+      padding: 10rem 8% 6rem;
+      position: relative; overflow:hidden;
+    }
+    .hero::before {
+      content:'';
+      position:absolute; inset:0; z-index:0;
+      background: radial-gradient(ellipse at 70% 40%, rgba(191,4,126,0.05) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(3,140,140,0.04) 0%, transparent 50%);
+    }
+    .hero-content { position:relative; z-index:1; max-width:800px; }
+    .hero-eyebrow {
+      font-size:0.72rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.25em; color:var(--pink); margin-bottom:2rem;
+      display:flex; align-items:center; gap:1rem;
+    }
+    .hero-eyebrow::after { content:''; width:40px; height:1px; background:var(--pink); display:block; }
+    .hero-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 1.05; margin-bottom:2rem;
+      color: var(--cream);
+    }
+    .hero-title em { font-style:italic; color:var(--pink); }
+    .hero-bio {
+      font-family: 'Crimson Pro', serif;
+      font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+      line-height: 1.75; color: rgba(9,23,64,0.6);
+      max-width: 640px; margin-bottom:3rem;
+    }
+    .hero-bio p + p { margin-top:1rem; }
+    .hero-scroll {
+      font-size:0.68rem; text-transform:uppercase; letter-spacing:0.2em;
+      color:rgba(9,23,64,0.25); position:relative; z-index:1;
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .page-section { padding: 6rem 8%; border-top:1px dashed rgba(9,23,64,0.12); }
+    .section-label {
+      font-size:0.68rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.25em; color:var(--pink); margin-bottom:3rem;
+      display:flex; align-items:center; gap:1rem;
+    }
+    .section-label::after { content:''; flex:1; height:1px; background:rgba(191,4,126,0.25); }
+
+    /* ── BOOKS ── */
+    .book-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .book-cover {
+      position: relative;
+    }
+    .book-cover img {
+      width: 100%; max-width:220px; display:block;
+      box-shadow: -8px -8px 0 var(--pink), 8px 8px 0 rgba(191,4,126,0.2);
+    }
+    .book-cover-label {
+      position:absolute; bottom:-1rem; right:-1rem;
+      background:var(--pink); color:white;
+      font-size:0.65rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.1em; padding:0.4rem 0.8rem;
+    }
+    .book-info {}
+    .book-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      color: var(--cream); margin-bottom:0.5rem; line-height:1.1;
+    }
+    .book-publisher {
+      font-size:0.75rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.12em; color:var(--teal); margin-bottom:1.75rem;
+    }
+    .book-desc {
+      font-family: 'Crimson Pro', serif;
+      font-size:1.05rem; line-height:1.75;
+      color:rgba(9,23,64,0.65);
+    }
+    .book-desc p + p { margin-top:1rem; }
+    .book-link {
+      display:inline-flex; align-items:center; gap:0.75rem;
+      margin-top:2rem;
+      font-size:0.75rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.12em; color:var(--pink);
+      border-bottom:1px dashed var(--pink); padding-bottom:3px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .book-link:hover { color:var(--cream); border-color:var(--cream); }
+
+    /* ── NOVEL IN PROGRESS ── */
+    .wip-block {
+      background: rgba(191,4,126,0.04);
+      border:2px dashed rgba(191,4,126,0.2);
+      padding:3rem;
+      margin-top:4rem;
+    }
+    .wip-tag {
+      display:inline-block;
+      font-size:0.65rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.15em; color:var(--pink);
+      border:1px dashed var(--pink); padding:0.3rem 0.8rem;
+      margin-bottom:1.25rem;
+    }
+    .wip-title {
+      font-family:'DM Serif Display', serif;
+      font-size:clamp(1.5rem, 2.5vw, 2.2rem);
+      color:var(--cream); margin-bottom:1.25rem; line-height:1.15;
+      font-style:italic;
+    }
+    .wip-desc {
+      font-family:'Crimson Pro', serif;
+      font-size:1.05rem; line-height:1.75;
+      color:rgba(9,23,64,0.6); max-width:680px;
+    }
+    .wip-desc p + p { margin-top:1rem; }
+
+    /* ── PUBLICATIONS ── */
+    .pub-list { display:flex; flex-direction:column; gap:0; }
+    .pub-item {
+      display:grid;
+      grid-template-columns: 1fr auto;
+      align-items:baseline;
+      gap:1rem 2rem;
+      padding:1.5rem 0;
+      border-bottom:1px dashed rgba(9,23,64,0.12);
+    }
+    .pub-item:first-child { border-top:1px dashed rgba(9,23,64,0.12); }
+    .pub-title {
+      font-family:'Crimson Pro', serif;
+      font-size:1.15rem; font-style:italic;
+      color:#091740;
+    }
+    .pub-title a {
+      color:#091740; border-bottom:1px dashed rgba(9,23,64,0.2);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .pub-title a:hover { color:var(--pink); border-color:var(--pink); background:transparent; }
+    .pub-venue {
+      font-size:0.8rem; color:rgba(9,23,64,0.5); margin-top:0.25rem;
+    }
+    .pub-year {
+      font-family:'Hind Madurai', sans-serif;
+      font-size:0.85rem; color:rgba(9,23,64,0.3);
+      white-space:nowrap;
+    }
+
+    /* ── TEACHING ── */
+    .teaching-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:4px;
+    }
+    .teaching-block {
+      background:#ffffff;
+      border:1px dashed rgba(9,23,64,0.12);
+      padding:2.5rem;
+      transition: border-color 0.2s;
+    }
+    .teaching-block:hover { border-color:rgba(3,140,140,0.4); }
+    .teaching-inst {
+      font-size:0.68rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.15em; color:var(--teal); margin-bottom:0.75rem;
+    }
+    .teaching-course {
+      font-family:'DM Serif Display', serif;
+      font-size:1.3rem; color:var(--cream);
+      margin-bottom:0.75rem; line-height:1.2;
+    }
+    .teaching-desc {
+      font-family:'Crimson Pro', serif;
+      font-size:0.98rem; line-height:1.65;
+      color:rgba(9,23,64,0.55);
+    }
+    .teaching-date {
+      font-size:0.72rem; color:rgba(9,23,64,0.3);
+      margin-top:1rem; text-transform:uppercase; letter-spacing:0.1em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top:1px dashed rgba(9,23,64,0.12);
+      padding:3rem 8%;
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:1rem;
+    }
+    .footer-copy {
+      font-size:0.72rem; text-transform:uppercase;
+      letter-spacing:0.15em; color:rgba(9,23,64,0.3);
+    }
+    .footer-links { display:flex; gap:2rem; }
+    .footer-links a {
+      font-size:0.72rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.1em; color:rgba(9,23,64,0.4);
+      transition:color 0.2s;
+    }
+    .footer-links a:hover { color:var(--teal); background:transparent; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:768px) {
+      nav { padding:1rem 1.5rem; }
+      .nav-links { gap:1rem; }
+      .hero { padding:8rem 6% 4rem; }
+      .page-section { padding:4rem 6%; }
+      .book-grid { grid-template-columns:1fr; gap:2.5rem; }
+      .teaching-grid { grid-template-columns:1fr; }
+      .pub-item { grid-template-columns:1fr; }
+      .pub-year { display:none; }
+      footer { flex-direction:column; align-items:flex-start; }
+    }
+
+    /* ── PAPER & INK ACCENTS ── */
+
+    /* Subtle paper grain overlay on body */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* Make sure everything else sits above the grain */
+    nav, header, section, footer { position: relative; z-index: 1; }
+
+    /* Ink-stain accent behind hero title */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 30%; right: 8%;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(191,4,126,0.06) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* Ruled lines on publication items */
+    .pub-item {
+      position: relative;
+    }
+
+    /* Ink drop decoration on section labels */
+    .section-label::before {
+      content: '§';
+      color: var(--pink);
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      margin-right: 0.25rem;
+      opacity: 0.6;
+    }
+
+    /* Torn paper edge effect between hero and first section */
+    .hero {
+      border-bottom: none;
+    }
+    .hero-tear {
+      height: 32px;
+      background: #f7f4f0;
+      position: relative; z-index: 1;
+      margin-top: -2px;
+    }
+    .hero-tear::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 32px;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent 0px,
+        transparent 6px,
+        rgba(9,23,64,0.04) 6px,
+        rgba(9,23,64,0.04) 7px
+      );
+    }
+
+    /* Ink underline on book title */
+    .book-title {
+      text-decoration: underline;
+      text-decoration-style: wavy;
+      text-decoration-color: rgba(191,4,126,0.25);
+      text-underline-offset: 6px;
+    }
+
+    /* Margin note style on wip block */
+    .wip-block::before {
+      content: '✦';
+      position: absolute;
+      left: -1.5rem; top: 1.5rem;
+      color: var(--pink);
+      font-size: 1rem;
+      opacity: 0.4;
+    }
+    .wip-block { position: relative; }
+
+    /* Aged paper tint on teaching blocks */
+    .teaching-block {
+      background: #fdfaf5 !important;
+      border-color: rgba(9,23,64,0.1) !important;
+    }
+    .teaching-block:hover {
+      border-color: rgba(3,140,140,0.35) !important;
+      background: #faf6ee !important;
+    }
+
+    /* Letterpress feel on section headings */
+    .section-label {
+      text-shadow: 0.5px 0.5px 0 rgba(191,4,126,0.15);
+    }
+
+    /* Ink smudge on pub years */
+    .pub-year {
+      font-family: 'Crimson Pro', serif;
+      font-style: italic;
+      letter-spacing: 0.05em;
+    }
+
+    /* Dashed pen-stroke border on hero content */
+    .hero-content::before {
+      content: '';
+      position: absolute;
+      left: -2rem; top: 0; bottom: 0;
+      width: 2px;
+      background: repeating-linear-gradient(
+        to bottom,
+        var(--pink) 0px,
+        var(--pink) 6px,
+        transparent 6px,
+        transparent 12px
+      );
+      opacity: 0.3;
+    }
+    .hero-content { position: relative; }
+
+    /* Book cover ink shadow */
+    .book-cover img {
+      filter: contrast(1.02) saturate(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="https://swethasiva.com" class="nav-home">Swetha Siva</a>
+    <div class="nav-links">
+      <a href="#books">Books</a>
+      <a href="#fiction">Fiction</a>
+      <a href="#poetry">Poetry</a>
+      <a href="#teaching">Teaching</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Writing</p>
+      <h1 class="hero-title">Stories that sit<br>at the <em>edge</em> of<br>the possible.</h1>
+      <div class="hero-bio">
+        <p>Swetha Siva is a fiction writer and poet whose work moves between speculative and literary modes — rooted in South Asian landscapes, queer longing, and the systems that shape who gets to tell their story.</p>
+        <p>She holds an MFA in Creative Writing (Fiction) from the University of Miami and has taught creative writing at the university level. Her fiction and poetry have appeared in publications including <em>It Gets Even Better: Stories of Queer Possibility</em>, <em>Out of Print</em>, <em>Dust Poetry</em>, and <em>Particle</em> magazine.</p>
+      </div>
+      <p class="hero-scroll">↓ Scroll to explore</p>
+    </div>
+  </header>
+  <div class="hero-tear"></div>
+
+  <!-- BOOKS -->
+  <section class="page-section" id="books">
+    <p class="section-label">Published Work</p>
+    <div class="book-grid">
+      <div class="book-cover">
+        <img src="images/Goldspun Cover.png" alt="Cover of Goldspun by Swetha S.">
+        <span class="book-cover-label">Published</span>
+      </div>
+      <div class="book-info">
+        <h2 class="book-title">Goldspun</h2>
+        <p class="book-publisher">Meraki Press</p>
+        <div class="book-desc">
+          <p>Every story started with a prayer to the gods — except mine. In fact, a peasant's story wasn't written at all. But I was going to change that.</p>
+          <p>A peasant girl born into a world that denies her the right to read or write finds an unlikely ally in Aavirai, a scholar who defies the royal family to give her the one thing that could change everything: the Golden Kurinji flower. As the royal family hunts them across the kingdom, the two must complete an impossible task or lose their lives — and everything they've fought for.</p>
+          <p>A story about who gets to be a scholar, who gets to hold power, and what it costs to defy the order you were born into.</p>
+        </div>
+        <a href="https://merakipresspub.wixsite.com/merakipress/online-store/Goldspun-by-Swetha-S-p464877011" target="_blank" rel="noopener" class="book-link">Buy the book ↗</a>
+      </div>
+    </div>
+
+    <!-- Novel in Progress -->
+    <div class="wip-block">
+      <span class="wip-tag">Novel in progress</span>
+      <h3 class="wip-title">Leave Now and Return Tomorrow</h3>
+      <div class="wip-desc">
+        <p>A literary speculative novel set in Then Madurai, a fantastical Tamil city suspended between past and future. The story follows Veera through a choose-your-own-adventure structure — branching paths, contested histories, and a city that remembers differently depending on who you ask.</p>
+        <p>Completed at 91,000 words. Currently in revision.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHORT FICTION -->
+  <section class="page-section" id="fiction">
+    <p class="section-label">Short Fiction</p>
+    <p style="font-family:'Crimson Pro',serif; font-size:1.05rem; color:rgba(9,23,64,0.45); margin-bottom:2.5rem; font-style:italic;">Chock full of speculative elements and mommy issues.</p>
+    <div class="pub-list">
+      <div class="pub-item">
+        <div>
+          <p class="pub-title"><a href="https://speculativelyqueer.com/our-books/it-gets-even-better-stories-of-queer-possibility/">unchartered territories</a></p>
+          <p class="pub-venue">It Gets Even Better: Stories of Queer Possibility — Speculatively Queer</p>
+        </div>
+        <span class="pub-year">2022</span>
+      </div>
+      <div class="pub-item">
+        <div>
+          <p class="pub-title"><a href="https://www.nottingham.edu.my/English/documents/Particle-Autumn-Issue-15.pdf">The Moon</a></p>
+          <p class="pub-venue">Particle Magazine, Autumn Issue 15</p>
+        </div>
+        <span class="pub-year">2020</span>
+      </div>
+      <div class="pub-item">
+        <div>
+          <p class="pub-title"><a href="http://outofprintmagazine.co.in/archive/july_2019_issue/swethas-my-old-hometown.html">My Old Hometown</a></p>
+          <p class="pub-venue">Out of Print Magazine</p>
+        </div>
+        <span class="pub-year">2019</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- POETRY -->
+  <section class="page-section" id="poetry">
+    <p class="section-label">Poetry</p>
+    <p style="font-family:'Crimson Pro',serif; font-size:1.05rem; color:rgba(9,23,64,0.45); margin-bottom:2.5rem; font-style:italic;">Queer, feminist, and meant to be screamed into a void.</p>
+    <div class="pub-list">
+      <div class="pub-item">
+        <div>
+          <p class="pub-title"><a href="https://www.dustpoetry.co.uk/post/the-parambarai-by-swetha-s">Parambarai</a></p>
+          <p class="pub-venue">Dust Poetry Magazine</p>
+        </div>
+        <span class="pub-year">2021</span>
+      </div>
+      <div class="pub-item">
+        <div>
+          <p class="pub-title"><a href="https://varietypack.net/issue-ii/">Voices</a></p>
+          <p class="pub-venue">Variety Pack Literary Magazine, Issue II</p>
+        </div>
+        <span class="pub-year">2020</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEACHING -->
+  <section class="page-section" id="teaching">
+    <p class="section-label">Teaching</p>
+    <div class="teaching-grid">
+      <div class="teaching-block">
+        <p class="teaching-inst">University of Miami</p>
+        <h3 class="teaching-course">ENG 209 — Speculative Creative Writing</h3>
+        <p class="teaching-desc">An undergraduate creative writing course exploring speculative modes — science fiction, fantasy, horror, and the uncanny — as tools for writing about the present. Students read across a range of speculative traditions and developed original work through guided critique.</p>
+        <p class="teaching-date">2022 – 2025</p>
+      </div>
+      <div class="teaching-block">
+        <p class="teaching-inst">University of Miami</p>
+        <h3 class="teaching-course">ENG 290 — Beginning Fiction Workshop</h3>
+        <p class="teaching-desc">An introductory fiction workshop grounded in close reading and Socratic discussion. Students developed short fiction across multiple drafts, with emphasis on building community in the classroom and learning to give and receive substantive feedback.</p>
+        <p class="teaching-date">2022 – 2025</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-copy">© Swetha Siva 2026</span>
+    <div class="footer-links">
+      <a href="https://swethasiva.com">Main site</a>
+      <a href="https://www.linkedin.com/in/swetha-siva" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
+
+</body>
+</html>
