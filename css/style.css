@@ -49,11 +49,52 @@ h3 {
 
 img { border: none; }
 
+/* ── TOP NAV ── */
+#mainnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 4%;
+  background: rgba(247,244,240,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px dashed rgba(9,23,64,0.15);
+  transition: background 0.3s;
+}
+#mainnav .nav {
+  display: flex; align-items: center; gap: 2rem;
+  margin: 0; padding: 0;
+}
+#mainnav .nav li {
+  display: inline-block;
+}
+#mainnav .nav li a {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(9,23,64,0.55);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+#mainnav .nav li a:hover {
+  color: #BF047E;
+  border-bottom-color: #BF047E;
+  background: transparent;
+}
+.nav-wordmark {
+  font-family: 'Hind Madurai', sans-serif;
+  font-size: 1rem; text-transform: uppercase;
+  letter-spacing: 0.05em; color: #091740;
+  text-decoration: none; font-weight: 700;
+}
+.nav-wordmark:hover { color: #BF047E; background: transparent; border-bottom: none; }
+
+
 /* ── LANDING HERO ── */
 #landing {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: 1fr minmax(3rem, auto) auto minmax(3rem, auto) 1fr;
+  grid-template-rows: 1fr 4rem auto 4rem 1fr;
   height: 100vh;
   background-image: linear-gradient(
     345deg,
@@ -108,8 +149,8 @@ img { border: none; }
 span {
   display: inline-block;
   font-family: 'Hind Madurai', sans-serif;
-  font-size: 9vw; text-transform: uppercase;
-  line-height: .8; transition: ease-out .6s;
+  font-size: clamp(3rem, 8vw, 8rem); text-transform: uppercase;
+  line-height: .85; transition: ease-out .6s;
 }
 a span { border: 0; }
 
