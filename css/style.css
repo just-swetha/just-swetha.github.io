@@ -94,7 +94,7 @@ img { border: none; }
 #landing {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: 1fr 7rem auto 4rem 1fr;
+  grid-template-rows: 1fr 10rem auto 4rem 1fr;
   height: 100vh;
   background-image: linear-gradient(
     345deg,
