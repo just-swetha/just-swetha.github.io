@@ -26,7 +26,6 @@ a:hover {
   background-color: #BF047E;
   color: rgb(255, 255, 255);
 }
-/* Menu Trigger */
 img {
   width: 6%;
   padding-left: 2%;
@@ -110,17 +109,9 @@ main {
   gap: 10px;
 }
 main h2 {
-/*  grid-column: 1/4;
-  grid-row: 2/3; */
   font-size: 60px;
 }
-/*main section {
-  grid-column: 1/4;
-  grid-row:3/4;
-} */
 main img {
-  /*grid-column: 4/6;
-  grid-row: 3/4; */
   width: 25vw;
   box-shadow: 60px 60px #091740;
 }
@@ -136,6 +127,7 @@ p {
   grid-column: 1/7;
   padding: 5%;
 }
+
 /*About Page*/
 #about{
   background-color: #BF047E;
@@ -160,10 +152,87 @@ p {
   grid-column: 4/6;
   grid-row: 2;
 }
+
+/* Portfolio Section */
+#portfolio {
+  grid-column: 1/6;
+  grid-row: 2;
+  background-color: #091740;
+  color: rgb(255, 255, 255);
+  padding: 5%;
+  border-style: dashed;
+  border-color: #038C8C;
+  border-width: 4px;
+}
+#portfolio h2 {
+  margin-bottom: 0.5rem;
+}
+#portfolio > p {
+  font-size: 18px;
+  opacity: 0.7;
+  padding-bottom: 3%;
+}
+#portfolio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 100%;
+}
+.portfolio-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.75rem 2rem;
+  border: 3px dashed rgba(255,255,255,0.2);
+  color: white;
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  background: transparent;
+}
+.portfolio-card:link,
+.portfolio-card:visited {
+  color: white;
+  text-decoration: none;
+  background: transparent;
+}
+.portfolio-card:hover {
+  border-color: #038C8C;
+  background: rgba(3,140,140,0.1);
+  transform: translate(-3px, -3px);
+  color: white;
+}
+.portfolio-card-muted {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.portfolio-card-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #038C8C;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.portfolio-card-desc {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  opacity: 0.75;
+  padding: 0;
+  max-width: 100%;
+}
+.portfolio-card-link {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #BF047E;
+  margin-top: auto;
+}
+
 /*Works Page*/
 #works {
   grid-column: 1/6;
-  grid-row: 2/3;
+  grid-row: 3;
   grid-template-columns: subgrid;
 }
 #books {
@@ -211,7 +280,6 @@ p {
   border-color: #038C8C;
   border-width: 4px;
 }
-
 #poetry {
   grid-column: 1/4;
   grid-row: 5;
@@ -228,10 +296,11 @@ p {
   list-style-type: none;
   text-align: right;
 }
+
 /*Resume Page*/
 #resume {
   grid-column: 1/6;
-  grid-row: 3;
+  grid-row: 4;
   display: grid;
 }
 #experience{
@@ -247,6 +316,12 @@ p {
 #experience h3, #education h3{
   padding-top:3%;
 }
+#experience li {
+  list-style: disc;
+  margin-left: 1.5rem;
+  font-size: 17px;
+  padding-bottom: 0.4rem;
+}
 #education {
   grid-column: 2/5;
   grid-row: 1;
@@ -256,6 +331,9 @@ p {
   border-style: dashed;
   border-color: #038C8C;
   border-width: 4px;
+}
+#education p {
+  padding-bottom: 0.5rem;
 }
 #skills {
   grid-column: 1/2;
@@ -267,20 +345,15 @@ p {
   border-color: #038C8C;
   border-width: 4px;
 }
-#awards {
-  grid-column: 2/5;
-  grid-row: 3;
-  padding: 5%;
-  background-color: #038C8C;
-  color: rgb(255, 255, 255);
-  border-style: dashed;
-  border-color: #BF047E;
-  border-width: 4px;
+#skills li {
+  list-style: disc;
+  margin-left: 1.5rem;
+  font-size: 17px;
+  padding-bottom: 0.4rem;
 }
 
 /* Footer */
-footer
-{
+footer {
     background-color: rgb(0, 0, 0);
     max-width: 100vw;
     height:fit-content;
@@ -292,7 +365,6 @@ footer
     text-align: center;
     padding: 10%;
 }
-
 
 /* Landing Page */
 #landing {
@@ -327,8 +399,8 @@ footer
   color:rgb(0, 0, 0);
   padding-left: 0;
 }
-/*Landing animation */
 
+/*Landing animation */
 .line {
   width: 100vw;
 }
@@ -363,7 +435,6 @@ span {
   line-height: .8;
   transition: ease-out .6s;
 }
-
 a span {
   border: 0;
 }
@@ -376,13 +447,11 @@ a span {
   z-index: 999;
   position: fixed;
 }
-
 .dotnav {
   padding: 0;
   list-style: none;
   font-size: 10px;
 }
-
 .dotnav > li {
   display: inline-block;
   font-size: 1rem;
@@ -391,10 +460,8 @@ a span {
 .dotnav > li:nth-child(n+2) {
   margin-left: 15px;
 }
-
 .dotnav > li > a {
   display: inline-block;
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   width: 15px;
   height: 15px;
@@ -404,7 +471,6 @@ a span {
   overflow: hidden;
   padding: 0;
   color: transparent;
-  /*text-indent: -999%;*/
 }
 .dotnav > li > a:hover,
 .dotnav > li > a:focus {
