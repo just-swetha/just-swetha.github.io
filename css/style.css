@@ -402,14 +402,41 @@ footer a:hover { background: transparent; color: #BF047E; border-color: #BF047E;
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
+  /* Nav */
+  #mainnav { padding: 0.85rem 4%; flex-wrap: wrap; gap: 0.4rem; }
+  #mainnav .nav { gap: 0.9rem; }
+  #mainnav .nav li a { font-size: 0.68rem; letter-spacing: 0.06em; }
+
+  /* Landing hero */
+  #landing {
+    background-attachment: scroll; /* Fixes iOS parallax rendering bug */
+    height: 100dvh;
+    grid-template-rows: 1fr 5rem auto minmax(2.5rem, auto) 1fr;
+  }
+  #greeting { font-size: 18px; padding-bottom: 0.75rem; }
+  #profile { font-size: 16px; padding-top: 1rem; }
+
+  /* About */
   #about { grid-template-columns: 1fr; gap: 2rem; }
   #about h2 { grid-column: 1; }
   #bio { grid-column: 1; }
-  #about > div { grid-column: 1; justify-content: flex-start; }
+  #about > div { grid-column: 1; justify-content: center; }
+
+  /* Portfolio */
   #portfolio-grid { grid-template-columns: 1fr; }
+
+  /* Resume experience — prevent date float clashing with job title */
+  .date { float: none; display: block; margin-top: 0.15rem; }
+
+  /* Education */
   #education { grid-template-columns: 1fr; }
   #education h2 { grid-column: 1; }
+
+  /* Skills */
   #skills ul { grid-template-columns: 1fr; }
+
+  /* Resume container */
   #resume { margin: 0 2% 4%; }
+
   p { font-size: 16px; }
 }
