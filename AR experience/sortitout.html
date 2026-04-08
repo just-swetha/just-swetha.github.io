@@ -267,6 +267,7 @@ const MIN_PULL     = 18;    // px — smaller than this snaps back
 
 let dragging = false, startX, startY, itemX, itemY;
 let feedbackOpen = false;
+let launching = false; // guard against double-trigger
 let timeLeft = 60, timerInterval = null;
 const timerEl = document.getElementById('timer');
 
@@ -300,6 +301,7 @@ function buildDots() {
 }
 
 function resetItemPosition() {
+  launching = false;
   const zone = document.getElementById('throw-zone');
   const zr = zone.getBoundingClientRect();
   itemX = zr.width / 2;
@@ -411,6 +413,7 @@ function animateThrow(targetId, correct, onDone) {
 }
 
 function showFeedback(correct, item) {
+  launching = false;
   feedbackOpen = true;
   feedbackIcon.textContent = correct ? '✅' : '❌';
   feedbackTitle.textContent = correct ? 'Correct!' : 'Not quite!';
@@ -483,6 +486,7 @@ function onPull(clientX, clientY) {
 
 // Shared release helper
 function onRelease() {
+  if (launching) return;
   dragging = false;
   itemImg.classList.remove('dragging');
   const zr = document.getElementById('throw-zone').getBoundingClientRect();
@@ -493,12 +497,13 @@ function onRelease() {
   let vy = (cY - itemY) * LAUNCH_SCALE;
   const spd = Math.sqrt(vx * vx + vy * vy);
   if (spd > 26) { vx = vx / spd * 26; vy = vy / spd * 26; }
+  launching = true;
   launch(vx, vy);
 }
 
 // Touch
 itemImg.addEventListener('touchstart', e => {
-  if (feedbackOpen) return;
+  if (feedbackOpen || launching) return;
   e.preventDefault();
   dragging = true;
   const t = e.touches[0];
@@ -515,12 +520,13 @@ document.addEventListener('touchmove', e => {
 
 document.addEventListener('touchend', e => {
   if (!dragging) return;
+  e.preventDefault(); // stops synthetic mousedown/mouseup that would re-trigger onRelease
   onRelease();
-});
+}, {passive: false});
 
 // Mouse
 itemImg.addEventListener('mousedown', e => {
-  if (feedbackOpen) return;
+  if (feedbackOpen || launching) return;
   dragging = true;
   startX = e.clientX; startY = e.clientY;
   itemImg.classList.add('dragging');
