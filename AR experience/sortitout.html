@@ -86,8 +86,8 @@ body {
   width: 100%;
   display: flex;
   justify-content: space-around;
-  align-items: flex-end;
-  padding: 0 16px 16px;
+  align-items: flex-start;
+  padding: 16px 16px 0;
   flex-shrink: 0;
 }
 .bin-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -208,15 +208,6 @@ body {
 <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
 
 <div id="game-area">
-  <div id="item-name">Loading...</div>
-  <div id="hint">Pull back and release to throw ↓</div>
-  <div class="counter-dots" id="dots"></div>
-
-  <div id="throw-zone">
-    <canvas id="trajectory"></canvas>
-    <img id="item-img" src="" alt="item" draggable="false">
-  </div>
-
   <div id="bins-row">
     <div class="bin-wrap" id="bin-recycle">
       <img class="bin-img" id="img-recycle" src="" alt="Recycle bin">
@@ -227,6 +218,15 @@ body {
       <div class="bin-label trash">🗑 Trash</div>
     </div>
   </div>
+
+  <div id="throw-zone">
+    <canvas id="trajectory"></canvas>
+    <img id="item-img" src="" alt="item" draggable="false">
+  </div>
+
+  <div id="item-name">Loading...</div>
+  <div id="hint">Pull down and release to throw ↑</div>
+  <div class="counter-dots" id="dots"></div>
 
   <div id="feedback">
     <div id="feedback-icon"></div>
