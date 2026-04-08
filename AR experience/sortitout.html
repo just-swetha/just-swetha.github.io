@@ -442,6 +442,8 @@ function launch(vx, vy) {
     py += vy;
     spin += spinRate;
 
+    itemX = px; itemY = py; // keep globals in sync so animateThrow starts from the right place
+
     itemImg.style.left      = (px - 50) + 'px';
     itemImg.style.top       = (py - 50) + 'px';
     itemImg.style.transform = `rotate(${spin}rad)`;
