@@ -31,6 +31,12 @@ body {
 #score-area { text-align: right; }
 #score { font-size: 22px; font-weight: 700; color: #1a5c2a; }
 #score-label { font-size: 10px; color: #6b9e78; text-transform: uppercase; letter-spacing: 0.05em; }
+#timer-area { text-align: center; }
+#timer { font-size: 22px; font-weight: 700; color: #1a5c2a; transition: color 0.3s; }
+#timer-label { font-size: 10px; color: #6b9e78; text-transform: uppercase; letter-spacing: 0.05em; }
+#timer.urgent { color: #dc2626; }
+@keyframes timerPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+#timer.urgent { animation: timerPulse 0.6s ease infinite; }
 #progress-bar-wrap { width: 100%; height: 4px; background: #e0ede0; flex-shrink: 0; }
 #progress-bar { height: 4px; background: #2d9e4f; transition: width 0.3s ease; width: 0%; }
 #game-area {
@@ -65,7 +71,7 @@ body {
   align-items: center;
   justify-content: center;
 }
-#trajectory { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+#trajectory { position: absolute; top: 0; left: 0; right: 0; pointer-events: none; z-index: 1; }
 #item-img {
   width: 100px;
   height: 100px;
@@ -181,7 +187,7 @@ body {
 <div id="location-splash">
   <p id="splash-pin">📍 Woodworth Dining Hall · Ball State University</p>
   <h1 id="splash-title">You're at Woodworth.<br>Let's see what ends up here.</h1>
-  <p id="splash-sub">Eight items. Two bins. One right answer each time — and we'll tell you why when you miss.</p>
+  <p id="splash-sub">Eight items. Two bins. One right answer each time, and we'll tell you why when you miss.</p>
   <button id="splash-start">Start Sorting →</button>
 </div>
 
@@ -189,6 +195,10 @@ body {
   <div>
     <div id="title">Sort It Out</div>
     <div id="subtitle">BSU Recycling Challenge</div>
+  </div>
+  <div id="timer-area">
+    <div id="timer">60</div>
+    <div id="timer-label">sec</div>
   </div>
   <div id="score-area">
     <div id="score">0</div>
@@ -199,7 +209,7 @@ body {
 
 <div id="game-area">
   <div id="item-name">Loading...</div>
-  <div id="hint">Flick or drag to the correct bin ↓</div>
+  <div id="hint">Pull back and release to throw ↓</div>
   <div class="counter-dots" id="dots"></div>
 
   <div id="throw-zone">
@@ -251,10 +261,14 @@ const ASSETS = {
 const ITEMS = [{"key": "bottle", "name": "Plastic bottle", "correct": "recycle", "fact": "Empty plastic bottles are recyclable \u2014 rinse them out first!"}, {"key": "tin_can", "name": "Tin can", "correct": "recycle", "fact": "Metal cans are infinitely recyclable. Give them a quick rinse."}, {"key": "glass_jar", "name": "Glass jar", "correct": "recycle", "fact": "Clean glass jars go in recycling. Remove lids first."}, {"key": "unused_paper", "name": "Clean paper", "correct": "recycle", "fact": "Clean, dry paper is recyclable. Keep it dry!"}, {"key": "pizza_box", "name": "Pizza box", "correct": "trash", "fact": "Grease contaminates the whole batch \u2014 greasy cardboard goes to trash."}, {"key": "plastic_bag", "name": "Plastic bag", "correct": "trash", "fact": "Soft plastics jam recycling machines. Take bags to grocery store drop-offs instead."}, {"key": "styrofoam_cup", "name": "Styrofoam cup", "correct": "trash", "fact": "Styrofoam is not accepted in BSU recycling bins. Trash only."}, {"key": "used_napkin", "name": "Used napkin", "correct": "trash", "fact": "Used napkins are contaminated with food or liquids \u2014 trash only."}];
 
 let order = [], currentIdx = 0, score = 0;
+const GRAVITY      = 0.55;  // px per frame²
+const LAUNCH_SCALE = 0.14;  // pull-distance → launch speed
+const MIN_PULL     = 18;    // px — smaller than this snaps back
+
 let dragging = false, startX, startY, itemX, itemY;
-let lastPX = 0, lastPY = 0, lastPT = 0;
-let prevPX = 0, prevPY = 0, prevPT = 0;
 let feedbackOpen = false;
+let timeLeft = 60, timerInterval = null;
+const timerEl = document.getElementById('timer');
 
 const itemImg = document.getElementById('item-img');
 const itemName = document.getElementById('item-name');
@@ -299,9 +313,14 @@ function resetItemPosition() {
 }
 
 function resizeCanvas() {
-  const zone = document.getElementById('throw-zone');
-  canvas.width = zone.offsetWidth;
-  canvas.height = zone.offsetHeight;
+  const zone     = document.getElementById('throw-zone');
+  const gameArea = document.getElementById('game-area');
+  canvas.width  = zone.offsetWidth;
+  // Extend canvas all the way to the bottom of game-area so trajectory
+  // dots appear over the bins row too.
+  const zoneTop  = zone.getBoundingClientRect().top;
+  const gameBot  = gameArea.getBoundingClientRect().bottom;
+  canvas.height  = Math.max(zone.offsetHeight, gameBot - zoneTop);
 }
 
 function loadItem(idx) {
@@ -314,19 +333,40 @@ function loadItem(idx) {
   buildDots();
 }
 
-function drawTrajectory(x1, y1, x2, y2) {
+function drawSlingshot(itemPx, itemPy, vx, vy) {
   resizeCanvas();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.setLineDash([7, 5]);
-  ctx.strokeStyle = 'rgba(45,158,79,0.4)';
+
+  const zone = document.getElementById('throw-zone');
+  const cX = zone.offsetWidth / 2, cY = zone.offsetHeight / 2;
+
+  // Rubber-band line from rest-centre to item
+  ctx.save();
+  ctx.setLineDash([4, 7]);
+  ctx.strokeStyle = 'rgba(45,158,79,0.28)';
   ctx.lineWidth = 2;
-  ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  const mx = (x1+x2)/2, my = Math.min(y1,y2) - 50;
-  ctx.quadraticCurveTo(mx, my, x2, y2);
+  ctx.moveTo(cX, cY);
+  ctx.lineTo(itemPx, itemPy);
   ctx.stroke();
-  ctx.setLineDash([]);
+  ctx.restore();
+
+  // Simulated arc — dots shrink and fade with distance
+  let px = itemPx, py = itemPy, pvx = vx, pvy = vy;
+  for (let i = 0; i < 45; i++) {
+    pvy += GRAVITY;
+    px  += pvx;
+    py  += pvy;
+    if (px < -60 || px > canvas.width + 60 || py > canvas.height + 60) break;
+    const fade   = Math.max(0, 0.85 - i * 0.019);
+    const radius = Math.max(1.5, 4.5 - i * 0.07);
+    ctx.globalAlpha = fade;
+    ctx.fillStyle = '#2d9e4f';
+    ctx.beginPath();
+    ctx.arc(px, py, radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
 }
 
 function checkDrop(pageX, pageY) {
@@ -387,68 +427,34 @@ feedbackBtn.addEventListener('click', () => {
   loadItem(currentIdx);
 });
 
-function handleDrop(pageX, pageY) {
-  if(feedbackOpen) return;
-  const dropped = checkDrop(pageX, pageY);
-  if(!dropped) { resetItemPosition(); return; }
-  const item = order[currentIdx];
-  const correct = dropped === item.correct;
-  animateThrow(dropped, correct, () => { showFeedback(correct, item); });
-}
-
-// Returns true if a flick was detected and launched; false if too slow.
-function tryLaunch() {
-  const dt = lastPT - prevPT;
-  if(dt <= 0 || dt > 150) return false;
-  const speedX = (lastPX - prevPX) / dt; // px/ms
-  const speedY = (lastPY - prevPY) / dt;
-  const speed  = Math.sqrt(speedX * speedX + speedY * speedY);
-  if(speed < 0.35) return false;
-  launchWithPhysics(speedX, speedY);
-  return true;
-}
-
-function launchWithPhysics(speedX, speedY) {
-  // Convert px/ms → px/frame at ~60 fps
-  const FRAME = 16.67;
-  let vx = speedX * FRAME;
-  let vy = speedY * FRAME;
-
-  // Cap so a hard flick doesn't fly completely off screen instantly
-  const spd = Math.sqrt(vx * vx + vy * vy);
-  if(spd > 26) { vx = vx / spd * 26; vy = vy / spd * 26; }
-
-  const gravity  = 0.6;                       // px per frame²
-  const spinRate = (vx >= 0 ? 1 : -1) * 0.13; // radians per frame
+// Fire item with given px/frame velocity from current itemX, itemY
+function launch(vx, vy) {
+  const spinRate = (vx >= 0 ? 1 : -1) * 0.13;
   let px = itemX, py = itemY, spin = 0;
-
   const zr = document.getElementById('throw-zone').getBoundingClientRect();
 
   function step() {
-    vy += gravity;
+    vy += GRAVITY;
     px += vx;
     py += vy;
     spin += spinRate;
 
-    itemImg.style.left = (px - 50) + 'px';
-    itemImg.style.top  = (py - 50) + 'px';
+    itemImg.style.left      = (px - 50) + 'px';
+    itemImg.style.top       = (py - 50) + 'px';
     itemImg.style.transform = `rotate(${spin}rad)`;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Convert throw-zone-relative position to client coordinates for bin check
-    const cx = px + zr.left;
-    const cy = py + zr.top;
-    const hit = checkDrop(cx, cy);
-    if(hit) {
+    // Convert throw-zone-relative coords to client coords for bin hit test
+    const hit = checkDrop(px + zr.left, py + zr.top);
+    if (hit) {
       itemImg.style.transform = '';
       const item = order[currentIdx];
-      const correct = hit === item.correct;
-      animateThrow(hit, correct, () => { showFeedback(correct, item); });
+      animateThrow(hit, hit === item.correct, () => { showFeedback(hit === item.correct, item); });
       return;
     }
 
-    // Item flew off screen — reset
-    if(px < -160 || px > zr.width + 160 || py > zr.height + 350 || py < -250) {
+    // Miss — reset once item leaves the playfield
+    if (px < -180 || px > zr.width + 180 || py > zr.height + 380 || py < -280) {
       itemImg.style.transform = '';
       resetItemPosition();
       return;
@@ -459,100 +465,119 @@ function launchWithPhysics(speedX, speedY) {
   requestAnimationFrame(step);
 }
 
+// Shared pull helper — called from both touch and mouse move
+function onPull(clientX, clientY) {
+  const zr = document.getElementById('throw-zone').getBoundingClientRect();
+  const cX = zr.width / 2, cY = zr.height / 2;
+  itemX = cX + (clientX - startX);
+  itemY = cY + (clientY - startY);
+  itemImg.style.left = (itemX - 50) + 'px';
+  itemImg.style.top  = (itemY - 50) + 'px';
+  // Launch vector is opposite of pull vector
+  let vx = (cX - itemX) * LAUNCH_SCALE;
+  let vy = (cY - itemY) * LAUNCH_SCALE;
+  const spd = Math.sqrt(vx * vx + vy * vy);
+  if (spd > 26) { vx = vx / spd * 26; vy = vy / spd * 26; }
+  drawSlingshot(itemX, itemY, vx, vy);
+}
+
+// Shared release helper
+function onRelease() {
+  dragging = false;
+  itemImg.classList.remove('dragging');
+  const zr = document.getElementById('throw-zone').getBoundingClientRect();
+  const cX = zr.width / 2, cY = zr.height / 2;
+  const pullDist = Math.sqrt((cX - itemX) ** 2 + (cY - itemY) ** 2);
+  if (pullDist < MIN_PULL) { resetItemPosition(); return; }
+  let vx = (cX - itemX) * LAUNCH_SCALE;
+  let vy = (cY - itemY) * LAUNCH_SCALE;
+  const spd = Math.sqrt(vx * vx + vy * vy);
+  if (spd > 26) { vx = vx / spd * 26; vy = vy / spd * 26; }
+  launch(vx, vy);
+}
+
 // Touch
 itemImg.addEventListener('touchstart', e => {
-  if(feedbackOpen) return;
+  if (feedbackOpen) return;
   e.preventDefault();
   dragging = true;
   const t = e.touches[0];
   startX = t.clientX; startY = t.clientY;
-  lastPX = t.clientX; lastPY = t.clientY; lastPT = performance.now();
-  prevPX = lastPX; prevPY = lastPY; prevPT = lastPT;
   itemImg.classList.add('dragging');
 }, {passive: false});
 
 document.addEventListener('touchmove', e => {
-  if(!dragging) return;
+  if (!dragging) return;
   e.preventDefault();
   const t = e.touches[0];
-  prevPX = lastPX; prevPY = lastPY; prevPT = lastPT;
-  lastPX = t.clientX; lastPY = t.clientY; lastPT = performance.now();
-  const dx = t.clientX - startX, dy = t.clientY - startY;
-  const zr = document.getElementById('throw-zone').getBoundingClientRect();
-  itemX = zr.width/2 + dx;
-  itemY = zr.height/2 + dy;
-  itemImg.style.left = (itemX - 50) + 'px';
-  itemImg.style.top = (itemY - 50) + 'px';
-  drawTrajectory(zr.width/2, zr.height/2, itemX, itemY);
+  onPull(t.clientX, t.clientY);
 }, {passive: false});
 
 document.addEventListener('touchend', e => {
-  if(!dragging) return;
-  dragging = false;
-  itemImg.classList.remove('dragging');
-  const t = e.changedTouches[0];
-  if(tryLaunch()) return;
-  handleDrop(t.clientX, t.clientY);
+  if (!dragging) return;
+  onRelease();
 });
 
 // Mouse
 itemImg.addEventListener('mousedown', e => {
-  if(feedbackOpen) return;
+  if (feedbackOpen) return;
   dragging = true;
   startX = e.clientX; startY = e.clientY;
-  lastPX = e.clientX; lastPY = e.clientY; lastPT = performance.now();
-  prevPX = lastPX; prevPY = lastPY; prevPT = lastPT;
   itemImg.classList.add('dragging');
 });
 
 document.addEventListener('mousemove', e => {
-  if(!dragging) return;
-  prevPX = lastPX; prevPY = lastPY; prevPT = lastPT;
-  lastPX = e.clientX; lastPY = e.clientY; lastPT = performance.now();
-  const dx = e.clientX - startX, dy = e.clientY - startY;
-  const zr = document.getElementById('throw-zone').getBoundingClientRect();
-  itemX = zr.width/2 + dx;
-  itemY = zr.height/2 + dy;
-  itemImg.style.left = (itemX - 50) + 'px';
-  itemImg.style.top = (itemY - 50) + 'px';
-  drawTrajectory(zr.width/2, zr.height/2, itemX, itemY);
+  if (!dragging) return;
+  onPull(e.clientX, e.clientY);
 });
 
 document.addEventListener('mouseup', e => {
-  if(!dragging) return;
-  dragging = false;
-  itemImg.classList.remove('dragging');
-  if(tryLaunch()) return;
-  handleDrop(e.clientX, e.clientY);
+  if (!dragging) return;
+  onRelease();
 });
 
+// ── TIMER ──────────────────────────────────────────────────
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+    if (timeLeft <= 10) timerEl.classList.add('urgent');
+    if (timeLeft <= 0)  { clearInterval(timerInterval); showEnd(); }
+  }, 1000);
+}
+function stopTimer() { clearInterval(timerInterval); }
+
 function showEnd() {
+  stopTimer();
   progressBar.style.width = '100%';
   const total = order.length * 10;
-  const pct = score / total;
+  const pct   = score / total;
   document.getElementById('stars').textContent = pct >= 0.9 ? '⭐⭐⭐' : pct >= 0.6 ? '⭐⭐' : '⭐';
   document.getElementById('end-score-display').textContent = score + ' / ' + total + ' points';
   document.getElementById('end-msg').textContent = pct >= 0.9
     ? "You're a recycling pro! BSU's STARS Gold rating thanks you."
     : pct >= 0.6
     ? "Good effort! A few more rounds and you'll be a recycling expert."
-    : "Keep practicing — every correct sort helps BSU stay STARS Gold certified.";
+    : "Keep practicing. Every correct sort helps BSU stay STARS Gold certified.";
   endScreen.classList.add('show');
 }
 
 document.getElementById('replay-btn').addEventListener('click', () => {
-  score = 0; currentIdx = 0;
+  score = 0; currentIdx = 0; timeLeft = 60;
   scoreEl.textContent = '0';
+  timerEl.textContent = '60';
+  timerEl.classList.remove('urgent');
   order = shuffle(ITEMS);
   endScreen.classList.remove('show');
   loadItem(0);
+  startTimer();
 });
 
 // Location splash
 const splash = document.getElementById('location-splash');
 document.getElementById('splash-start').addEventListener('click', () => {
   splash.classList.add('fade-out');
-  setTimeout(() => { splash.style.display = 'none'; }, 500);
+  setTimeout(() => { splash.style.display = 'none'; startTimer(); }, 500);
 });
 
 // Init
