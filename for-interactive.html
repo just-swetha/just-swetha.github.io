@@ -154,10 +154,45 @@
       color: rgba(255,255,255,0.25);
     }
 
+    /* ── SECONDARY CTA ── */
+    .hero-cta-secondary {
+      display: inline-flex; align-items: center; gap: 1rem;
+      background: transparent;
+      color: var(--gold);
+      border: 2px dashed var(--gold);
+      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 1rem 2rem;
+      width: fit-content;
+      transition: background 0.2s, color 0.2s;
+      animation: fadeUp 0.7s 0.55s ease both;
+    }
+    .hero-cta-secondary:hover { background: var(--gold); color: var(--deep); }
+
+    /* ── PROJECT DIVIDER ── */
+    .project-divider {
+      position: relative; z-index: 1;
+      padding: 5rem 5% 3rem;
+      border-top: 2px dashed rgba(200,146,58,0.4);
+    }
+    .project-number {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.3em; color: var(--gold); margin-bottom: 0.75rem;
+    }
+    .project-divider-title {
+      font-family: 'Hind Madurai', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      text-transform: uppercase; line-height: 1; margin-bottom: 0.75rem;
+    }
+    .project-meta {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.3);
+    }
+
     /* ── GAME SECTION ── */
     .game-section {
       position: relative; z-index: 1;
-      padding: 6rem 5%;
+      padding: 3rem 5% 6rem;
     }
 
     /* Screenshots strip */
@@ -411,9 +446,11 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
+      .nav-links a { font-size: 0.7rem; }
       .hero-content { padding: 8rem 2rem 3rem; max-width: 100%; }
       .hero-screenshot { width: 100%; opacity: 0.15; }
-      .game-section { padding: 4rem 4%; }
+      .game-section { padding: 2rem 4% 4rem; }
+      .project-divider { padding: 3rem 4% 2rem; }
       .screenshots { grid-template-columns: 1fr; }
       .screenshot-main img { height: 280px; }
       .screenshot-side { flex-direction: row; }
@@ -434,8 +471,8 @@
   <nav>
     <a href="https://swethasiva.com" class="nav-home">Swetha Siva</a>
     <div class="nav-links">
-      <a href="#game">The Game</a>
-      <a href="#play">Play</a>
+      <a href="#project-01">Hanging by a Thread</a>
+      <a href="#sort-it-out">Sort It Out</a>
       <a href="#contact">Contact</a>
     </div>
   </nav>
@@ -444,20 +481,30 @@
   <header class="hero">
     <div class="hero-bg"></div>
     <div class="hero-screenshot">
-      <img src="images/interactive/game-angel.png" alt="Hanging by a Thread — Angel character">
+      <img src="images/interactive/game-boutique.png" alt="Interactive work by Swetha Siva">
     </div>
     <div class="hero-content">
-      <p class="hero-eyebrow">Interactive & Narrative Design</p>
+      <p class="hero-eyebrow">Swetha Siva — Portfolio</p>
       <h1 class="hero-title">
-        <span class="solid">Hanging</span><br>
-        <span class="outline">by a</span><br>
-        <span class="solid">Thread</span>
+        <span class="solid">Interactive</span><br>
+        <span class="outline">& Narrative</span><br>
+        <span class="solid">Design</span>
       </h1>
-      <p class="hero-sub">A visual novel about sinners in purgatory, divine orders, and what it costs to act collectively — or not.</p>
-      <a href="#play" class="hero-cta">Play the prototype ↓</a>
+      <p class="hero-sub">Two projects where the mechanics and the message agree — a branching visual novel set in purgatory, and a mobile recycling game designed for a campus AR activation.</p>
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+        <a href="#project-01" class="hero-cta">Hanging by a Thread ↓</a>
+        <a href="#sort-it-out" class="hero-cta-secondary">Sort It Out ↓</a>
+      </div>
     </div>
-    <p class="hero-scroll-hint">↓ Scroll to explore the design</p>
+    <p class="hero-scroll-hint">↓ Scroll to explore both projects</p>
   </header>
+
+  <!-- PROJECT 01 HEADER -->
+  <div class="project-divider" id="project-01">
+    <p class="project-number">Project 01</p>
+    <h2 class="project-divider-title">Hanging by a Thread</h2>
+    <p class="project-meta">Visual Novel &nbsp;·&nbsp; Ren'Py &nbsp;·&nbsp; EMDD 630, Ball State University &nbsp;·&nbsp; 2025</p>
+  </div>
 
   <!-- GAME SECTION -->
   <main class="game-section" id="game">
@@ -612,6 +659,53 @@
     </div>
 
   </main>
+
+  <!-- PROJECT 02 HEADER -->
+  <div class="project-divider" id="sort-it-out">
+    <p class="project-number">Project 02</p>
+    <h2 class="project-divider-title">Sort It Out</h2>
+    <p class="project-meta">Mobile Web Game &nbsp;·&nbsp; AR Prototype &nbsp;·&nbsp; BSU Recycling Campaign &nbsp;·&nbsp; 2025</p>
+    <p style="font-family:'Crimson Pro',serif; font-size:clamp(1.1rem,1.8vw,1.3rem); font-style:italic; color:var(--muted); line-height:1.6; max-width:520px; margin-top:1.25rem;">A mobile-first recycling game built as the interactive layer of a campus AR activation — flick items into the right bin, earn points, learn what actually gets recycled.</p>
+  </div>
+
+  <!-- SORT IT OUT SECTION -->
+  <section class="game-section" style="padding-top:0;">
+
+    <div class="content-grid" style="margin-bottom: 4px;">
+      <div class="content-block accent">
+        <p class="block-label">The Concept</p>
+        <h3 class="block-title">Playful education through physical interaction.</h3>
+        <div class="block-body">
+          <p>Sort It Out puts everyday objects in front of you — pizza boxes, glass jars, plastic bags — and asks a deceptively simple question: does this go in recycling or trash?</p>
+          <p>Designed as the interactive layer of a campus AR activation, the game makes sustainability tangible and fast-paced. The web build is the playable prototype; the full vision layers it over the physical world through a phone camera.</p>
+        </div>
+      </div>
+      <div class="content-block">
+        <p class="block-label">How It Works</p>
+        <h3 class="block-title">Flick. Arc. Sort.</h3>
+        <div class="block-body">
+          <p>Each round presents a waste item. Flick it toward the recycling bin or the trash can — the game reads your throw velocity and launches the item as a real projectile, with gravity and spin, so how hard you flick actually matters.</p>
+          <p>A progress bar and live score keep tension up. Wrong bins flash red; correct ones flash green. Best played on mobile, where the flick gesture feels natural.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="embed-section" style="margin-top:4px;">
+      <div class="embed-header">
+        <h2 class="embed-title">Play Sort It Out</h2>
+        <p class="embed-note">Flick to throw · Best on mobile · AR prototype</p>
+      </div>
+      <div class="embed-wrapper" style="background: #f0f7f0;">
+        <iframe
+          src="AR experience/sortitout.html"
+          allowfullscreen
+          title="Sort It Out — BSU Recycling Game"
+          style="height: 700px;">
+        </iframe>
+      </div>
+    </div>
+
+  </section>
 
   <!-- LIGHTBOX -->
   <div id="lightbox" onclick="closeLightbox()">
