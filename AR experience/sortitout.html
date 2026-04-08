@@ -143,9 +143,48 @@ body {
   font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px;
 }
 #replay-btn:active { background: #1a7a3a; }
+
+/* ── LOCATION SPLASH ── */
+#location-splash {
+  position: fixed; inset: 0; z-index: 50;
+  background: #f0f7f0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 2.5rem 2rem;
+  transition: opacity 0.5s ease;
+}
+#location-splash.fade-out { opacity: 0; pointer-events: none; }
+#splash-pin {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.15em; color: #6b9e78; margin-bottom: 1.75rem;
+}
+#splash-title {
+  font-size: clamp(22px, 6vw, 30px); font-weight: 800; color: #1a5c2a;
+  line-height: 1.25; margin-bottom: 1rem;
+}
+#splash-sub {
+  font-size: 14px; color: #4a7a56; line-height: 1.65;
+  margin-bottom: 2.25rem; max-width: 280px;
+}
+#splash-start {
+  background: #2d9e4f; color: white; border: none;
+  border-radius: 12px; padding: 14px 44px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  letter-spacing: 0.02em; touch-action: manipulation;
+}
+#splash-start:active { background: #1a7a3a; transform: scale(0.97); }
 </style>
 </head>
 <body>
+
+<!-- LOCATION SPLASH -->
+<div id="location-splash">
+  <p id="splash-pin">📍 Woodworth Dining Hall · Ball State University</p>
+  <h1 id="splash-title">You're at Woodworth.<br>Let's see what ends up here.</h1>
+  <p id="splash-sub">Eight items. Two bins. One right answer each time — and we'll tell you why when you miss.</p>
+  <button id="splash-start">Start Sorting →</button>
+</div>
+
 <div id="header">
   <div>
     <div id="title">Sort It Out</div>
@@ -507,6 +546,13 @@ document.getElementById('replay-btn').addEventListener('click', () => {
   order = shuffle(ITEMS);
   endScreen.classList.remove('show');
   loadItem(0);
+});
+
+// Location splash
+const splash = document.getElementById('location-splash');
+document.getElementById('splash-start').addEventListener('click', () => {
+  splash.classList.add('fade-out');
+  setTimeout(() => { splash.style.display = 'none'; }, 500);
 });
 
 // Init
