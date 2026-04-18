@@ -2,399 +2,405 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Swetha Siva: Interactive & Narrative Design</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Swetha Siva · Interactive Narrative Design</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@700&family=Poppins:wght@400;700;900&family=DM+Serif+Display:ital@0;1&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Hind+Madurai:wght@700&family=Poppins:wght@400;700;900&family=DM+Serif+Display:ital@0;1&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --pink: #BF047E;
-      --teal: #038C8C;
-      --navy: #091740;
-      --gold: #C8923A;
-      --deep: #05102A;
-      --mid: #0D2152;
-      --white: #ffffff;
-      --offwhite: #f7f4f0;
-      --muted: rgba(255,255,255,0.55);
+      --pink:    #BF047E;
+      --teal:    #038C8C;
+      --navy:    #091740;
+      --gold:    #C8923A;
+      --deep:    #05102A;
+      --pixel:   #06091a;
+      --mid:     #0d1530;
+      --white:   #ffffff;
+      --muted:   rgba(255,255,255,0.5);
     }
 
-    * { margin: 0; padding: 0; border: 0; box-sizing: border-box; list-style: none; }
+    * { margin: 0; padding: 0; box-sizing: border-box; list-style: none; }
     html { scroll-behavior: smooth; }
 
     body {
-      background-color: #ffffff;
-      color: var(--navy);
+      background: var(--pixel);
+      color: var(--white);
       font-family: 'Poppins', sans-serif;
       overflow-x: hidden;
     }
 
     a { color: inherit; text-decoration: none; }
 
-    /* Starfield canvas — hidden on light page */
-    #starfield { display: none; }
-
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 3rem;
-      background: rgba(255,255,255,0.92);
+      padding: 1rem 2.5rem;
+      background: rgba(6,9,26,0.94);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(9,23,64,0.08);
+      border-bottom: 1px solid rgba(200,146,58,0.18);
     }
     .nav-home {
-      font-family: 'Hind Madurai', sans-serif;
-      font-size: 1rem; letter-spacing: 0.05em; text-transform: uppercase;
-      color: var(--navy); opacity: 0.55; transition: opacity 0.2s;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55rem; letter-spacing: 0.08em;
+      color: var(--gold); transition: color 0.2s;
     }
-    .nav-home:hover { opacity: 1; color: var(--navy); }
-    .nav-links { display: flex; gap: 2rem; }
+    .nav-home:hover { color: var(--white); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
     .nav-links a {
-      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.1em; color: var(--navy); opacity: 0.5;
-      padding-bottom: 2px; border-bottom: 1px solid transparent;
-      transition: opacity 0.2s, border-color 0.2s;
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: rgba(255,255,255,0.45);
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      padding-bottom: 2px;
     }
-    .nav-links a:hover { opacity: 1; border-color: var(--gold); }
+    .nav-links a:hover { color: var(--gold); border-color: var(--gold); }
+    #nav-toggle {
+      display: none; background: none; border: none;
+      font-size: 1.2rem; cursor: pointer; color: var(--gold);
+    }
 
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
-      display: grid;
-      grid-template-rows: 1fr auto;
+      background: var(--pixel);
       position: relative;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       overflow: hidden;
     }
 
-    .hero-bg {
-      position: absolute; inset: 0; z-index: 0;
-      background: linear-gradient(160deg, #eef2ff 0%, #ffffff 45%, #fff8f0 100%);
+    /* Pixel grid */
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(200,146,58,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,146,58,0.06) 1px, transparent 1px);
+      background-size: 32px 32px;
     }
 
-    .hero-screenshot {
-      position: absolute;
-      right: 0; top: 0; bottom: 0;
-      width: 55%;
-      z-index: 1;
-      overflow: hidden;
-    }
-    .hero-screenshot img {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: center;
-      opacity: 0.18;
-    }
-    .hero-screenshot::before {
-      content: '';
-      position: absolute; inset: 0; z-index: 1;
-      background: linear-gradient(to right, #ffffff 0%, transparent 60%);
+    /* CRT scanlines */
+    .hero-scanlines {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 4px
+      );
     }
 
-    .hero-content {
+    /* Pixel corner brackets */
+    .px-corner {
+      position: absolute; width: 28px; height: 28px; z-index: 1;
+    }
+    .px-corner::before, .px-corner::after {
+      content: ''; position: absolute; background: var(--gold); opacity: 0.6;
+    }
+    .px-corner.tl { top: 5.5rem; left: 2.5rem; }
+    .px-corner.tr { top: 5.5rem; right: 2.5rem; }
+    .px-corner.bl { bottom: 3.5rem; left: 2.5rem; }
+    .px-corner.br { bottom: 3.5rem; right: 2.5rem; }
+    .px-corner.tl::before, .px-corner.tr::before,
+    .px-corner.bl::before, .px-corner.br::before { width: 100%; height: 3px; }
+    .px-corner.tl::after,  .px-corner.tr::after,
+    .px-corner.bl::after,  .px-corner.br::after  { width: 3px; height: 100%; }
+    .px-corner.tl::before { top: 0; left: 0; }
+    .px-corner.tl::after  { top: 0; left: 0; }
+    .px-corner.tr::before { top: 0; right: 0; }
+    .px-corner.tr::after  { top: 0; right: 0; }
+    .px-corner.bl::before { bottom: 0; left: 0; }
+    .px-corner.bl::after  { bottom: 0; left: 0; }
+    .px-corner.br::before { bottom: 0; right: 0; }
+    .px-corner.br::after  { bottom: 0; right: 0; }
+
+    .hero-inner {
       position: relative; z-index: 2;
-      padding: 10rem 5rem 4rem;
-      max-width: 680px;
-      display: flex; flex-direction: column; justify-content: center;
+      text-align: center;
+      padding: 7rem 2rem 4rem;
+      max-width: 860px;
     }
 
     .hero-eyebrow {
-      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.25em; color: var(--gold); margin-bottom: 2rem;
-      display: flex; align-items: center; gap: 1rem;
-    }
-    .hero-eyebrow::after {
-      content: ''; display: block; width: 40px; height: 1px; background: var(--gold);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.5rem; color: var(--teal);
+      letter-spacing: 0.2em; margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s ease both;
     }
 
     .hero-title {
-      font-family: 'Hind Madurai', sans-serif;
-      font-size: clamp(3rem, 7vw, 6.5rem);
-      line-height: 0.88;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-      letter-spacing: -0.01em;
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(1.2rem, 3.5vw, 2.6rem);
+      line-height: 1.8;
+      color: var(--white);
+      margin-bottom: 2.5rem;
+      text-shadow: 4px 4px 0 rgba(200,146,58,0.25);
+      animation: fadeUp 0.6s 0.1s ease both;
     }
-    .hero-title .outline {
-      -webkit-text-stroke: 1.5px rgba(9,23,64,0.25);
-      color: transparent;
+    .hero-title .accent { color: var(--gold); }
+
+    .hero-cursor {
+      display: inline-block;
+      width: 0.55em; height: 0.12em;
+      background: var(--gold);
+      margin-left: 0.15em;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+      position: relative; top: -0.15em;
     }
-    .hero-title .solid { color: var(--navy); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
     .hero-sub {
       font-family: 'Crimson Pro', serif;
-      font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+      font-size: clamp(1rem, 1.8vw, 1.3rem);
       font-style: italic;
-      color: rgba(9,23,64,0.6);
-      line-height: 1.6;
-      max-width: 480px;
-      margin-bottom: 2.5rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.75;
+      max-width: 580px;
+      margin: 0 auto 3rem;
+      animation: fadeUp 0.6s 0.2s ease both;
     }
 
     .hero-cta {
-      display: inline-flex; align-items: center; gap: 1rem;
-      background: var(--gold);
-      color: var(--deep);
-      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.15em;
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55rem; letter-spacing: 0.1em;
+      background: var(--gold); color: var(--deep);
       padding: 1rem 2rem;
-      width: fit-content;
-      transition: background 0.2s, transform 0.2s;
+      clip-path: polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+      transition: background 0.15s, transform 0.15s;
+      animation: fadeUp 0.6s 0.3s ease both;
     }
-    .hero-cta:hover { background: var(--navy); color: var(--white); transform: translate(-2px, -2px); }
+    .hero-cta:hover { background: var(--white); transform: translate(-3px,-3px); }
 
-    .hero-scroll-hint {
-      position: relative; z-index: 2;
-      padding: 2rem 5rem;
-      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em;
-      color: rgba(9,23,64,0.25);
+    .hero-scroll {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4rem; color: rgba(255,255,255,0.18);
+      letter-spacing: 0.2em; z-index: 2;
+      animation: float 2.2s ease-in-out infinite;
     }
-
-    /* ── SECONDARY CTA ── */
-    .hero-cta-secondary {
-      display: inline-flex; align-items: center; gap: 1rem;
-      background: transparent;
-      color: var(--gold);
-      border: 2px dashed var(--gold);
-      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.15em;
-      padding: 1rem 2rem;
-      width: fit-content;
-      transition: background 0.2s, color 0.2s;
-      animation: fadeUp 0.7s 0.55s ease both;
-    }
-    .hero-cta-secondary:hover { background: var(--gold); color: var(--deep); }
-
-    /* ── PROJECT DIVIDER ── */
-    .project-divider {
-      position: relative; z-index: 1;
-      padding: 5rem 5% 3rem;
-      border-top: 2px dashed rgba(200,146,58,0.4);
-    }
-    .project-number {
-      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.3em; color: var(--gold); margin-bottom: 0.75rem;
-    }
-    .project-divider-title {
-      font-family: 'Hind Madurai', sans-serif;
-      font-size: clamp(1.8rem, 3.5vw, 3rem);
-      text-transform: uppercase; line-height: 1; margin-bottom: 0.75rem;
-    }
-    .project-meta {
-      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em;
-      color: rgba(9,23,64,0.35);
-    }
-    .dark-section .project-meta { color: rgba(255,255,255,0.3); }
-    .dark-section .project-divider-title { color: var(--white); }
-
-    /* ── GAME SECTION ── */
-    .game-section {
-      position: relative; z-index: 1;
-      padding: 3rem 5% 6rem;
+    @keyframes float {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(7px); }
     }
 
-    /* Screenshots strip */
-    .screenshots {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 4px;
-      margin-bottom: 6rem;
-      border: 2px dashed rgba(200,146,58,0.2);
-    }
-    .screenshot-main {
-      position: relative; overflow: hidden; cursor: zoom-in;
-    }
-    .screenshot-main img {
-      width: 100%; height: 420px;
-      object-fit: cover; object-position: top;
-      display: block;
-      transition: transform 0.4s ease;
-    }
-    .screenshot-main:hover img { transform: scale(1.03); }
-
-    .screenshot-side {
-      display: flex; flex-direction: column; gap: 4px;
-    }
-    .screenshot-thumb {
-      position: relative; overflow: hidden; cursor: zoom-in; flex: 1;
-    }
-    .screenshot-thumb img {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: top;
-      display: block; min-height: 206px;
-      transition: transform 0.4s ease;
-    }
-    .screenshot-thumb:hover img { transform: scale(1.05); }
-
-    .screenshot-label {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to top, rgba(5,16,42,0.9) 0%, transparent 100%);
-      padding: 1.5rem 1rem 0.75rem;
-      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.15em; color: var(--gold);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .screenshot-main:hover .screenshot-label,
-    .screenshot-thumb:hover .screenshot-label { opacity: 1; }
-
-    /* Content blocks */
-    .content-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px;
-      margin-bottom: 4px;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .content-block {
-      background: rgba(13,33,82,0.5);
-      border: 2px dashed rgba(255,255,255,0.08);
-      padding: 3rem;
-      backdrop-filter: blur(4px);
-    }
-    .content-block.accent { border-color: rgba(200,146,58,0.3); }
-    .content-block.full { grid-column: 1 / 3; }
-
-    .block-label {
-      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.25em; color: var(--gold); margin-bottom: 1.25rem;
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-    .block-label::after { content: ''; flex: 1; height: 1px; background: rgba(200,146,58,0.3); }
-
-    .block-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
-      line-height: 1.15;
-      margin-bottom: 1.25rem;
-      color: var(--white);
-    }
-
-    .block-body {
-      font-family: 'Crimson Pro', serif;
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: var(--muted);
-    }
-    .block-body p + p { margin-top: 1rem; }
-
-    /* Variable bars */
-    .variables {
-      display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem;
-    }
-    .var-row { display: flex; flex-direction: column; gap: 0.5rem; }
-    .var-header { display: flex; justify-content: space-between; align-items: baseline; }
-    .var-name {
-      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.12em; color: var(--white);
-    }
-    .var-desc { font-size: 0.7rem; color: var(--muted); }
-    .var-bar { height: 4px; background: rgba(255,255,255,0.1); position: relative; }
-    .var-fill {
-      position: absolute; left: 0; top: 0; bottom: 0;
-      transition: width 1s ease;
-    }
-    .var-fill.harmony { background: var(--teal); width: 60%; }
-    .var-fill.angel { background: var(--gold); width: 35%; }
-    .var-fill.raji { background: var(--pink); width: 75%; }
-
-    /* Endings */
-    .endings {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      gap: 4px; margin-top: 1rem;
-    }
-    .ending {
-      border: 2px dashed rgba(255,255,255,0.1);
-      padding: 1.5rem;
-      text-align: center;
-      transition: border-color 0.2s;
-    }
-    .ending:hover { border-color: var(--gold); }
-    .ending-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
-    .ending-title {
-      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.1em; color: var(--white); margin-bottom: 0.5rem;
-    }
-    .ending-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
-
-    /* Embed section */
-    .embed-section {
-      background: rgba(13,33,82,0.5);
-      border: 2px dashed rgba(200,146,58,0.3);
-      padding: 3rem;
-      margin-bottom: 4px;
-      backdrop-filter: blur(4px);
-    }
-    .embed-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
-    }
-    .embed-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.8rem; color: var(--white);
-    }
-    .embed-note { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
-    .embed-wrapper {
-      width: 100%;
-      background: #000;
-      border: 2px dashed rgba(255,255,255,0.1);
-      overflow: hidden;
+    /* ── ABOUT ── */
+    .about-section {
+      background: var(--pixel);
+      border-top: 1px solid rgba(200,146,58,0.15);
+      padding: 7rem 5% 6rem;
       position: relative;
     }
-    .embed-wrapper iframe {
-      width: 100%; height: 600px; display: block; border: none;
+    .about-section::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(200,146,58,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,146,58,0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
     }
 
-    /* Credits */
-    .credits-block {
-      background: rgba(13,33,82,0.5);
-      border: 2px dashed rgba(255,255,255,0.08);
-      padding: 3rem;
-      backdrop-filter: blur(4px);
-    }
-    .credits-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 2rem; margin-top: 1.5rem;
+    .about-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 280px 1fr;
+      gap: 5rem; align-items: start;
+      position: relative; z-index: 1;
     }
 
-    .credit-label {
-      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.2em; color: var(--gold); margin-bottom: 0.4rem;
+    /* Player card */
+    .player-card {
+      border: 2px solid rgba(200,146,58,0.35);
+      padding: 2rem;
+      clip-path: polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+      background: rgba(13,21,48,0.7);
     }
-    .credit-value { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+    .player-tag {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4rem; color: var(--teal);
+      letter-spacing: 0.15em; margin-bottom: 1.25rem;
+    }
+    .player-name {
+      font-family: 'Hind Madurai', sans-serif;
+      font-size: 1.9rem; text-transform: uppercase;
+      color: var(--white); line-height: 1; margin-bottom: 0.4rem;
+    }
+    .player-role {
+      font-size: 0.65rem; color: var(--gold);
+      text-transform: uppercase; letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+    }
+    .stat-row { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 1.5rem; }
+    .stat { display: flex; align-items: center; gap: 0.75rem; }
+    .stat-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.35rem; color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em; width: 70px; flex-shrink: 0;
+    }
+    .stat-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.08); position: relative; }
+    .stat-fill { position: absolute; left: 0; top: 0; bottom: 0; }
+    .stat-val {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.35rem; width: 24px; text-align: right; flex-shrink: 0;
+    }
+    .player-affil {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.35rem; color: rgba(200,146,58,0.5);
+      letter-spacing: 0.08em; line-height: 1.8;
+      margin-top: 0.5rem;
+    }
 
-    .itch-link {
-      display: inline-flex; align-items: center; gap: 1rem;
-      margin-top: 2rem;
-      background: transparent;
-      color: var(--gold);
-      border: 2px dashed var(--gold);
-      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.15em; padding: 0.9rem 2rem;
+    /* About text */
+    .about-text { padding-top: 0.5rem; }
+    .section-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.5rem; color: var(--gold);
+      letter-spacing: 0.2em; margin-bottom: 1.5rem;
+    }
+    .about-text h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      color: var(--white); line-height: 1.2;
+      margin-bottom: 1.75rem;
+    }
+    .about-text h2 em { font-style: normal; color: var(--gold); }
+    .about-text p {
+      font-family: 'Crimson Pro', serif;
+      font-size: 1.1rem; line-height: 1.8;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 1.25rem;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    /* ── PROJECTS ── */
+    .projects-section {
+      background: var(--mid);
+      border-top: 1px solid rgba(200,146,58,0.12);
+      padding: 6rem 5%;
+    }
+    .projects-inner { max-width: 1100px; margin: 0 auto; }
+
+    .section-header { margin-bottom: 3.5rem; }
+    .section-title {
+      font-family: 'Hind Madurai', sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      text-transform: uppercase;
+      color: var(--white); line-height: 0.92;
+      margin-top: 1rem;
+    }
+
+    .projects-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+    }
+
+    .project-card {
+      position: relative; overflow: hidden;
+      clip-path: polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+      transition: transform 0.3s ease;
+      display: block;
+    }
+    .project-card:hover { transform: translate(-4px,-4px); z-index: 1; }
+
+    .card-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: saturate(0.5) brightness(0.35);
+      transition: filter 0.4s ease, transform 0.5s ease;
+    }
+    .project-card:hover .card-bg {
+      filter: saturate(0.7) brightness(0.45);
+      transform: scale(1.04);
+    }
+
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(6,9,26,0.98) 0%,
+        rgba(6,9,26,0.7) 40%,
+        rgba(6,9,26,0.2) 100%
+      );
+    }
+
+    .card-border {
+      position: absolute; inset: 0;
+      border: 2px solid rgba(200,146,58,0.25);
+      clip-path: inherit; pointer-events: none;
+      transition: border-color 0.3s;
+    }
+    .project-card:hover .card-border { border-color: var(--gold); }
+
+    .card-content {
+      position: relative; z-index: 1;
+      padding: 2.5rem; min-height: 500px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+
+    .card-number {
+      position: absolute; top: 2rem; left: 2.5rem;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4rem; color: rgba(200,146,58,0.6);
+      letter-spacing: 0.2em;
+    }
+
+    .card-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .card-tag {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.32rem; color: var(--teal);
+      border: 1px solid rgba(3,140,140,0.5);
+      padding: 0.3rem 0.6rem; letter-spacing: 0.08em;
+    }
+
+    .card-title {
+      font-family: 'Hind Madurai', sans-serif;
+      font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+      text-transform: uppercase;
+      color: var(--white); line-height: 0.92;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-desc {
+      font-family: 'Crimson Pro', serif;
+      font-size: 1rem; color: rgba(255,255,255,0.5);
+      line-height: 1.65; margin-bottom: 1.5rem;
+    }
+
+    .card-cta {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.45rem; color: var(--gold);
+      border: 1px solid rgba(200,146,58,0.35);
+      padding: 0.7rem 1.25rem;
+      clip-path: polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);
       transition: background 0.2s, color 0.2s;
+      width: fit-content;
     }
-    .itch-link:hover { background: var(--gold); color: var(--deep); }
+    .project-card:hover .card-cta { background: var(--gold); color: var(--deep); }
 
     /* ── FOOTER ── */
     footer {
-      position: relative; z-index: 1;
-      background: #f5f5f2;
-      border-top: 1px solid rgba(9,23,64,0.08);
+      background: var(--pixel);
+      border-top: 1px solid rgba(200,146,58,0.15);
       padding: 5rem;
       display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
     }
     .footer-left h2 {
       font-family: 'Hind Madurai', sans-serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      text-transform: uppercase; line-height: 0.95; margin-bottom: 1.5rem;
-      color: var(--navy);
+      font-size: clamp(2rem,4vw,3.5rem);
+      text-transform: uppercase; line-height: 0.95;
+      margin-bottom: 1.5rem; color: var(--white);
     }
     .footer-left h2 em { font-style: normal; color: var(--gold); }
-    .footer-left p { font-size: 0.9rem; line-height: 1.6; color: rgba(9,23,64,0.55); max-width: 360px; }
+    .footer-left p { font-size: 0.9rem; line-height: 1.6; color: rgba(255,255,255,0.35); max-width: 360px; }
     .footer-right { display: flex; flex-direction: column; justify-content: center; gap: 1.5rem; }
     .footer-link {
       display: flex; align-items: center; gap: 1rem;
-      font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.1em; color: rgba(9,23,64,0.5); transition: color 0.2s;
+      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(255,255,255,0.35);
+      transition: color 0.2s;
     }
     .footer-link:hover { color: var(--gold); }
     .footer-arrow {
@@ -409,152 +415,46 @@
     }
     .footer-copy {
       grid-column: 1/3;
-      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em;
-      color: rgba(9,23,64,0.2); padding-top: 2rem;
-      border-top: 1px solid rgba(9,23,64,0.06);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.38rem; letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.12); padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
     }
-
-    /* ── LIGHTBOX ── */
-    #lightbox {
-      display: none; position: fixed; inset: 0;
-      background: rgba(5,16,42,0.97); z-index: 1000;
-      align-items: center; justify-content: center;
-      padding: 2rem; cursor: zoom-out;
-    }
-    #lightbox.open { display: flex; }
-    #lightbox-inner { position: relative; max-width: 90vw; max-height: 90vh; }
-    #lightbox-img { max-width: 100%; max-height: 85vh; object-fit: contain; display: block; border: 2px dashed rgba(200,146,58,0.4); }
-    #lightbox-cap { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 1rem; text-align: center; }
-    #lightbox-close {
-      position: absolute; top: -1rem; right: -1rem;
-      background: var(--pink); color: white; border: none;
-      width: 34px; height: 34px; cursor: pointer; font-size: 1rem;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    /* ── DARK SECTION (Hanging by a Thread) ── */
-    .dark-section {
-      background: var(--deep);
-      color: var(--white);
-    }
-    .dark-section .project-divider {
-      border-top-color: rgba(200,146,58,0.4);
-    }
-
-    /* ── LIGHT SECTION (Sort It Out) ── */
-    .light-section {
-      background: #ffffff;
-      color: var(--navy);
-    }
-    .light-section .content-block {
-      background: rgba(9,23,64,0.03);
-      border-color: rgba(9,23,64,0.1);
-    }
-    .light-section .content-block.accent {
-      border-color: rgba(200,146,58,0.35);
-    }
-    .light-section .block-title { color: var(--navy); }
-    .light-section .block-body { color: rgba(9,23,64,0.65); }
-    .light-section .var-name { color: var(--navy); }
-    .light-section .embed-section {
-      background: rgba(9,23,64,0.03);
-      border-color: rgba(200,146,58,0.3);
-    }
-    .light-section .embed-title { color: var(--navy); }
-    .light-section .embed-note { color: rgba(9,23,64,0.5); }
-    .light-section .embed-wrapper { border-color: rgba(9,23,64,0.1); }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes shimmer { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
-
-    .hero-eyebrow { animation: fadeUp 0.7s ease both; }
-    .hero-title   { animation: fadeUp 0.7s 0.1s ease both; }
-    .hero-sub     { animation: fadeUp 0.7s 0.25s ease both; }
-    .hero-cta     { animation: fadeUp 0.7s 0.4s ease both; }
-
-    /* ── HAMBURGER TOGGLE ── */
-    #nav-toggle {
-      display: none;
-      background: none; border: none;
-      font-size: 1.3rem; cursor: pointer;
-      color: var(--navy); padding: 0.25rem; line-height: 1;
-    }
-
-    /* ── MOBILE FULLSCREEN CTA ── */
-    .embed-mobile-cta {
-      display: none;
-      flex-direction: column; align-items: center; justify-content: center;
-      gap: 1rem; padding: 3rem 2rem; text-align: center;
-      background: rgba(9,23,64,0.03);
-      border: 1px solid rgba(9,23,64,0.08);
-    }
-    .embed-mobile-cta p { font-size: 0.85rem; color: rgba(9,23,64,0.55); max-width: 280px; line-height: 1.6; }
-    .fullscreen-btn {
-      display: inline-flex; align-items: center; gap: 0.75rem;
-      background: #2d9e4f; color: white;
-      font-size: 0.9rem; font-weight: 700; letter-spacing: 0.08em;
-      padding: 1rem 2rem; border-radius: 4px;
-      transition: background 0.2s;
-    }
-    .fullscreen-btn:hover { background: #1a7a3a; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
-      nav { padding: 1rem 1.5rem; }
-      .hero-content { padding: 8rem 2rem 3rem; max-width: 100%; }
-      .hero-screenshot { width: 100%; opacity: 0.12; }
-      .game-section { padding: 2rem 4% 4rem; }
-      .project-divider { padding: 3rem 4% 2rem; }
-      .screenshots { grid-template-columns: 1fr; }
-      .screenshot-main img { height: 280px; }
-      .screenshot-side { flex-direction: row; }
-      .content-grid { grid-template-columns: 1fr; }
-      .content-block.full { grid-column: 1; }
-      .endings { grid-template-columns: 1fr; }
-      .credits-grid { grid-template-columns: 1fr 1fr; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .projects-grid { grid-template-columns: 1fr; }
       footer { grid-template-columns: 1fr; padding: 3rem 2rem; gap: 2rem; }
       .footer-copy { grid-column: 1; }
-      .embed-wrapper iframe { height: 380px; }
     }
 
     @media (max-width: 680px) {
       #nav-toggle { display: block; }
       .nav-links {
-        display: none;
-        position: fixed; top: 57px; left: 0; right: 0; z-index: 99;
+        display: none; position: fixed; top: 56px; left: 0; right: 0; z-index: 99;
         flex-direction: column; gap: 0;
-        background: rgba(255,255,255,0.97);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(9,23,64,0.08);
+        background: rgba(6,9,26,0.97); backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(200,146,58,0.15);
         padding: 0.5rem 1.5rem 1rem;
       }
       .nav-links.open { display: flex; }
-      .nav-links a {
-        padding: 0.8rem 0; opacity: 1; font-size: 0.85rem;
-        border-bottom: 1px solid rgba(9,23,64,0.05);
-      }
+      .nav-links a { padding: 0.8rem 0; border-bottom: 1px solid rgba(200,146,58,0.08); }
       .nav-links a:last-child { border-bottom: none; }
-      .hero-title { font-size: clamp(2.5rem, 12vw, 4rem); }
-      .hero-cta, .hero-cta-secondary { width: 100%; justify-content: center; }
-      .embed-wrapper { display: none; }
-      .embed-mobile-cta { display: flex; }
-      .project-divider { padding: 2.5rem 5% 1.5rem; }
-      .content-block { padding: 2rem; }
-      .embed-section { padding: 2rem; }
-      .system-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+      .hero-title { font-size: clamp(0.9rem, 5vw, 1.4rem); }
+      .card-content { min-height: 380px; padding: 2rem 1.5rem; }
+      .about-section { padding: 5rem 5% 4rem; }
     }
   </style>
 </head>
 <body>
-  <canvas id="starfield"></canvas>
 
   <!-- NAV -->
   <nav>
     <a href="https://swethasiva.com" class="nav-home">Swetha Siva</a>
-    <div class="nav-links">
-      <a href="#project-01">Hanging by a Thread</a>
-      <a href="#sort-it-out">Sort It Out</a>
+    <div class="nav-links" id="nav-links">
+      <a href="#about">About</a>
+      <a href="#projects">Work</a>
       <a href="#contact">Contact</a>
     </div>
     <button id="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
@@ -562,377 +462,147 @@
 
   <!-- HERO -->
   <header class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-screenshot">
-      <img src="images/interactive/game-boutique.png" alt="Interactive work by Swetha Siva">
-    </div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">Swetha Siva: Portfolio</p>
+    <div class="hero-grid"></div>
+    <div class="hero-scanlines"></div>
+    <div class="px-corner tl"></div>
+    <div class="px-corner tr"></div>
+    <div class="px-corner bl"></div>
+    <div class="px-corner br"></div>
+
+    <div class="hero-inner">
+      <p class="hero-eyebrow">▸ swetha siva · portfolio.exe</p>
       <h1 class="hero-title">
-        <span class="solid">Interactive</span><br>
-        <span class="outline">& Narrative</span><br>
-        <span class="solid">Design</span>
+        <span class="accent">Interactive</span><br>
+        Narrative<br>
+        Design<span class="hero-cursor"></span>
       </h1>
-      <p class="hero-sub">Two projects where the mechanics and the message agree: a branching visual novel set in purgatory, and a mobile recycling game designed for a campus AR activation.</p>
-      <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
-        <a href="#project-01" class="hero-cta">Hanging by a Thread ↓</a>
-        <a href="#sort-it-out" class="hero-cta-secondary">Sort It Out ↓</a>
-      </div>
+      <p class="hero-sub">Stories where the mechanic and the message agree — games, branching fiction, and transmedia systems built for impact and community.</p>
+      <a href="#projects" class="hero-cta">▸ Select Project</a>
     </div>
-    <p class="hero-scroll-hint">↓ Scroll to explore both projects</p>
+    <p class="hero-scroll">↓ scroll to explore</p>
   </header>
 
-  <!-- PROJECT 01 — DARK SECTION -->
-  <div class="dark-section">
-  <div class="project-divider" id="project-01">
-    <p class="project-number">Project 01</p>
-    <h2 class="project-divider-title">Hanging by a Thread</h2>
-    <p class="project-meta">Visual Novel &nbsp;·&nbsp; Ren'Py &nbsp;·&nbsp; EMDD 630, Ball State University &nbsp;·&nbsp; 2025</p>
-  </div>
+  <!-- ABOUT -->
+  <section class="about-section" id="about">
+    <div class="about-inner">
 
-  <!-- GAME SECTION -->
-  <main class="game-section" id="game">
-
-    <!-- Screenshots -->
-    <div class="screenshots">
-      <div class="screenshot-main" onclick="openLightbox('images/interactive/game-boutique.png', 'The purgatory boutique: workers fulfilling divine orders')">
-        <img src="images/interactive/game-boutique.png" alt="The purgatory boutique scene">
-        <div class="screenshot-label">The Boutique</div>
-      </div>
-      <div class="screenshot-side">
-        <div class="screenshot-thumb" onclick="openLightbox('images/interactive/game-angel.png', 'The Angel, enforcer of the divine system')">
-          <img src="images/interactive/game-angel.png" alt="The Angel character with HUD bars">
-          <div class="screenshot-label">The Angel + HUD</div>
-        </div>
-        <div class="screenshot-thumb" onclick="openLightbox('images/interactive/game-classroom.jpg', 'Flashback scene, drawn on real notebook paper')">
-          <img src="images/interactive/game-classroom.jpg" alt="Notebook paper flashback scene">
-          <div class="screenshot-label">Flashback Scene</div>
-        </div>
-      </div>
-      <div class="screenshot-side">
-        <div class="screenshot-thumb" onclick="openLightbox('images/interactive/game-title.png', 'Title screen: Hanging by a Thread')">
-          <img src="images/interactive/game-title.png" alt="Title screen">
-          <div class="screenshot-label">Title Screen</div>
-        </div>
-        <div class="screenshot-thumb" style="background: rgba(13,33,82,0.8); display:flex; align-items:center; justify-content:center; cursor:default;">
-          <div style="text-align:center; padding:1.5rem;">
-            <p style="font-family:'Hind Madurai',sans-serif; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.2em; color:var(--gold); margin-bottom:0.75rem;">Built in</p>
-            <p style="font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--white); line-height:1;">Ren'Py</p>
-            <p style="font-size:0.7rem; color:var(--muted); margin-top:0.5rem;">Visual novel engine</p>
+      <div class="player-card">
+        <p class="player-tag">▸ PLAYER PROFILE</p>
+        <p class="player-name">Swetha<br>Siva</p>
+        <p class="player-role">Interactive Narrative Designer</p>
+        <div class="stat-row">
+          <div class="stat">
+            <span class="stat-label">Narrative</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:95%;background:var(--gold);"></div></div>
+            <span class="stat-val" style="color:var(--gold);">95</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Systems</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:82%;background:var(--teal);"></div></div>
+            <span class="stat-val" style="color:var(--teal);">82</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Research</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:90%;background:var(--pink);"></div></div>
+            <span class="stat-val" style="color:var(--pink);">90</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Transmedia</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:85%;background:var(--white);opacity:0.7;"></div></div>
+            <span class="stat-val" style="color:rgba(255,255,255,0.7);">85</span>
           </div>
         </div>
+        <p class="player-affil">▸ MA Emerging Media<br>▸ Ball State University</p>
       </div>
+
+      <div class="about-text">
+        <p class="section-label">▸ ABOUT</p>
+        <h2>Design for change.<br>Stories that make<br>you <em>feel</em> the system.</h2>
+        <p>Swetha Siva is an interactive narrative designer and transmedia storyteller working at the intersection of game mechanics, social critique, and community-centred design. Her work is built on a single conviction: that what you do in a story and what the story says should be the same thing.</p>
+        <p>She holds an MFA in Creative Writing (Fiction) from the University of Miami and is currently pursuing an MA in Emerging Media Design and Development at Ball State University. Before design, she taught undergraduate creative writing, edited a graduate literary magazine, and worked in grant writing and research communications across academic and cultural institutions.</p>
+        <p>Born and raised in Coimbatore, India. Her practice is shaped by South Asian speculative fiction, queer narrative traditions, and the long history of storytelling as a tool for building community — and by the conviction that interactive media is one of the most underused forms we have for making structural critique visceral.</p>
+      </div>
+
     </div>
-    <p style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.15em; color:rgba(255,255,255,0.25); margin-bottom:5rem; text-align:right;">↑ Click any screenshot to expand</p>
-
-    <!-- The World + The Mechanic -->
-    <div class="content-grid" style="margin-bottom:4px;">
-
-      <div class="content-block accent">
-        <p class="block-label">The Premise</p>
-        <h2 class="block-title">You are newly dead. The afterlife has a dress code.</h2>
-        <div class="block-body">
-          <p>Sinners in purgatory must sew garments for deities to work off their sins. When you arrive, flashbacks to your life start bleeding through, and suddenly the line between holy duty and human longing gets very complicated.</p>
-          <p>The afterlife is cosmic and hand-painted. The flashback scenes are drawn on actual notebook paper. The world looks different depending on whether you're human, and that difference is built into the art direction, not just the writing.</p>
-        </div>
-      </div>
-
-      <div class="content-block">
-        <p class="block-label">The Variables</p>
-        <h2 class="block-title">Three tensions. Three endings.</h2>
-        <div class="variables">
-          <div class="var-row">
-            <div class="var-header">
-              <span class="var-name">Harmony</span>
-              <span class="var-desc">Stability with the group</span>
-            </div>
-            <div class="var-bar"><div class="var-fill harmony"></div></div>
-          </div>
-          <div class="var-row">
-            <div class="var-header">
-              <span class="var-name">Angel Favor</span>
-              <span class="var-desc">Goodwill with the system's enforcer</span>
-            </div>
-            <div class="var-bar"><div class="var-fill angel"></div></div>
-          </div>
-
-        </div>
-        <p style="font-size:0.75rem; color:rgba(255,255,255,0.3); margin-top:1.5rem; font-style:italic;">Some choices are marked in gold. They feel like shortcuts. They cost you in ways the interface doesn't announce.</p>
-      </div>
-    </div>
-
-    <!-- Endings -->
-    <div class="content-block" style="margin-bottom:4px;">
-      <p class="block-label">The Endings</p>
-      <div class="endings">
-        <div class="ending">
-          <div class="ending-icon">✊</div>
-          <p class="ending-title">Workers' Strike</p>
-          <p class="ending-desc">Collective action prevails. The system cracks. Briefly.</p>
-        </div>
-        <div class="ending">
-          <div class="ending-icon">⚙️</div>
-          <p class="ending-title">Absorbed</p>
-          <p class="ending-desc">You become what you arrived in. The boutique continues.</p>
-        </div>
-        <div class="ending">
-          <div class="ending-icon">🧵</div>
-          <p class="ending-title">Endless Cycle</p>
-          <p class="ending-desc">No resolution. The work goes on. The thread never ends.</p>
-        </div>
-      </div>
-      <p style="font-size:0.8rem; color:var(--muted); margin-top:1.5rem; font-family:'Crimson Pro',serif; font-style:italic;">The endings are not ranked. The game does not tell you which one is right.</p>
-    </div>
-
-    <!-- Design Thinking -->
-    <div class="content-block accent" style="margin-bottom: 4rem;">
-      <p class="block-label">The Design Thinking</p>
-      <div class="block-body" style="max-width:800px;">
-        <p>The mechanic was built to put the player in the same position as the characters: aware that something is being measured, uncertain what the right answer is, complicit in the outcome regardless. The HUD is always visible. What the bars actually mean only becomes clear in retrospect.</p>
-        <p>This is what ludonarrative harmony looks like when the subject matter is labour, collective action, and complicity: the game's form and its politics have to agree with each other, or the whole thing collapses. Inspired by <em>Sita Sings the Blues</em> and <em>Omori</em>.</p>
-      </div>
-    </div>
-
-    <!-- Embed -->
-    <div class="embed-section" id="play">
-      <div class="embed-header">
-        <h2 class="embed-title">Play the Prototype</h2>
-        <p class="embed-note">Playable in browser · Ren'Py web build</p>
-      </div>
-      <div class="embed-wrapper">
-        <iframe
-          src="https://itch.io/embed-upload/16873525?color=333333"
-          allowfullscreen
-          title="Hanging by a Thread: playable prototype">
-        </iframe>
-      </div>
-      <a href="https://justswetha.itch.io/hanging-by-a-thread" target="_blank" rel="noopener" class="itch-link">
-        Open full screen on itch.io ↗
-      </a>
-    </div>
-
-    <!-- Credits -->
-    <div class="credits-block">
-      <p class="block-label">Credits & Tools</p>
-      <div class="credits-grid">
-        <div class="credit-item">
-          <p class="credit-label">Engine</p>
-          <p class="credit-value">Ren'Py</p>
-        </div>
-        <div class="credit-item">
-          <p class="credit-label">Art Direction & Original Art</p>
-          <p class="credit-value">Swetha Siva<br><span style="font-size:0.8rem; opacity:0.6;">Character redraw in progress with external collaborator</span></p>
-        </div>
-        <div class="credit-item">
-          <p class="credit-label">Writing & Design</p>
-          <p class="credit-value">Swetha Siva</p>
-        </div>
-        <div class="credit-item">
-          <p class="credit-label">Notebook-Paper Scenes</p>
-          <p class="credit-value">Swetha Siva<br><span style="font-size:0.8rem; opacity:0.6;">Hand-drawn on real paper, scanned</span></p>
-        </div>
-        <div class="credit-item">
-          <p class="credit-label">Inspirations</p>
-          <p class="credit-value">Sita Sings the Blues<br>Omori</p>
-        </div>
-        <div class="credit-item">
-          <p class="credit-label">Context</p>
-          <p class="credit-value">EMDD 630: Nonlinear & Interactive Storytelling<br>Ball State University, 2025</p>
-        </div>
-      </div>
-    </div>
-
-  </main>
-  </div><!-- end .dark-section -->
-
-  <!-- PROJECT 02 HEADER -->
-  <div class="project-divider light-section" id="sort-it-out">
-    <p class="project-number">Project 02</p>
-    <h2 class="project-divider-title">Sort It Out</h2>
-    <p class="project-meta">Mobile Web Game &nbsp;·&nbsp; AR Prototype &nbsp;·&nbsp; BSU Recycling Campaign &nbsp;·&nbsp; 2025</p>
-    <p style="font-family:'Crimson Pro',serif; font-size:clamp(1.1rem,1.8vw,1.3rem); font-style:italic; color:rgba(9,23,64,0.6); line-height:1.6; max-width:520px; margin-top:1.25rem;">A mobile-first recycling game built as the interactive layer of a campus AR activation. Flick items into the right bin, earn points, learn what actually gets recycled.</p>
-  </div>
-
-  <!-- SORT IT OUT SECTION -->
-  <section class="game-section light-section" style="padding-top:0;">
-    <div class="content-grid" style="margin-bottom: 4px;">
-      <div class="content-block accent">
-        <p class="block-label">The Premise</p>
-        <h3 class="block-title">The bin is no longer a passive receptacle.</h3>
-        <div class="block-body">
-          <p>Sort It Out is triggered by scanning a QR code placed directly on a campus recycling or trash bin, intercepting the student at the exact moment the disposal decision happens. The AR overlay makes recycling rules legible through consequence, not instruction.</p>
-          <p>No poster or video can replicate the experience of holding a greasy pizza box and having to consciously decide where it goes. The intervention is site-specific by design.</p>
-        </div>
-      </div>
-      <div class="content-block">
-        <p class="block-label">The Loop</p>
-        <h3 class="block-title">Scan. Sort. Stamp. Repeat.</h3>
-        <div class="block-body">
-          <p>Scan a QR code → a location splash names the site ("You're at Woodworth: let's see what ends up here") → eight waste items appear as AR overlays → flick each toward the correct bin. Wrong sorts trigger a one-line explanation before the item resets. No item is simply marked wrong and discarded.</p>
-          <p>Finishing a location stamps it on a campus-wide collection map. Completing all locations earns a redeemable dining coupon.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-block" style="margin-bottom: 4px; border: 2px dashed rgba(9,23,64,0.1);">
-      <p class="block-label">The System</p>
-      <div class="system-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
-        <div>
-          <h3 class="block-title" style="font-size:1.3rem;">A campus-scale social layer.</h3>
-          <div class="block-body">
-            <p>Points are attributed to hall-based teams, with a live leaderboard surfaced in-game: "Your floor is currently ranked 4th on campus." Each location carries site-specific narrative text developed with the residence hall or department it serves, so the game at Woodworth is not the same game as the game at DeHority.</p>
-          </div>
-        </div>
-        <div>
-          <h3 class="block-title" style="font-size:1.3rem;">A node in a larger storyworld.</h3>
-          <div class="block-body">
-            <p>Sort It Out is not a standalone minigame; it is a spatial node in a documentary campaign following a recycled item from bin to processing facility. The documentary's narrative is the backstory that Sort It Out makes physically present at the moment of disposal. QR codes on bins are the physical touchpoints that connect the digital and real-world layers.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="embed-section" style="margin-top:4px;">
-      <div class="embed-header">
-        <h2 class="embed-title">Play the Prototype</h2>
-        <p class="embed-note">Web build · mechanic prototype · full AR vision requires QR-triggered camera overlay</p>
-      </div>
-      <div class="embed-wrapper" style="background: #f0f7f0;">
-        <iframe
-          src="AR experience/sortitout.html"
-          allow="fullscreen"
-          title="Sort It Out: BSU Recycling Game"
-          style="height: 700px;">
-        </iframe>
-      </div>
-      <div class="embed-mobile-cta">
-        <p>This game is designed for mobile. Open it full screen for the intended experience.</p>
-        <a href="AR experience/sortitout.html" target="_blank" rel="noopener" class="fullscreen-btn">Open full screen ↗</a>
-      </div>
-      <a href="AR experience/sortitout.html" target="_blank" rel="noopener" class="itch-link" style="color:rgba(9,23,64,0.6); border-color:rgba(9,23,64,0.25);">
-        Open full screen ↗
-      </a>
-    </div>
-
   </section>
 
-  <!-- LIGHTBOX -->
-  <div id="lightbox" onclick="closeLightbox()">
-    <div id="lightbox-inner" onclick="event.stopPropagation()">
-      <img id="lightbox-img" src="" alt="">
-      <p id="lightbox-cap"></p>
-      <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <!-- PROJECTS -->
+  <section class="projects-section" id="projects">
+    <div class="projects-inner">
+      <div class="section-header">
+        <p class="section-label">▸ SELECT PROJECT</p>
+        <h2 class="section-title">Interactive<br>Work</h2>
+      </div>
+
+      <div class="projects-grid">
+
+        <!-- Card 1 -->
+        <a href="hanging-by-a-thread.html" class="project-card">
+          <div class="card-bg" style="background-image:url('images/interactive/game-boutique.png');"></div>
+          <div class="card-overlay"></div>
+          <div class="card-border"></div>
+          <div class="card-content">
+            <p class="card-number">01 ·</p>
+            <div class="card-tags">
+              <span class="card-tag">Visual Novel</span>
+              <span class="card-tag">Ren'Py</span>
+              <span class="card-tag">Autoethnography</span>
+            </div>
+            <h2 class="card-title">Hanging by<br>a Thread</h2>
+            <p class="card-desc">A branching visual novel set in a purgatory boutique, where complicity is built into the HUD — and only becomes legible in retrospect.</p>
+            <span class="card-cta">▸ View Case Study</span>
+          </div>
+        </a>
+
+        <!-- Card 2 -->
+        <a href="sort-it-out.html" class="project-card">
+          <div class="card-bg" style="background-image:url('images/interactive/sortitout-screenshot.png');"></div>
+          <div class="card-overlay"></div>
+          <div class="card-border"></div>
+          <div class="card-content">
+            <p class="card-number">02 ·</p>
+            <div class="card-tags">
+              <span class="card-tag">Mobile Game</span>
+              <span class="card-tag">AR Activation</span>
+              <span class="card-tag">Transmedia</span>
+            </div>
+            <h2 class="card-title">Sort It<br>Out</h2>
+            <p class="card-desc">A mobile recycling game as the interactive node in a campus transmedia documentary — designed for the exact moment a student holds something over a bin.</p>
+            <span class="card-cta">▸ View Case Study</span>
+          </div>
+        </a>
+
+      </div>
     </div>
-  </div>
+  </section>
 
   <!-- FOOTER -->
   <footer id="contact">
     <div class="footer-left">
       <h2>More<br><em>work</em><br>to see.</h2>
-      <p>Explore the full site or get in touch about interactive narrative, transmedia design, or collaborative projects.</p>
+      <p>Explore the full portfolio or get in touch about interactive narrative, transmedia design, or collaborative projects.</p>
     </div>
     <div class="footer-right">
       <a href="https://swethasiva.com/for-comms.html" class="footer-link"><span class="footer-arrow"></span>Communications portfolio</a>
       <a href="https://www.linkedin.com/in/swetha-siva" class="footer-link" target="_blank"><span class="footer-arrow"></span>LinkedIn</a>
       <a href="https://swethasiva.com" class="footer-link"><span class="footer-arrow"></span>Main site</a>
     </div>
-    <p class="footer-copy">© Swetha Siva 2026 · swethasiva.com/for-interactive</p>
+    <p class="footer-copy">© Swetha Siva 2026 · Interactive Narrative Design · swethasiva.com/for-interactive</p>
   </footer>
 
   <script>
-    function openLightbox(src, cap) {
-      document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox-cap').textContent = cap;
-      document.getElementById('lightbox').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-
-    // Hamburger nav
-    const navToggle = document.getElementById('nav-toggle');
-    const navLinks  = document.querySelector('.nav-links');
-    navToggle.addEventListener('click', () => {
-      const open = navLinks.classList.toggle('open');
-      navToggle.setAttribute('aria-expanded', open);
-      navToggle.textContent = open ? '✕' : '☰';
+    const toggle = document.getElementById('nav-toggle');
+    const links  = document.getElementById('nav-links');
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+      toggle.textContent = open ? '✕' : '☰';
     });
-    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', false);
-      navToggle.textContent = '☰';
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      links.classList.remove('open');
+      toggle.setAttribute('aria-expanded', false);
+      toggle.textContent = '☰';
     }));
-  </script>
-
-  <script>
-    // Parallax starfield
-    const canvas = document.getElementById('starfield');
-    const ctx = canvas.getContext('2d');
-
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = document.body.scrollHeight;
-    }
-    resize();
-    window.addEventListener('resize', () => { resize(); drawStars(); });
-
-    // Three layers: slow, medium, fast parallax speeds
-    const layers = [
-      { count: 120, minR: 0.4, maxR: 1.0, speed: 0.08, opacity: 0.65, color: '255,255,255' },
-      { count: 70,  minR: 0.8, maxR: 1.6, speed: 0.18, opacity: 0.85, color: '255,255,255' },
-      { count: 25,  minR: 1.2, maxR: 2.4, speed: 0.30, opacity: 1.00, color: '200,146,58'  },
-    ];
-
-    // Generate star positions (normalised 0-1)
-    const stars = [];
-    layers.forEach(layer => {
-      for (let i = 0; i < layer.count; i++) {
-        stars.push({
-          nx: Math.random(),
-          ny: Math.random(),
-          r:  layer.minR + Math.random() * (layer.maxR - layer.minR),
-          opacity: layer.opacity * (0.6 + Math.random() * 0.4),
-          speed: layer.speed,
-          color: layer.color,
-          twinkleOffset: Math.random() * Math.PI * 2,
-          twinkleSpeed:  0.3 + Math.random() * 0.7,
-        });
-      }
-    });
-
-    let scrollY = 0;
-    let animFrame;
-
-    function drawStars() {
-      const W = canvas.width;
-      const H = canvas.height;
-      ctx.clearRect(0, 0, W, H);
-      const t = performance.now() / 1000;
-
-      stars.forEach(s => {
-        const x = s.nx * W;
-        // parallax: slower stars move less with scroll
-        const y = (s.ny * H) - (scrollY * s.speed);
-        // wrap vertically
-        const yw = ((y % H) + H) % H;
-        const twinkle = 0.6 + 0.4 * Math.sin(t * s.twinkleSpeed + s.twinkleOffset);
-        ctx.beginPath();
-        ctx.arc(x, yw, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${s.color},${(s.opacity * twinkle).toFixed(2)})`;
-        ctx.fill();
-      });
-    }
-
-    function loop() {
-      scrollY = window.scrollY;
-      drawStars();
-      animFrame = requestAnimationFrame(loop);
-    }
-
-    loop();
   </script>
 
 </body>
