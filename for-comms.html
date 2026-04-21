@@ -52,11 +52,11 @@
     .hero-scroll { grid-column: 1/7; text-align: center; padding-bottom: 2rem; color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; align-self: end; }
 
     /* INTRO */
-    .intro { background: var(--white); color: var(--navy); padding: 5rem; border-bottom: 4px dashed var(--teal); }
+    .intro { background: var(--white); color: var(--navy); padding: 5rem; }
     .intro-inner { max-width: 800px; }
     .intro p { font-family: 'DM Serif Display', serif; font-size: clamp(1.3rem, 2.5vw, 1.8rem); line-height: 1.55; font-style: italic; }
     .intro-meta { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
-    .intro-tag { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--teal); border: 2px solid var(--teal); padding: 0.4rem 1rem; }
+    .intro-tag { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--navy); border: 2px solid var(--navy); padding: 0.4rem 1rem; }
 
     /* SECTION LABEL */
     .section-label { display: flex; align-items: center; gap: 1.5rem; padding: 3rem 5% 1.5rem; }
@@ -104,7 +104,7 @@
     .card-type { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: var(--pink); margin-bottom: 0.75rem; }
     .card-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.4rem, 2.2vw, 2rem); line-height: 1.2; color: var(--navy); margin-bottom: 1rem; }
     .card-desc { font-size: 0.92rem; line-height: 1.7; color: #444; max-width: 520px; margin-bottom: 1.5rem; }
-    .card-detail { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); }
+    .card-detail { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); }
     .card-link { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.25rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--pink); border-bottom: 2px solid var(--pink); padding-bottom: 2px; width: fit-content; }
 
     /* SKILLS */
@@ -133,6 +133,34 @@
     .hero-name    { animation: fadeUp 0.6s 0.15s ease both; }
     .hero-tagline { animation: fadeUp 0.6s 0.3s ease both; }
     .hero-deco-box { animation: fadeUp 0.6s 0.45s ease both; }
+
+    /* Carousel */
+    .carousel { position: relative; width: 100%; overflow: hidden; }
+    .carousel-track { display: flex; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
+    .carousel-slide { min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem 1.5rem 0.5rem; gap: 1rem; }
+    .carousel-dots { display: flex; gap: 10px; justify-content: center; padding: 1.25rem 0 2rem; }
+    .carousel-dot { width: 9px; height: 9px; border-radius: 50%; border: none; cursor: pointer; transition: all 0.3s ease; padding: 0; flex-shrink: 0; }
+    .carousel[data-theme="dark"] .carousel-dot { background: rgba(255,255,255,0.25); }
+    .carousel[data-theme="dark"] .carousel-dot.active { background: var(--pink); width: 28px; border-radius: 5px; }
+    .carousel[data-theme="light"] .carousel-dot { background: rgba(9,23,64,0.18); }
+    .carousel[data-theme="light"] .carousel-dot.active { background: var(--pink); width: 28px; border-radius: 5px; }
+    .carousel-item-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; margin: 0; }
+    .carousel-item-sub { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; margin: 0; opacity: 0.55; text-align: center; }
+    .carousel[data-theme="dark"] .carousel-item-label { color: rgba(255,255,255,0.8); }
+    .carousel[data-theme="dark"] .carousel-item-sub { color: rgba(255,255,255,0.45); }
+    .carousel[data-theme="light"] .carousel-item-label { color: var(--navy); }
+    .carousel[data-theme="light"] .carousel-item-sub { color: var(--navy); }
+    .carousel .social-post { width: min(82%, 340px); cursor: zoom-in; }
+    .carousel .doc-mockup { width: min(70%, 300px); cursor: zoom-in; }
+    .carousel .magnet-mockup { width: min(70%, 260px); cursor: zoom-in; transform: none !important; }
+    .carousel .laptop-mockup { cursor: zoom-in; }
+    .carousel .laptop-mockup .laptop-screen { width: min(90%, 420px); }
+    .carousel .laptop-mockup .laptop-chin  { width: min(90%, 420px); }
+    .carousel .laptop-mockup .laptop-base  { width: min(calc(90% + 20px), 440px); }
+    .carousel .video-frame { width: 93%; max-width: 600px; }
+    .carousel .video-frame video { width: 100%; height: auto; display: block; }
+    .carousel .video-frame--short { width: auto; max-width: none; }
+    .carousel .video-frame--short video { height: min(440px, 68vh); width: auto; display: block; }
 
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
@@ -170,10 +198,9 @@
 
   <section class="intro">
     <div class="intro-inner">
-      <p>Having worked with Communication and Outreach at Sponsored Projects Administration, Ball State, and University of Miami HR Internal Communications, I understand how to translate complex information into accessible media and share it through the right channels.</p>
+      <p>Having worked with Communication and Outreach at Sponsored Projects Administration at Ball State University, and with University of Miami HR Internal Communications, I understand how to translate complex information into accessible media and share it through the right channels.</p>
       <div class="intro-meta">
-        <span class="intro-tag">Ball State University</span>
-        <span class="intro-tag">Sponsored Projects Administration</span>
+        <span class="intro-tag">Sponsored Projects Administration · Ball State University</span>
         <span class="intro-tag">University of Miami</span>
       </div>
     </div>
@@ -232,24 +259,32 @@
           <p class="card-desc">Event highlight reels and student research spotlights produced for SPA's outreach campaigns. Shot on an iPhone 14 Pro with a gimbal stabilizer and edited on Adobe Premiere pro with branded motion graphics for multi-platform distribution from YouTube to social media shorts. Low budget, intentional framing.</p>
           <p class="card-detail">Tools: iPhone 14 Pro · DJI Osmo Mobile 7 Gimbal · Adobe Premiere Pro · YouTube</p>
         </div>
-        <div style="grid-column:3/7; background:#0f1525; min-height:400px; display:flex; align-items:center; justify-content:center; gap:32px; padding:32px 24px; flex-wrap:wrap;">
-          <div class="video-item">
-            <div class="video-frame">
-              <video width="320" height="180" controls>
-                <source src="CHIRPS%20Week%20Highlights(1).mp4" type="video/mp4">
-              </video>
+        <div style="grid-column:3/7; background:#0f1525; min-height:400px; display:flex; align-items:center; justify-content:center;">
+          <div class="carousel" data-theme="dark" style="width:100%;">
+            <div class="carousel-track">
+              <div class="carousel-slide">
+                <div class="video-frame">
+                  <video width="320" height="180" controls>
+                    <source src="CHIRPS%20Week%20Highlights(1).mp4" type="video/mp4">
+                  </video>
+                </div>
+                <p class="carousel-item-label">CHIRPS Week Highlights</p>
+                <p class="carousel-item-sub">Event coverage reel · Annual research showcase</p>
+              </div>
+              <div class="carousel-slide">
+                <div class="video-frame video-frame--short">
+                  <video width="180" height="320" controls>
+                    <source src="Faith%20-%20Business%20School.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <p class="carousel-item-label">Faith — Business School</p>
+                <p class="carousel-item-sub">Student research spotlight · YouTube Short</p>
+              </div>
             </div>
-            <p class="video-label">CHIRPS Week Highlights</p>
-            <p class="video-sub">Event coverage reel · Annual research showcase</p>
-          </div>
-          <div class="video-item">
-            <div class="video-frame video-frame--short">
-              <video width="180" height="320" controls>
-                <source src="Faith%20-%20Business%20School.mp4" type="video/mp4">
-              </video>
+            <div class="carousel-dots">
+              <button class="carousel-dot active" aria-label="CHIRPS Week Highlights"></button>
+              <button class="carousel-dot" aria-label="Faith — Business School"></button>
             </div>
-            <p class="video-label">Faith — Business School</p>
-            <p class="video-sub">Student research spotlight · YouTube Short</p>
           </div>
         </div>
       </div>
@@ -258,46 +293,62 @@
     <!-- ═══ SECTION 2: SOCIAL & DIGITAL ═══ -->
     <article class="project-card" id="social" style="display:flex; flex-direction:column;">
       <div style="display:grid; grid-template-columns:repeat(6,1fr); width:100%;">
-        <div style="grid-column:1/4; background:#e4e6ee; min-height:400px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; gap:32px; padding:24px;">
-          <div style="position:relative; width:320px; height:360px; flex-shrink:0;">
-            <div class="sp-wrap" style="transform:translate(calc(-50% - 110px), calc(-50% + 15px)) rotate(-6deg); z-index:1;">
-              <div class="social-post" onclick="openLightbox('images/comms/social-one-bsu-day.png','One Ball State Day — Teacher-Scholar Testimonial')">
-                <div class="sp-header"><div class="sp-avatar"></div><div class="sp-meta"><div class="sp-name"></div><div class="sp-handle"></div></div><div class="sp-dots">···</div></div>
-                <div class="sp-image"><img src="images/comms/social-one-bsu-day.png" alt="One Ball State Day"></div>
-                <div class="sp-actions"><span class="sp-icon">♡</span><span class="sp-icon">◻</span><span class="sp-icon">↗</span><span class="sp-icon" style="margin-left:auto;">⊡</span></div>
+        <div style="grid-column:1/4; background:#e4e6ee; min-height:400px; display:flex; align-items:center; justify-content:center;">
+          <div class="carousel" data-theme="light" style="width:100%;">
+            <div class="carousel-track">
+              <div class="carousel-slide">
+                <div class="social-post" onclick="openLightbox('images/comms/social-one-bsu-day.png','One Ball State Day — Teacher-Scholar Testimonial')">
+                  <div class="sp-header"><div class="sp-avatar"></div><div class="sp-meta"><div class="sp-name"></div><div class="sp-handle"></div></div><div class="sp-dots">···</div></div>
+                  <div class="sp-image"><img src="images/comms/social-one-bsu-day.png" alt="One Ball State Day"></div>
+                  <div class="sp-actions"><span class="sp-icon">♡</span><span class="sp-icon">◻</span><span class="sp-icon">↗</span><span class="sp-icon" style="margin-left:auto;">⊡</span></div>
+                </div>
+                <p class="carousel-item-label">One Ball State Day</p>
+                <p class="carousel-item-sub">Teacher-Scholar Testimonial · LinkedIn</p>
+              </div>
+              <div class="carousel-slide">
+                <div class="social-post" onclick="openLightbox('images/comms/social-linkedin-event.png','LinkedIn — Finding Funding Opportunities')">
+                  <div class="sp-header"><div class="sp-avatar"></div><div class="sp-meta"><div class="sp-name"></div><div class="sp-handle"></div></div><div class="sp-dots">···</div></div>
+                  <div class="sp-image"><img src="images/comms/social-linkedin-event.png" alt="LinkedIn Event"></div>
+                  <div class="sp-actions"><span class="sp-icon">♡</span><span class="sp-icon">◻</span><span class="sp-icon">↗</span><span class="sp-icon" style="margin-left:auto;">⊡</span></div>
+                </div>
+                <p class="carousel-item-label">Finding Funding Opportunities</p>
+                <p class="carousel-item-sub">Event announcement · LinkedIn</p>
+              </div>
+              <div class="carousel-slide">
+                <div class="social-post" onclick="openLightbox('images/comms/social-chirps.png','Instagram — CHIRPS Week')">
+                  <div class="sp-header"><div class="sp-avatar"></div><div class="sp-meta"><div class="sp-name"></div><div class="sp-handle"></div></div><div class="sp-dots">···</div></div>
+                  <div class="sp-image"><img src="images/comms/social-chirps.png" alt="CHIRPS Week"></div>
+                  <div class="sp-actions"><span class="sp-icon">♡</span><span class="sp-icon">◻</span><span class="sp-icon">↗</span><span class="sp-icon" style="margin-left:auto;">⊡</span></div>
+                </div>
+                <p class="carousel-item-label">CHIRPS Week</p>
+                <p class="carousel-item-sub">Event post · Instagram</p>
+              </div>
+              <div class="carousel-slide">
+                <div class="laptop-mockup" onclick="openLightbox('images/comms/carousel-alpha.png','Alpha Support website carousel')">
+                  <div class="laptop-screen">
+                    <div class="laptop-bar"><span class="browser-dot" style="background:#ff5f57;"></span><span class="browser-dot" style="background:#ffbd2e;"></span><span class="browser-dot" style="background:#28c840;"></span></div>
+                    <img src="images/comms/carousel-alpha.png" alt="Website carousel">
+                  </div>
+                  <div class="laptop-chin"></div>
+                  <div class="laptop-base"></div>
+                </div>
+                <p class="carousel-item-label">Alpha Support</p>
+                <p class="carousel-item-sub">Website carousel · Web</p>
               </div>
             </div>
-            <div class="sp-wrap" style="transform:translate(calc(-50% + 10px), calc(-50% - 12px)) rotate(2deg); z-index:3;">
-              <div class="social-post" onclick="openLightbox('images/comms/social-linkedin-event.png','LinkedIn — Finding Funding Opportunities')">
-                <div class="sp-header"><div class="sp-avatar"></div><div class="sp-meta"><div class="sp-name"></div><div class="sp-handle"></div></div><div class="sp-dots">···</div></div>
-                <div class="sp-image"><img src="images/comms/social-linkedin-event.png" alt="LinkedIn Event"></div>
-                <div class="sp-actions"><span class="sp-icon">♡</span><span class="sp-icon">◻</span><span class="sp-icon">↗</span><span class="sp-icon" style="margin-left:auto;">⊡</span></div>
-              </div>
-            </div>
-            <div class="sp-wrap" style="transform:translate(calc(-50% + 120px), calc(-50% + 18px)) rotate(7deg); z-index:2;">
-              <div class="social-post" onclick="openLightbox('images/comms/social-chirps.png','Instagram — CHIRPS Week')">
-                <div class="sp-header"><div class="sp-avatar"></div><div class="sp-meta"><div class="sp-name"></div><div class="sp-handle"></div></div><div class="sp-dots">···</div></div>
-                <div class="sp-image"><img src="images/comms/social-chirps.png" alt="CHIRPS Week"></div>
-                <div class="sp-actions"><span class="sp-icon">♡</span><span class="sp-icon">◻</span><span class="sp-icon">↗</span><span class="sp-icon" style="margin-left:auto;">⊡</span></div>
-              </div>
+            <div class="carousel-dots">
+              <button class="carousel-dot active" aria-label="One Ball State Day"></button>
+              <button class="carousel-dot" aria-label="Finding Funding"></button>
+              <button class="carousel-dot" aria-label="CHIRPS Week"></button>
+              <button class="carousel-dot" aria-label="Alpha Support"></button>
             </div>
           </div>
-          <div class="laptop-mockup" onclick="openLightbox('images/comms/carousel-alpha.png','Alpha Support website carousel')" title="Click to expand">
-            <div class="laptop-screen">
-              <div class="laptop-bar"><span class="browser-dot" style="background:#ff5f57;"></span><span class="browser-dot" style="background:#ffbd2e;"></span><span class="browser-dot" style="background:#28c840;"></span></div>
-              <img src="images/comms/carousel-alpha.png" alt="Website carousel">
-            </div>
-            <div class="laptop-chin"></div>
-            <div class="laptop-base"></div>
-          </div>
-          <p style="position:absolute; bottom:10px; right:14px; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; color:#8890a8;">Click to expand →</p>
         </div>
         <div class="card-body" style="grid-column:4/7;">
           <p class="card-type">Social & Digital Campaigns</p>
           <h2 class="card-title">Multi-Platform Content Adapted for Every Channel</h2>
           <p class="card-desc">Social media graphics and website carousel assets for SPA's research communications — formal LinkedIn announcements, Instagram event posts, and spotlights adapted for each platform's format and tone while maintaining a consistent institutional voice.</p>
           <p class="card-detail">Platforms: LinkedIn · Instagram · Facebook · Web · Tools: Adobe Illustrator · Photoshop</p>
-          <p class="card-hint">← Click any piece to expand</p>
         </div>
       </div>
     </article>
@@ -310,30 +361,46 @@
           <h2 class="card-title">Designed for Every Desk — From Flyers to Fridge Magnets</h2>
           <p class="card-desc">Print and brand materials spanning four audiences: promotional flyers for students and faculty, a quick-reference magnet for administrators with complex grant accounting info, and thank you cards that make sponsors feel seen. Each piece required a distinct visual register and call to action.</p>
           <p class="card-detail">Tools: Adobe Illustrator · Photoshop · Audiences: Students · Faculty · Administrators · Sponsors</p>
-          <p class="card-hint">Click any piece to expand →</p>
         </div>
-        <div style="grid-column:3/7; background:#ddd8ea; min-height:400px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-          <div class="doc-wrap" style="transform:translate(calc(-50% - 155px), calc(-50% + 10px)) rotate(-6deg); z-index:1;">
-            <div class="doc-mockup" onclick="openLightbox('images/comms/flyer-faculty.png','Faculty grant administration flyer')">
-              <img src="images/comms/flyer-faculty.png" alt="Faculty flyer">
+        <div style="grid-column:3/7; background:#ddd8ea; min-height:400px; display:flex; align-items:center; justify-content:center;">
+          <div class="carousel" data-theme="light" style="width:100%;">
+            <div class="carousel-track">
+              <div class="carousel-slide">
+                <div class="doc-mockup" onclick="openLightbox('images/comms/flyer-faculty.png','Faculty grant administration flyer')">
+                  <img src="images/comms/flyer-faculty.png" alt="Faculty flyer">
+                </div>
+                <p class="carousel-item-label">Faculty Grant Administration</p>
+                <p class="carousel-item-sub">Promotional flyer · Faculty audience</p>
+              </div>
+              <div class="carousel-slide">
+                <div class="doc-mockup" onclick="openLightbox('images/comms/flyer-student.png','Student grants promotional flyer')">
+                  <img src="images/comms/flyer-student.png" alt="Student flyer">
+                </div>
+                <p class="carousel-item-label">Student Grants</p>
+                <p class="carousel-item-sub">Promotional flyer · Student audience</p>
+              </div>
+              <div class="carousel-slide">
+                <div class="magnet-mockup" onclick="openLightbox('images/comms/magnet.png','RIA Grant Expenses reference magnet')">
+                  <img src="images/comms/magnet.png" alt="Reference magnet">
+                </div>
+                <p class="carousel-item-label">RIA Grant Expenses</p>
+                <p class="carousel-item-sub">Quick-reference magnet · Administrators</p>
+              </div>
+              <div class="carousel-slide">
+                <div class="doc-mockup" onclick="openLightbox('images/comms/thankyou-2.png','Thank you card')">
+                  <img src="images/comms/thankyou-2.png" alt="Thank you card">
+                </div>
+                <p class="carousel-item-label">Thank You Card</p>
+                <p class="carousel-item-sub">Sponsor recognition · Print</p>
+              </div>
+            </div>
+            <div class="carousel-dots">
+              <button class="carousel-dot active" aria-label="Faculty flyer"></button>
+              <button class="carousel-dot" aria-label="Student flyer"></button>
+              <button class="carousel-dot" aria-label="Magnet"></button>
+              <button class="carousel-dot" aria-label="Thank you card"></button>
             </div>
           </div>
-          <div class="doc-wrap" style="transform:translate(calc(-50% - 40px), calc(-50% - 14px)) rotate(2deg); z-index:3;">
-            <div class="doc-mockup" onclick="openLightbox('images/comms/flyer-student.png','Student grants promotional flyer')">
-              <img src="images/comms/flyer-student.png" alt="Student flyer">
-            </div>
-          </div>
-          <div class="doc-wrap" style="transform:translate(calc(-50% + 72px), calc(-50% + 16px)) rotate(-3deg); z-index:2;">
-            <div class="magnet-mockup" style="transform:none;" onclick="openLightbox('images/comms/magnet.png','RIA Grant Expenses reference magnet')">
-              <img src="images/comms/magnet.png" alt="Reference magnet">
-            </div>
-          </div>
-          <div class="doc-wrap" style="transform:translate(calc(-50% + 178px), calc(-50% - 8px)) rotate(5deg); z-index:1;">
-            <div class="doc-mockup" onclick="openLightbox('images/comms/thankyou-2.png','Thank you card')">
-              <img src="images/comms/thankyou-2.png" alt="Thank you card">
-            </div>
-          </div>
-          <p style="position:absolute; bottom:10px; right:14px; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; color:#8880a8;">Click to expand →</p>
         </div>
       </div>
     </article>
@@ -369,27 +436,24 @@
         </div>
       </div>
       <div style="display:grid; grid-template-columns:1fr 1fr; border-top:1px solid rgba(9,23,64,0.08);">
-        <a href="https://blogs.bsu.edu/research/2026/02/17/bringing-greek-myths-to-nebraska-how-celia-used-the-aspire-grants-to-bring-place-to-life-in-her-novel/" target="_blank" rel="noopener" style="display:flex; flex-direction:column; padding:2.5rem; border-right:1px solid rgba(9,23,64,0.08); gap:1rem; transition:background 0.2s; color:inherit;" onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background='transparent'">
-          <div class="browser-mockup" style="max-width:100%;">
-            <div class="browser-bar"><span class="browser-dot" style="background:#ff5f57;"></span><span class="browser-dot" style="background:#ffbd2e;"></span><span class="browser-dot" style="background:#28c840;"></span><div class="browser-url">blogs.bsu.edu/research</div></div>
-            <div class="browser-screen"><img src="images/comms/blog-post.png" alt="Blog post screenshot"></div>
+        <a href="https://blogs.bsu.edu/research/2026/02/17/bringing-greek-myths-to-nebraska-how-celia-used-the-aspire-grants-to-bring-place-to-life-in-her-novel/" target="_blank" rel="noopener" style="display:flex; flex-direction:column; padding:2.5rem; border-right:1px solid rgba(9,23,64,0.08); gap:1.25rem; transition:background 0.2s; color:inherit;" onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background='transparent'">
+          <div style="height:280px; overflow:hidden; border-radius:8px; flex-shrink:0;">
+            <div class="browser-mockup">
+              <div class="browser-bar"><span class="browser-dot" style="background:#ff5f57;"></span><span class="browser-dot" style="background:#ffbd2e;"></span><span class="browser-dot" style="background:#28c840;"></span><div class="browser-url">blogs.bsu.edu/research</div></div>
+              <div class="browser-screen" style="max-height:none;"><img src="images/comms/blog-post.png" alt="Blog post screenshot" style="width:100%; height:250px; object-fit:cover; object-position:top;"></div>
+            </div>
           </div>
           <p class="card-type" style="margin:0;">Feature Writing</p>
           <p style="font-family:'DM Serif Display',serif; font-size:1.1rem; line-height:1.3; color:var(--navy); margin:0;">Bringing Greek Myths to Nebraska — How Celia Used the Aspire Grant</p>
           <span class="card-link" style="margin:0;">Read the post ↗</span>
         </a>
-        <div style="padding:2.5rem; display:flex; flex-direction:column; gap:1rem;">
-          <div style="background:#e4e0ec; border-radius:4px; height:200px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-            <div class="doc-wrap" style="transform:translate(calc(-50% - 45px), calc(-50% + 8px)) rotate(-4deg); z-index:1;">
-              <div class="doc-mockup" onclick="openLightbox('images/comms/grant-considerations-3.png','Grant Writing Considerations — Page 3')"><img src="images/comms/grant-considerations-3.png" alt="Grant considerations p3"></div>
-            </div>
-            <div class="doc-wrap" style="transform:translate(calc(-50% + 45px), calc(-50% - 8px)) rotate(3deg); z-index:2;">
-              <div class="doc-mockup" onclick="openLightbox('images/comms/grant-considerations-4.png','Grant Writing Considerations — Page 4')"><img src="images/comms/grant-considerations-4.png" alt="Grant considerations p4"></div>
-            </div>
+        <div style="padding:2.5rem; display:flex; flex-direction:column; gap:1.25rem;">
+          <div style="background:#e4e0ec; border-radius:4px; flex-shrink:0; height:280px; display:flex; align-items:center; justify-content:center; gap:1.5rem; padding:1rem;">
+            <div class="doc-mockup" style="width:175px; transform:rotate(-3deg);" onclick="openLightbox('images/comms/grant-considerations-3.png','Grant Writing Considerations — Page 3')"><img src="images/comms/grant-considerations-3.png" alt="Grant considerations p3"></div>
+            <div class="doc-mockup" style="width:175px; transform:rotate(3deg);" onclick="openLightbox('images/comms/grant-considerations-4.png','Grant Writing Considerations — Page 4')"><img src="images/comms/grant-considerations-4.png" alt="Grant considerations p4"></div>
           </div>
           <p class="card-type" style="margin:0;">Faculty Workshop Material</p>
           <p style="font-family:'DM Serif Display',serif; font-size:1.1rem; line-height:1.3; color:var(--navy); margin:0;">Grant Writing Considerations — Making Institutional Processes Accessible</p>
-          <p class="card-hint" style="margin:0;">Click pages to expand →</p>
         </div>
       </div>
     </article>
@@ -512,6 +576,20 @@
         document.body.style.overflow = '';
       }
       document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    </script>
+
+    <script>
+      document.querySelectorAll('.carousel').forEach(function(carousel) {
+        var track = carousel.querySelector('.carousel-track');
+        var dots  = carousel.querySelectorAll('.carousel-dot');
+        dots.forEach(function(dot, i) {
+          dot.addEventListener('click', function() {
+            track.querySelectorAll('video').forEach(function(v) { v.pause(); });
+            track.style.transform = 'translateX(-' + (100 * i) + '%)';
+            dots.forEach(function(d, j) { d.classList.toggle('active', j === i); });
+          });
+        });
+      });
     </script>
 
   </div>
