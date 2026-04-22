@@ -239,16 +239,16 @@ main { display: flex; flex-direction: column; }
 
 /* ── RESUME ── */
 #resume {
-  display: flex; flex-direction: column;
   margin: 0 5% 5%;
   border: 4px dashed #091740;
   background: #fff;
+  overflow: hidden;
 }
 
 /* Resume header bar */
 #resume-header {
   background: #091740;
-  padding: 2.5rem 5%;
+  padding: 2rem 2.5rem;
   display: flex; align-items: baseline; justify-content: space-between;
   gap: 1rem; flex-wrap: wrap;
 }
@@ -264,92 +264,104 @@ main { display: flex; flex-direction: column; }
   font-family: 'Poppins', sans-serif;
 }
 
+/* Two-column body */
+#resume-body {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+}
+
+/* Sidebar: education + skills */
+#resume-sidebar {
+  background: #f7f4f0;
+  border-right: 2px dashed rgba(9,23,64,0.12);
+  padding: 2.5rem 2rem;
+  display: flex; flex-direction: column; gap: 2.5rem;
+}
+
+/* Section label style shared by sidebar sections */
+#education h2,
+#skills h2 {
+  color: #BF047E;
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.2em; padding-bottom: 1.25rem;
+  font-family: 'Poppins', sans-serif;
+  border-bottom: 1px solid rgba(191,4,126,0.2);
+  margin-bottom: 0.25rem;
+}
+
+/* Education */
+#education { background: transparent; }
+#education h3 {
+  font-size: 0.85rem; font-weight: 700;
+  color: #091740; padding-top: 0; padding-bottom: 0.2rem;
+}
+#education p {
+  font-size: 13px; padding-bottom: 0.15rem;
+  color: #555; max-width: 100%; line-height: 1.5;
+}
+.edu-date {
+  font-size: 12px; font-weight: 700;
+  color: #BF047E; padding-bottom: 0.2rem; max-width: 100%;
+}
+.edu-honors { font-size: 12px; color: #888; font-style: italic; padding-bottom: 0; }
+
+/* Skills */
+#skills { background: transparent; }
+#skills h2 { margin-top: 0; }
+.skill-category { margin-bottom: 1.25rem; }
+.skill-category:last-child { margin-bottom: 0; }
+.skill-category h3 {
+  font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #091740;
+  padding-top: 0; padding-bottom: 0.35rem;
+}
+.skill-category p {
+  font-size: 12.5px; line-height: 1.65;
+  color: #555; padding-bottom: 0; max-width: 100%;
+}
+
+/* Experience (main column) */
 #experience {
+  padding: 2.5rem 2.5rem;
   background: #fff;
-  border-bottom: 2px dashed rgba(9,23,64,0.12);
-  padding: 4% 5%;
 }
 #experience h2 {
   color: #BF047E;
-  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.2em; padding-bottom: 1.5rem;
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.2em; padding-bottom: 1.25rem;
   font-family: 'Poppins', sans-serif;
+  border-bottom: 1px solid rgba(191,4,126,0.2);
+  margin-bottom: 0.25rem;
 }
-#experience h3 {
-  font-size: 0.92rem;
-  font-weight: 700;
-  padding-top: 1.75rem;
-  padding-bottom: 0.4rem;
-  color: #091740;
-  border-top: 1px dashed rgba(9,23,64,0.12);
-  margin-top: 0.75rem;
+
+.exp-item {
+  padding-top: 1.25rem;
+  margin-top: 0.5rem;
+  border-top: 1px dashed rgba(9,23,64,0.1);
 }
-#experience h3:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+.exp-item:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+
+.exp-header {
+  display: flex; align-items: baseline;
+  justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap;
+}
+.exp-title {
+  font-size: 0.9rem; font-weight: 700;
+  color: #091740; line-height: 1.3;
+}
+.exp-org {
+  font-size: 13px; color: #777;
+  padding-bottom: 0.5rem; max-width: 100%;
+  font-style: italic; line-height: 1.4;
+}
 #experience li {
   list-style: disc;
-  margin-left: 1.5rem;
-  font-size: 15px;
-  padding-bottom: 0.35rem;
+  margin-left: 1.25rem;
+  font-size: 14px;
+  padding-bottom: 0.3rem;
   line-height: 1.55;
   color: #444;
-}
-
-#education {
-  background: #f7f4f0;
-  border-bottom: 2px dashed rgba(9,23,64,0.12);
-  padding: 4% 5%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem 4rem;
-  align-items: start;
-}
-#education h2 {
-  grid-column: 1/3;
-  color: #BF047E;
-  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.2em; padding-bottom: 1.5rem;
-  font-family: 'Poppins', sans-serif;
-}
-#education h3 {
-  font-size: 0.92rem;
-  padding-top: 0;
-  color: #091740;
-  font-weight: 700;
-  margin-top: 0.5rem;
-}
-#education p {
-  font-size: 14px;
-  padding-bottom: 0.2rem;
-  color: #444;
-  max-width: 100%;
-}
-#education em { font-size: 13px; color: #888; font-style: normal; }
-
-#skills {
-  background: #fff;
-  padding: 4% 5%;
-}
-#skills h2 {
-  color: #BF047E;
-  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.2em; padding-bottom: 1.5rem;
-  font-family: 'Poppins', sans-serif;
-}
-#skills ul {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem 2rem;
-}
-#skills li {
-  font-size: 15px;
-  padding: 0.5rem 0;
-  border-bottom: 1px dashed rgba(9,23,64,0.1);
-  color: #444;
-}
-#skills li::before {
-  content: '→ ';
-  color: #BF047E;
-  font-weight: 700;
 }
 
 /* ── FOOTER ── */
@@ -380,24 +392,19 @@ footer a:hover { background: transparent; color: #BF047E; border-color: #BF047E;
 
 /* ── RESUME DATE SPANS ── */
 .date {
-  font-size: 13px; font-weight: 400;
-  color: #888; float: right;
+  font-size: 12px; font-weight: 600;
+  color: #BF047E; white-space: nowrap; flex-shrink: 0;
 }
 
 /* ── EDUCATION ITEMS ── */
 .edu-item {
-  padding-top: 1.5rem;
-  border-top: 1px dashed rgba(3,140,140,0.3);
-  margin-top: 0.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed rgba(3,140,140,0.25);
+  margin-top: 0.75rem;
 }
-.edu-item:first-of-type { border-top: none; padding-top: 0; }
+.edu-item:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
 .edu-school {
-  font-size: 14px; opacity: 0.7;
-  padding-bottom: 0.2rem; color: #444; max-width: 100%;
-}
-.edu-honors {
-  font-size: 13px; opacity: 0.6;
-  padding-bottom: 0; color: #666; max-width: 100%;
+  font-size: 13px; padding-bottom: 0.1rem; color: #555; max-width: 100%;
 }
 
 /* ── RESPONSIVE ── */
@@ -425,18 +432,14 @@ footer a:hover { background: transparent; color: #BF047E; border-color: #BF047E;
   /* Portfolio */
   #portfolio-grid { grid-template-columns: 1fr; }
 
-  /* Resume experience — prevent date float clashing with job title */
-  .date { float: none; display: block; margin-top: 0.15rem; }
-
-  /* Education */
-  #education { grid-template-columns: 1fr; }
-  #education h2 { grid-column: 1; }
-
-  /* Skills */
-  #skills ul { grid-template-columns: 1fr; }
-
-  /* Resume container */
+  /* Resume */
   #resume { margin: 0 2% 4%; }
+  #resume-body { grid-template-columns: 1fr; }
+  #resume-sidebar {
+    border-right: none;
+    border-bottom: 2px dashed rgba(9,23,64,0.12);
+  }
+  .date { float: none; display: block; margin-top: 0.15rem; }
 
   p { font-size: 16px; }
 }
