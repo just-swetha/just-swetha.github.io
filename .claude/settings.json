@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(python3 -c ' *)",
-      "Read(//Users/swethas/Documents/Hanging by a Thread/game/**)"
+      "Read(//Users/swethas/Documents/Hanging by a Thread/game/**)",
+      "Bash(python3 -c \"import sys, json; lines = sys.stdin.read\\(\\).strip\\(\\).split\\('\\\\n'\\); [print\\(json.loads\\(l\\).get\\('message',''\\)\\) for l in lines if l and 'role' in json.loads\\(l\\) and json.loads\\(l\\).get\\('role'\\)=='user']\")",
+      "Bash(python3 -c \" import sys, json data = sys.stdin.read\\(\\).strip\\(\\) lines = data.split\\('\\\\n'\\) for line in lines: if not line: continue try: obj = json.loads\\(line\\) if obj.get\\('role'\\) == 'user': msg = obj.get\\('message', ''\\) if isinstance\\(msg, list\\): for item in msg: if isinstance\\(item, dict\\) and item.get\\('type'\\) == 'text': print\\('USER:', item.get\\('text',''\\)[:2000]\\) elif isinstance\\(msg, str\\): print\\('USER:', msg[:2000]\\) except: pass \")"
     ]
   }
 }
