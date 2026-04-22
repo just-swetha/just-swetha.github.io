@@ -154,13 +154,25 @@
     .carousel .doc-mockup { width: min(70%, 300px); cursor: zoom-in; }
     .carousel .magnet-mockup { width: min(70%, 260px); cursor: zoom-in; transform: none !important; }
     .carousel .laptop-mockup { cursor: zoom-in; }
-    .carousel .laptop-mockup .laptop-screen { width: min(90%, 420px); }
-    .carousel .laptop-mockup .laptop-chin  { width: min(90%, 420px); }
-    .carousel .laptop-mockup .laptop-base  { width: min(calc(90% + 20px), 440px); }
+    .carousel .laptop-mockup .laptop-screen { width: min(96%, 520px); }
+    .carousel .laptop-mockup .laptop-chin  { width: min(96%, 520px); }
+    .carousel .laptop-mockup .laptop-base  { width: min(calc(96% + 20px), 540px); }
     .carousel .video-frame { width: 93%; max-width: 600px; }
     .carousel .video-frame video { width: 100%; height: auto; display: block; }
     .carousel .video-frame--short { width: auto; max-width: none; }
     .carousel .video-frame--short video { height: min(440px, 68vh); width: auto; display: block; }
+
+    /* ABOUT */
+    .about-me { background: var(--offwhite); padding: 6rem 5%; border-top: 1px solid rgba(9,23,64,0.08); }
+    .about-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
+    .about-eyebrow { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.25em; color: var(--pink); margin-bottom: 1.5rem; }
+    .about-bio { font-family: 'DM Serif Display', serif; font-size: clamp(1.1rem, 1.8vw, 1.45rem); line-height: 1.6; font-style: italic; color: var(--navy); }
+    .about-cred-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem; }
+    .about-cred-list li { border-left: 3px solid var(--pink); padding-left: 1rem; }
+    .cred-degree { display: block; font-size: 0.88rem; font-weight: 700; color: var(--navy); line-height: 1.3; }
+    .cred-school { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin-top: 0.3rem; }
+    .about-honors { border-top: 1px solid rgba(9,23,64,0.1); padding-top: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .about-honor { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); opacity: 0.55; }
 
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
@@ -197,16 +209,6 @@
   </header>
 
   <main>
-
-  <section class="intro" aria-label="Introduction">
-    <div class="intro-inner">
-      <p>Having worked with Communication and Outreach at Sponsored Projects Administration at Ball State University, and with University of Miami HR Internal Communications, I understand how to translate complex information into accessible media and share it through the right channels.</p>
-      <div class="intro-meta">
-        <span class="intro-tag">Sponsored Projects Administration · Ball State University</span>
-        <span class="intro-tag">University of Miami</span>
-      </div>
-    </div>
-  </section>
 
   <div class="section-label" id="projects">
     <span class="section-label-text">Selected Work</span>
@@ -609,6 +611,37 @@
       <span class="skill-tag">HTML & CSS</span>
       <span class="skill-tag">Copyediting</span>
       <span class="skill-tag">Chicago Manual of Style</span>
+    </div>
+  </section>
+
+  <section class="about-me" aria-label="About">
+    <div class="about-inner">
+      <div class="about-text">
+        <p class="about-eyebrow">About</p>
+        <p class="about-bio">I'm a writer working in communications and emerging media design. I hold an MFA in Fiction from the University of Miami, where I taught creative writing and edited <em>Sinking City</em> — the university's graduate literary magazine — managing a team of 20 interns and 3 editors. I'm currently finishing an MA in Emerging Media Design and Development at Ball State. I bring a fiction writer's instinct for audience, narrative, and craft to institutional communications, and a designer's eye for structure and clarity to everything I write.</p>
+      </div>
+      <div class="about-credentials">
+        <ul class="about-cred-list">
+          <li>
+            <span class="cred-degree">MA, Emerging Media Design and Development</span>
+            <span class="cred-school">Ball State University · Expected 2027</span>
+          </li>
+          <li>
+            <span class="cred-degree">MFA, Creative Writing — Fiction</span>
+            <span class="cred-school">University of Miami · 2025</span>
+          </li>
+          <li>
+            <span class="cred-degree">BA (Hons), English with Creative Writing</span>
+            <span class="cred-school">University of Nottingham · 2021</span>
+          </li>
+        </ul>
+        <div class="about-honors">
+          <p class="about-honor">Point Foundation Flagship Scholarship Finalist</p>
+          <p class="about-honor">Vice Chancellor's Medal · University of Nottingham 2021</p>
+          <p class="about-honor">Fred Shaw Prize · Lester Goran Prize · University of Miami 2024</p>
+          <p class="about-honor">Dean's Summer MFA Fellowship · UGrow Fellowship 2023</p>
+        </div>
+      </div>
     </div>
   </section>
 
