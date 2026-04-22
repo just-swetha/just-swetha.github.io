@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Sort It Out — AR Photo Prototype · BSU</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; touch-action: none; }
+
+body {
+  background: #0c120c;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow: hidden;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  color: white;
+}
+
+/* ── CAMERA CORNERS ── */
+.cam-corner {
+  position: fixed;
+  width: 22px; height: 22px;
+  border-color: rgba(255,255,255,0.4);
+  border-style: solid;
+  z-index: 200;
+  pointer-events: none;
+}
+.cam-corner.tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
+.cam-corner.tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; }
+.cam-corner.bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; }
+.cam-corner.br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+
+/* ── PROTOTYPE BADGE ── */
+#proto-badge {
+  position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28); z-index: 200; pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── LOCATION TAG ── */
+#location-tag {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: rgba(74,222,128,0.7);
+  text-align: center;
+  padding: 10px 0 2px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+/* ── HUD ── */
+#hud {
+  width: 100%; max-width: 480px;
+  padding: 4px 20px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  z-index: 10;
+}
+.hud-chip {
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 24px;
+  padding: 4px 14px;
+  text-align: center;
+  min-width: 60px;
+}
+.hud-val { font-size: 20px; font-weight: 800; color: #4ade80; display: block; line-height: 1.1; }
+.hud-val.urgent { color: #f87171; animation: timerPulse 0.6s ease infinite; }
+.hud-lbl { font-size: 8px; opacity: 0.45; text-transform: uppercase; letter-spacing: 0.1em; }
+@keyframes timerPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+
+/* ── PROGRESS BAR ── */
+#progress-bar-wrap { width: 100%; height: 2px; background: rgba(255,255,255,0.07); flex-shrink: 0; }
+#progress-bar { height: 2px; background: #4ade80; transition: width 0.3s ease; width: 0%; }
+
+/* ── GAME AREA ── */
+#game-area {
+  flex: 1; width: 100%; max-width: 480px;
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  overflow: hidden;
+}
+
+/* ── BINS ── */
+#bins-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding: 10px 16px 0;
+  flex-shrink: 0;
+}
+.bin-wrap { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+
+.bin-photo-frame {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.6);
+  border: 2px solid rgba(255,255,255,0.1);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+.bin-photo-frame.highlight-good {
+  border-color: #4ade80;
+  box-shadow: 0 0 0 3px rgba(74,222,128,0.35), 0 6px 28px rgba(0,0,0,0.6);
+  transform: scale(1.06);
+}
+.bin-photo-frame.highlight-bad {
+  border-color: #f87171;
+  box-shadow: 0 0 0 3px rgba(248,113,113,0.35), 0 6px 28px rgba(0,0,0,0.6);
+  transform: scale(0.95);
+}
+
+.bin-photo {
+  width: 128px; height: 152px;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* Subtle scan-line overlay on the photos for camera feel */
+.bin-photo-frame::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px
+  );
+  pointer-events: none;
+}
+
+.bin-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 3px 12px; border-radius: 20px;
+}
+.bin-label.recycle {
+  background: rgba(59,130,246,0.2);
+  color: #93c5fd;
+  border: 1px solid rgba(59,130,246,0.35);
+}
+.bin-label.trash {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* ── ITEM META ── */
+#item-meta {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 5px;
+  margin-top: 8px; flex-shrink: 0;
+}
+#item-name {
+  font-size: 13px; font-weight: 700;
+  color: rgba(255,255,255,0.92);
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.13);
+  padding: 5px 16px; border-radius: 24px;
+}
+#hint { font-size: 10px; color: rgba(255,255,255,0.28); }
+.counter-dots { display: flex; gap: 5px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.12); transition: background 0.2s; }
+.dot.done    { background: #4ade80; }
+.dot.current { background: rgba(74,222,128,0.45); }
+
+/* ── THROW ZONE ── */
+#throw-zone {
+  flex: 1; width: 100%;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+#trajectory { position: absolute; top: 0; left: 0; right: 0; pointer-events: none; z-index: 1; }
+#item-img {
+  width: 88px; height: 88px;
+  object-fit: contain;
+  position: absolute;
+  cursor: grab;
+  filter: drop-shadow(0 4px 18px rgba(0,0,0,0.55));
+  transform-origin: center center;
+  z-index: 5;
+}
+#item-img.dragging { cursor: grabbing; }
+
+/* ── FEEDBACK ── */
+#feedback {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  background: rgba(12,18,12,0.96);
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 18px;
+  padding: 22px 24px;
+  width: 84%; max-width: 300px;
+  box-shadow: 0 10px 48px rgba(0,0,0,0.6);
+  text-align: center;
+  opacity: 0; pointer-events: none;
+  transition: all 0.22s ease;
+  z-index: 10;
+}
+#feedback.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+#feedback-icon { font-size: 34px; margin-bottom: 8px; }
+#feedback-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+#feedback-fact { font-size: 12.5px; color: rgba(255,255,255,0.55); line-height: 1.6; margin-bottom: 16px; }
+#feedback-btn {
+  background: #2d9e4f; color: white; border: none;
+  border-radius: 12px; padding: 11px 24px;
+  font-size: 13px; font-weight: 700; cursor: pointer; width: 100%;
+}
+#feedback-btn:active { background: #1a7a3a; }
+
+/* ── END SCREEN ── */
+#end-screen {
+  position: fixed; inset: 0;
+  background: rgba(12,18,12,0.97);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px; opacity: 0; pointer-events: none;
+  transition: opacity 0.4s; z-index: 20;
+  padding: 32px; text-align: center;
+}
+#end-screen.show { opacity: 1; pointer-events: auto; }
+#end-emoji { font-size: 56px; }
+#end-title { font-size: 26px; font-weight: 800; color: #4ade80; }
+#end-score-display { font-size: 18px; color: rgba(255,255,255,0.65); font-weight: 600; }
+#end-msg { font-size: 14px; color: rgba(255,255,255,0.4); line-height: 1.7; max-width: 300px; }
+#stars { font-size: 28px; letter-spacing: 4px; }
+#replay-btn {
+  background: #2d9e4f; color: white; border: none;
+  border-radius: 12px; padding: 14px 44px;
+  font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px;
+}
+#replay-btn:active { background: #1a7a3a; }
+
+/* ── LOCATION SPLASH ── */
+#location-splash {
+  position: fixed; inset: 0; z-index: 50;
+  background: #0c120c;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 2.5rem 2rem;
+  transition: opacity 0.5s ease;
+}
+#location-splash.fade-out { opacity: 0; pointer-events: none; }
+
+.splash-eyebrow {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.18em; color: #4ade80;
+  margin-bottom: 1.75rem;
+}
+
+/* Side-by-side bin photos on splash */
+#splash-bins {
+  display: flex; gap: 12px;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+}
+.splash-bin-card {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 7px;
+}
+.splash-bin-photo {
+  width: 100px; height: 118px;
+  object-fit: cover; object-position: center top;
+  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.12);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+}
+.splash-bin-photo.recycle-photo { border-color: rgba(59,130,246,0.45); }
+.splash-bin-photo.trash-photo   { border-color: rgba(255,255,255,0.18); }
+.splash-bin-tag {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; padding: 2px 10px; border-radius: 12px;
+}
+.splash-bin-tag.recycle { background: rgba(59,130,246,0.2); color: #93c5fd; }
+.splash-bin-tag.trash   { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.55); }
+
+#splash-title {
+  font-size: clamp(20px, 5.5vw, 25px); font-weight: 800;
+  color: white; line-height: 1.25; margin-bottom: 0.85rem;
+}
+#splash-sub {
+  font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.7;
+  margin-bottom: 2rem; max-width: 270px;
+}
+#splash-start {
+  background: #2d9e4f; color: white; border: none;
+  border-radius: 12px; padding: 14px 48px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  letter-spacing: 0.02em; touch-action: manipulation;
+}
+#splash-start:active { background: #1a7a3a; transform: scale(0.97); }
+</style>
+</head>
+<body>
+
+<!-- Camera corners -->
+<div class="cam-corner tl"></div>
+<div class="cam-corner tr"></div>
+<div class="cam-corner bl"></div>
+<div class="cam-corner br"></div>
+<div id="proto-badge">Prototype 2 · Photo AR Simulation</div>
+
+<!-- Location splash -->
+<div id="location-splash">
+  <p class="splash-eyebrow">📍 Woodworth Dining Hall · Ball State University</p>
+  <div id="splash-bins">
+    <div class="splash-bin-card">
+      <img class="splash-bin-photo recycle-photo" src="bin-recycle.jpg" alt="Recycle bin at Woodworth">
+      <span class="splash-bin-tag recycle">♻ Recycle</span>
+    </div>
+    <div class="splash-bin-card">
+      <img class="splash-bin-photo trash-photo" src="bin-trash.jpg" alt="Trash bin at Woodworth">
+      <span class="splash-bin-tag trash">🗑 Trash</span>
+    </div>
+  </div>
+  <h1 id="splash-title">You're at Woodworth.<br>Let's see what ends up here.</h1>
+  <p id="splash-sub">Eight items. Two bins. One right answer each time — we'll tell you why when you miss.</p>
+  <button id="splash-start">Start Sorting →</button>
+</div>
+
+<!-- HUD -->
+<p id="location-tag">📍 Woodworth Dining Hall</p>
+<div id="hud">
+  <div class="hud-chip">
+    <span class="hud-val" id="score">0</span>
+    <span class="hud-lbl">pts</span>
+  </div>
+  <div class="hud-chip">
+    <span class="hud-val" id="timer">60</span>
+    <span class="hud-lbl">sec</span>
+  </div>
+</div>
+<div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+
+<!-- Game area -->
+<div id="game-area">
+
+  <div id="bins-row">
+    <div class="bin-wrap">
+      <div class="bin-photo-frame" id="frame-recycle">
+        <img class="bin-photo" id="img-recycle" src="bin-recycle.jpg" alt="Recycle bin">
+      </div>
+      <div class="bin-label recycle">♻ Recycle</div>
+    </div>
+    <div class="bin-wrap">
+      <div class="bin-photo-frame" id="frame-trash">
+        <img class="bin-photo" id="img-trash" src="bin-trash.jpg" alt="Trash bin">
+      </div>
+      <div class="bin-label trash">🗑 Trash</div>
+    </div>
+  </div>
+
+  <div id="throw-zone">
+    <canvas id="trajectory"></canvas>
+    <img id="item-img" src="" alt="item" draggable="false">
+  </div>
+
+  <div id="item-meta">
+    <div id="item-name">Loading...</div>
+    <div id="hint">Drag toward the right bin</div>
+    <div class="counter-dots" id="dots"></div>
+  </div>
+
+  <div id="feedback">
+    <div id="feedback-icon"></div>
+    <div id="feedback-title"></div>
+    <div id="feedback-fact"></div>
+    <button id="feedback-btn">Next item →</button>
+  </div>
+</div>
+
+<div id="end-screen">
+  <div id="end-emoji"></div>
+  <div id="end-title"></div>
+  <div id="stars"></div>
+  <div id="end-score-display"></div>
+  <div id="end-msg"></div>
+  <button id="replay-btn">Play again</button>
+</div>
+
+<script>
+const ITEMS = [
+  { key:'bottle',        name:'Plastic bottle',    correct:'recycle', img:'bottle.png',        fact:'Empty plastic bottles are recyclable — rinse them out first!' },
+  { key:'tin_can',       name:'Tin can',            correct:'recycle', img:'tin_can.png',       fact:'Metal cans are infinitely recyclable. Give them a quick rinse.' },
+  { key:'glass_jar',     name:'Glass jar',          correct:'recycle', img:'glass_jar.png',     fact:'Clean glass jars go in recycling. Remove lids first.' },
+  { key:'unused_paper',  name:'Clean paper',        correct:'recycle', img:'unused_paper.png',  fact:'Clean, dry paper is recyclable. Keep it dry!' },
+  { key:'pizza_box',     name:'Greasy pizza box',   correct:'trash',   img:'pizza_box.png',     fact:'Grease contaminates the whole batch — greasy cardboard always goes to trash.' },
+  { key:'plastic_bag',   name:'Plastic bag',        correct:'trash',   img:'plastic_bag.png',   fact:'Soft plastics jam recycling machines. Take bags to grocery store drop-offs.' },
+  { key:'styrofoam_cup', name:'Styrofoam cup',      correct:'trash',   img:'styrofoam_cup.png', fact:'Styrofoam is not accepted in BSU recycling bins. Trash only.' },
+  { key:'used_napkin',   name:'Used napkin',        correct:'trash',   img:'used_napkin.png',   fact:'Used napkins are contaminated with food or liquid — trash only.' },
+];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// State
+let queue, current, score, timeLeft, timerInterval, dragging, startX, startY, itemX, itemY, gameActive;
+
+// DOM refs
+const itemImg     = document.getElementById('item-img');
+const itemName    = document.getElementById('item-name');
+const scoreEl     = document.getElementById('score');
+const timerEl     = document.getElementById('timer');
+const progressBar = document.getElementById('progress-bar');
+const feedback    = document.getElementById('feedback');
+const fbIcon      = document.getElementById('feedback-icon');
+const fbTitle     = document.getElementById('feedback-title');
+const fbFact      = document.getElementById('feedback-fact');
+const fbBtn       = document.getElementById('feedback-btn');
+const endScreen   = document.getElementById('end-screen');
+const dotsEl      = document.getElementById('dots');
+const canvas      = document.getElementById('trajectory');
+const ctx         = canvas.getContext('2d');
+const frameR      = document.getElementById('frame-recycle');
+const frameT      = document.getElementById('frame-trash');
+const imgR        = document.getElementById('img-recycle');
+const imgT        = document.getElementById('img-trash');
+
+function initGame() {
+  queue      = shuffle(ITEMS);
+  current    = 0;
+  score      = 0;
+  timeLeft   = 60;
+  gameActive = true;
+  scoreEl.textContent = '0';
+  timerEl.textContent = '60';
+  timerEl.classList.remove('urgent');
+  progressBar.style.width = '0%';
+  endScreen.classList.remove('show');
+  buildDots();
+  loadItem();
+  startTimer();
+}
+
+function buildDots() {
+  dotsEl.innerHTML = '';
+  queue.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' current' : '');
+    dotsEl.appendChild(d);
+  });
+}
+
+function updateDots() {
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => {
+    d.className = 'dot' + (i < current ? ' done' : i === current ? ' current' : '');
+  });
+}
+
+function loadItem() {
+  if (current >= queue.length) { endGame(); return; }
+  const item = queue[current];
+  itemImg.src = item.img;
+  itemName.textContent = item.name;
+  resetItemPos();
+  updateDots();
+  progressBar.style.width = (current / queue.length * 100) + '%';
+  clearCanvas();
+}
+
+function resetItemPos() {
+  const zone = document.getElementById('throw-zone');
+  const zr   = zone.getBoundingClientRect();
+  itemX = zr.width  / 2 - 44;
+  itemY = zr.height / 2 - 44;
+  itemImg.style.left      = itemX + 'px';
+  itemImg.style.top       = itemY + 'px';
+  itemImg.style.transform = '';
+  itemImg.style.opacity   = '1';
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (!gameActive) return;
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+    if (timeLeft <= 10) timerEl.classList.add('urgent');
+    if (timeLeft <= 0)  endGame();
+  }, 1000);
+}
+
+function endGame() {
+  gameActive = false;
+  clearInterval(timerInterval);
+  const total = queue.length;
+  const pct   = score / total;
+  const emojis = pct >= 0.875 ? '🌿' : pct >= 0.5 ? '♻️' : '🗑️';
+  const titles = pct >= 0.875 ? 'Sorted!' : pct >= 0.5 ? 'Getting there.' : 'Keep practising.';
+  const stars  = pct >= 0.875 ? '⭐⭐⭐' : pct >= 0.625 ? '⭐⭐' : '⭐';
+  const msgs   = [
+    'Every correct sort keeps a whole load out of the landfill.',
+    'Next time you\'re at a bin, you\'ll know exactly what goes where.',
+    'Contamination diverts entire loads to landfill. Now you know how to stop it.',
+  ];
+  document.getElementById('end-emoji').textContent      = emojis;
+  document.getElementById('end-title').textContent      = titles;
+  document.getElementById('stars').textContent          = stars;
+  document.getElementById('end-score-display').textContent = score + ' of ' + total + ' correct';
+  document.getElementById('end-msg').textContent        = msgs[Math.floor(Math.random() * msgs.length)];
+  progressBar.style.width = '100%';
+  endScreen.classList.add('show');
+}
+
+// Hit test against the photo frames
+function getHitBin(clientX, clientY) {
+  const rr  = frameR.getBoundingClientRect();
+  const tr  = frameT.getBoundingClientRect();
+  const pad = 28;
+  const inR = clientX >= rr.left - pad && clientX <= rr.right  + pad &&
+              clientY >= rr.top  - pad && clientY <= rr.bottom + pad;
+  const inT = clientX >= tr.left - pad && clientX <= tr.right  + pad &&
+              clientY >= tr.top  - pad && clientY <= tr.bottom + pad;
+  if (inR) return 'recycle';
+  if (inT) return 'trash';
+  return null;
+}
+
+function resolveSort(targetId) {
+  if (!gameActive) return;
+  const item    = queue[current];
+  const correct = item.correct === targetId;
+  const frame   = document.getElementById('frame-' + targetId);
+
+  frame.classList.add(correct ? 'highlight-good' : 'highlight-bad');
+  setTimeout(() => frame.classList.remove('highlight-good', 'highlight-bad'), 750);
+
+  if (correct) {
+    score++;
+    scoreEl.textContent = score;
+    fbIcon.textContent  = '✅';
+    fbTitle.textContent = 'Correct!';
+    fbTitle.style.color = '#4ade80';
+  } else {
+    fbIcon.textContent  = '❌';
+    fbTitle.textContent = 'Not quite.';
+    fbTitle.style.color = '#f87171';
+  }
+  fbFact.textContent = item.fact;
+  feedback.classList.add('show');
+  clearCanvas();
+}
+
+fbBtn.addEventListener('click', () => {
+  feedback.classList.remove('show');
+  current++;
+  loadItem();
+});
+
+// Canvas trajectory
+function clearCanvas() {
+  canvas.width  = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawLine(x1, y1, x2, y2) {
+  clearCanvas();
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.setLineDash([4, 6]);
+  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+  ctx.lineWidth   = 1.5;
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+// Pointer / drag
+itemImg.addEventListener('pointerdown', e => {
+  if (!gameActive || feedback.classList.contains('show')) return;
+  e.preventDefault();
+  itemImg.setPointerCapture(e.pointerId);
+  dragging = true;
+  const zone = document.getElementById('throw-zone');
+  const zr   = zone.getBoundingClientRect();
+  startX = e.clientX - zr.left;
+  startY = e.clientY - zr.top;
+  itemImg.classList.add('dragging');
+});
+
+itemImg.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  e.preventDefault();
+  const zone = document.getElementById('throw-zone');
+  const zr   = zone.getBoundingClientRect();
+  const cx = e.clientX - zr.left;
+  const cy = e.clientY - zr.top;
+  itemX = cx - 44;
+  itemY = cy - 44;
+  itemImg.style.left = itemX + 'px';
+  itemImg.style.top  = itemY + 'px';
+  drawLine(startX, startY, cx, cy);
+});
+
+itemImg.addEventListener('pointerup', e => {
+  if (!dragging) return;
+  dragging = false;
+  itemImg.classList.remove('dragging');
+  clearCanvas();
+  const hit = getHitBin(e.clientX, e.clientY);
+  if (hit) {
+    itemImg.style.opacity = '0';
+    resolveSort(hit);
+  } else {
+    resetItemPos();
+  }
+});
+
+itemImg.addEventListener('pointercancel', () => {
+  dragging = false;
+  itemImg.classList.remove('dragging');
+  resetItemPos();
+  clearCanvas();
+});
+
+// Splash
+document.getElementById('splash-start').addEventListener('click', () => {
+  const splash = document.getElementById('location-splash');
+  splash.classList.add('fade-out');
+  setTimeout(() => { splash.style.display = 'none'; }, 500);
+  initGame();
+});
+
+document.getElementById('replay-btn').addEventListener('click', () => {
+  endScreen.classList.remove('show');
+  initGame();
+});
+
+// Prevent scroll pull-to-refresh on mobile
+document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+</script>
+</body>
+</html>
