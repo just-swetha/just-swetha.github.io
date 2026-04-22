@@ -549,10 +549,49 @@
       border-top: 1px solid rgba(255,255,255,0.05);
     }
 
+    /* ── RESEARCH TABLE ── */
+    .cs-table-wrap {
+      margin: 2rem 0;
+      border: 2px dashed rgba(9,23,64,0.12);
+      overflow: hidden;
+    }
+    .cs-table-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.38rem; color: var(--teal);
+      letter-spacing: 0.15em;
+      padding: 1.1rem 2rem 0.9rem;
+      border-bottom: 1px solid rgba(9,23,64,0.08);
+      background: rgba(9,23,64,0.02);
+    }
+    .cs-table { width: 100%; border-collapse: collapse; }
+    .cs-table thead tr {
+      background: rgba(3,140,140,0.06);
+      border-bottom: 1px solid rgba(3,140,140,0.18);
+    }
+    .cs-table th {
+      text-align: left; padding: 0.75rem 1.5rem;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.3rem; color: var(--teal);
+      letter-spacing: 0.1em; font-weight: 700;
+    }
+    .cs-table td {
+      padding: 0.9rem 1.5rem;
+      font-size: 0.95rem; color: rgba(26,26,46,0.65);
+      line-height: 1.65; vertical-align: top;
+      border-bottom: 1px solid rgba(9,23,64,0.06);
+    }
+    .cs-table tr:last-child td { border-bottom: none; }
+    .cs-table tr:nth-child(even) td { background: rgba(9,23,64,0.015); }
+    .cs-table td:first-child {
+      font-weight: 600; color: var(--navy);
+      font-size: 0.88rem; width: 38%;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .dt-section { position: relative; top: auto; }
       .findings-grid { grid-template-columns: 1fr; }
+      .cs-table td:first-child { width: auto; }
       .case-footer { grid-template-columns: 1fr; padding: 3rem 2rem; gap: 2rem; }
       .footer-copy { grid-column: 1; }
     }
@@ -697,47 +736,48 @@
         </div>
         <h2 class="cs-section-title">The disposal decision:<br><em>primary and secondary research</em></h2>
         <div class="cs-body">
-          <p>This project builds on primary research conducted in EMDD 620 Design Thinking (Fall 2025) by Ava, Femi, and Selasi, who first identified contamination patterns at Ball State waste stations. The EMDD 640 team extended that work through new observation, interviews, and journey mapping, while situating the findings in a broader secondary literature on campus recycling behaviour.</p>
-          <p>Ball State's recycling program — managed in partnership with Republic Services and the Muncie Sanitary District — accepts paper, cardboard, glass, metals, and specific plastics collected in blue bags. Despite this infrastructure, empathy research consistently found the same pattern: students slowed down at waste stations but rarely read signage. The physical act of sorting was happening in a near-total information vacuum.</p>
+          <p>This project builds on primary research conducted in EMDD 620 Design Thinking (Fall 2025) by Ava, Femi, and Selasi, who first identified contamination patterns at Ball State waste stations. The EMDD 640 team extended that work through observation, interviews, and journey mapping, situating findings in a broader secondary literature on campus recycling behaviour.</p>
+          <p>Ball State's recycling program, managed in partnership with Republic Services and the Muncie Sanitary District, accepts paper, cardboard, glass, metals, and specific plastics collected in blue bags. Despite this infrastructure, empathy research consistently found the same pattern: students slowed down at waste stations but rarely read signage. The physical act of sorting was happening in a near-total information vacuum.</p>
 
-          <div class="findings-grid">
-            <div class="finding-card">
-              <p class="finding-card-label">▸ PRIMARY · OBSERVATION</p>
-              <h4>Waste Station Watch</h4>
-              <p>Observation at dining and residence hall stations (Woodworth, DeHority, Student Center). Tracking pause behaviour, contamination sources, and moments of visible uncertainty. Food-soiled paper — especially greasy pizza boxes — emerged as the single most common contamination source.</p>
-            </div>
-            <div class="finding-card">
-              <p class="finding-card-label">▸ PRIMARY · INTERVIEWS</p>
-              <h4>Facilities + Sustainability Staff</h4>
-              <p>Interviews with Sustainability Officers and Republic Services staff revealed that contamination rates were high enough to divert entire loads to landfill. The Muncie facility enforces a strict 10% contamination threshold; loads above it are rejected entirely.</p>
-            </div>
-            <div class="finding-card">
-              <p class="finding-card-label">▸ PRIMARY · JOURNEY MAPPING</p>
-              <h4>Student Disposal Journey</h4>
-              <p>Collaborative journey mapping with ~10 students representing diverse majors and recycling familiarity. Sessions mapped where confusion arises — particularly in rushed between-class moments when the disposal decision is made in under five seconds.</p>
-            </div>
-            <div class="finding-card">
-              <p class="finding-card-label">▸ PRIMARY · DISCOURSE ANALYSIS</p>
-              <h4>Online & Student Media</h4>
-              <p>Ball Bearings and Ball State Daily News coverage (Liakas, 2025) and Reddit discourse reflect widespread student frustration: unclear rules, inconsistent bin placement, and scepticism that recycling is actually processed. This is the "value-action gap" in lived form.</p>
-            </div>
-            <div class="finding-card">
-              <p class="finding-card-label">▸ SECONDARY RESEARCH</p>
-              <h4>Behaviour Gap Literature</h4>
-              <p>Noh (2021), Cho (2019), and Yusoff et al. (2024) confirm that recycling participation is driven by perceived behavioural control and clear guidance — not general awareness. The gap between intention and action is widest at the point of disposal.</p>
-            </div>
-            <div class="finding-card">
-              <p class="finding-card-label">▸ SECONDARY RESEARCH</p>
-              <h4>National + Regional Context</h4>
-              <p>The EPA (2023) documents that contamination thresholds as low as 10% cause entire loads to be landfilled. Midwest recycling rates lag behind the Northeast and Pacific Coast (National Academies, 2025) — meaning BSU students may have had less prior exposure to strict recycling culture.</p>
-            </div>
+          <div class="cs-table-wrap">
+            <p class="cs-table-label">▸ RESEARCH METHODS + FINDINGS</p>
+            <table class="cs-table">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>What we found</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Observation (Woodworth, DeHority, Student Center)</td>
+                  <td>Students paused at bins but rarely read signage. Greasy pizza boxes were the single most common contamination source.</td>
+                </tr>
+                <tr>
+                  <td>Interviews with Sustainability Officers and Republic Services staff</td>
+                  <td>Contamination rates were high enough to divert entire loads to landfill. The Muncie facility enforces a strict 10% contamination threshold.</td>
+                </tr>
+                <tr>
+                  <td>Journey mapping with ~10 students</td>
+                  <td>Confusion peaks in rushed between-class moments, when the disposal decision happens in under five seconds.</td>
+                </tr>
+                <tr>
+                  <td>Discourse analysis (Ball Bearings, Reddit)</td>
+                  <td>Students expressed frustration at unclear rules, inconsistent bin placement, and scepticism that recycling is actually processed.</td>
+                </tr>
+                <tr>
+                  <td>Secondary research (Noh, 2021; Cho, 2019; Yusoff et al., 2024)</td>
+                  <td>Recycling participation is driven by perceived behavioural control and clear guidance, not general awareness. The gap between intention and action is widest at the point of disposal.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           <div class="cs-pull">
             <p>"Students broadly knew recycling mattered. They did not know, at the moment of holding something over a bin, what Ball State's specific rules were — and existing infrastructure wasn't telling them."</p>
           </div>
 
-          <p>The synthesis from research: recycling at Ball State is not a logistical problem or an awareness problem. It is a <em>narrative coherence problem</em>. The institutional story of sustainability (geothermal energy, climate action plans, blue-bag programs) does not connect, at the moment of disposal, to the student standing over a bin with a greasy cup. The storyworld fractures precisely where it needs to hold.</p>
+          <p>The synthesis: recycling at Ball State is not a logistical problem or an awareness problem. It is a narrative coherence problem. The institutional story of sustainability does not connect, at the moment of disposal, to the student standing over a bin with a greasy cup.</p>
         </div>
       </section>
 
@@ -752,22 +792,45 @@
         </div>
         <h2 class="cs-section-title">Not an awareness problem.<br><em>A narrative coherence problem.</em></h2>
         <div class="cs-body">
-          <p>The problem statement that emerged: Ball State operates as a narrative ecosystem. Institutional messaging (sustainability website, orientation, email campaigns, signage) constructs a story of collective environmental progress. Informal narratives circulate through student journalism, Reddit threads, and peer conversations — where recycling is frequently described as confusing, inconvenient, and possibly symbolic. These parallel narratives coexist but do not align. When coherence weakens across platforms, behaviour weakens with it.</p>
           <p>The existing tools operate at the wrong moment. Posters and orientation modules build awareness weeks before the disposal decision happens. They cannot intervene at the bin.</p>
+          <p>Sort It Out is designed to. It is a mobile AR sorting game, triggered by a QR code at the physical bin, that intercepts the student at the exact moment the behaviour it is trying to change occurs.</p>
 
           <div class="hmw-block">
             <p class="hmw-label">▸ HOW MIGHT WE</p>
-            <p class="hmw-text">How might we design a transmedia storytelling experience that uses narrative, interaction, and participation to reshape how people understand, feel about, and engage with recycling — meeting students at the moment the disposal decision happens?</p>
+            <p class="hmw-text">How might we design a transmedia experience that uses narrative, interaction, and participation to reshape how students understand and engage with recycling, meeting them at the moment the disposal decision happens?</p>
           </div>
 
-          <div class="cs-callout">
-            <p class="cs-callout-label">▸ DESIGN PARAMETERS</p>
-            <p><strong>Site-specific by design:</strong> The game at Woodworth must not be the same game as the game at DeHority. Each location carries narrative text developed with the community that uses that space.</p>
-            <p><strong>Mobile-first:</strong> Students are on their phones at the bin. The intervention meets them there. No app download required — QR code triggers a mobile browser experience.</p>
-            <p><strong>Consequence-based, not instructional:</strong> A wrong sort triggers explanation before the item resets. No item is simply marked wrong and discarded. Every error is a teaching moment.</p>
-            <p><strong>Embedded in a larger story:</strong> A standalone minigame has no reason to return to. Sort It Out is one spatial node in a transmedia documentary campaign — the physical touchpoint that connects digital and real-world layers.</p>
-            <p><strong>Measurable target:</strong> A 20% improvement in correct recycling behaviour in two dining halls by end of Spring 2027 deployment.</p>
+          <div class="cs-table-wrap">
+            <p class="cs-table-label">▸ DESIGN PARAMETERS</p>
+            <table class="cs-table">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Rationale</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Site-specific</td>
+                  <td>The game at Woodworth is not the same as the game at DeHority. Each location carries narrative text developed with its community.</td>
+                </tr>
+                <tr>
+                  <td>Mobile-first, no download</td>
+                  <td>Students are on their phones at the bin. A QR code triggers a mobile browser experience.</td>
+                </tr>
+                <tr>
+                  <td>Consequence-based, not instructional</td>
+                  <td>Wrong sorts trigger an explanation before the item resets. Every error is a teaching moment.</td>
+                </tr>
+                <tr>
+                  <td>Part of a larger storyworld</td>
+                  <td>Sort It Out is one node in a transmedia documentary campaign — the physical touchpoint connecting digital and real-world layers.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
+
+          <p>Measurable target: a 20% improvement in correct recycling behaviour in two dining halls by end of Spring 2027 deployment.</p>
         </div>
       </section>
 
@@ -782,79 +845,74 @@
         </div>
         <h2 class="cs-section-title">Sort It Out as one node<br><em>in a larger storyworld</em></h2>
         <div class="cs-body">
-          <p>The design team developed a transmedia storyworld structured as a Freytag arc: from exposition (students encounter basic information about the recycling system) through rising action (students discover the scale of the contamination problem through interconnected content) to climax (collective confrontation, coordinated participation, visible outcomes) to resolution (recycling reframed as a permanent part of Ball State community identity).</p>
-          <p>The storyworld contains five interconnected story nodes. Sort It Out is the physical, spatial node — the only one that can intercept the student at the exact moment the disposal decision happens.</p>
+          <p>The project is structured as a transmedia campaign. Sort It Out is the spatial node — the only component that can intercept a student at the physical bin.</p>
 
-          <div class="transmedia-map">
-            <p class="transmedia-map-label">▸ THE FULL TRANSMEDIA SYSTEM</p>
-            <div class="transmedia-nodes">
-              <div class="t-node">
-                <div class="t-node-circle">📽</div>
-                <span class="t-node-label">Documentary<br>How Does BSU<br>Recycle?</span>
-              </div>
-              <div class="t-arrow">↔</div>
-              <div class="t-node">
-                <div class="t-node-circle">📱</div>
-                <span class="t-node-label">Explainer<br>Series<br>TikTok / Reels</span>
-              </div>
-              <div class="t-arrow">↔</div>
-              <div class="t-node highlight">
-                <div class="t-node-circle">🎮</div>
-                <span class="t-node-label">Sort It Out<br>AR Game<br>(this project)</span>
-              </div>
-              <div class="t-arrow">↔</div>
-              <div class="t-node">
-                <div class="t-node-circle">🎤</div>
-                <span class="t-node-label">Street Quiz<br>Videos<br>Gamified</span>
-              </div>
-              <div class="t-arrow">↔</div>
-              <div class="t-node">
-                <div class="t-node-circle">🏆</div>
-                <span class="t-node-label">Recycling<br>Game App<br>Leaderboard</span>
-              </div>
-            </div>
+          <div class="cs-table-wrap">
+            <p class="cs-table-label">▸ THE FULL TRANSMEDIA SYSTEM</p>
+            <table class="cs-table">
+              <thead>
+                <tr>
+                  <th>Node</th>
+                  <th>Format</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Documentary</td>
+                  <td>How Does BSU Recycle?</td>
+                </tr>
+                <tr>
+                  <td>Explainer Series</td>
+                  <td>TikTok and Reels</td>
+                </tr>
+                <tr>
+                  <td>Sort It Out</td>
+                  <td>AR game at the bin (this project)</td>
+                </tr>
+                <tr>
+                  <td>Street Quiz Videos</td>
+                  <td>Gamified, shareable</td>
+                </tr>
+                <tr>
+                  <td>Recycling Leaderboard</td>
+                  <td>Residence hall competition app</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
-          <p>Sort It Out's specific contribution to the storyworld: it is the only node that operates spatially, at the physical bin, at the moment the behaviour it is trying to change actually occurs. No video, poster, or social post can replicate the experience of holding a greasy pizza box and having to consciously decide where it goes.</p>
-
-          <p>The game loop was designed around three motivational layers operating simultaneously: immediate consequence-based feedback (sort correctly → points; sort incorrectly → one-line explanation + reset), social competition (team points attributed by residence hall, live leaderboard: "Your floor is currently ranked 4th on campus"), and collection (campus-wide stamp map driving students to visit multiple locations).</p>
+          <p>Sort It Out's game loop runs on three motivational layers: immediate feedback (sort correctly, score points; sort incorrectly, learn why before the item resets), social competition (live leaderboard ranking floors and halls), and collection (a campus-wide stamp map driving students to visit multiple bin locations).</p>
 
           <div class="loop-steps">
             <div class="loop-step">
               <span class="loop-n">01</span>
               <div class="loop-content">
-                <strong>Scan QR code on bin</strong>
-                <p>Location splash appears: "You're at Woodworth — let's see what ends up here." Site-specific narrative text, developed in collaboration with each residence hall or department, greets the player from the first second.</p>
+                <strong>Scan the QR code on the bin</strong>
+                <p>A location-specific splash screen appears: "You're at Woodworth — let's see what ends up here."</p>
               </div>
             </div>
             <div class="loop-step">
               <span class="loop-n">02</span>
               <div class="loop-content">
                 <strong>Sort eight waste items</strong>
-                <p>Items appear as AR overlays in the camera view. Flick each toward the correct bin. Wrong sorts trigger a one-line explanation ("Greasy cardboard contaminates the whole batch — always trash") before the item resets. No item is discarded without teaching first.</p>
+                <p>Items appear as AR overlays on the camera view. Flick each toward the correct bin. Wrong sorts trigger a one-line explanation before the item resets.</p>
               </div>
             </div>
             <div class="loop-step">
               <span class="loop-n">03</span>
               <div class="loop-content">
-                <strong>Stamp the location, climb the leaderboard</strong>
-                <p>Completing a location stamps it on the campus-wide collection map. Your floor's ranking updates. The map makes all QR locations visible, drawing students to explore campus.</p>
+                <strong>Stamp the location and climb the leaderboard</strong>
+                <p>Completing a location updates your floor's campus ranking.</p>
               </div>
             </div>
             <div class="loop-step">
               <span class="loop-n">04</span>
               <div class="loop-content">
                 <strong>Complete all locations, earn a reward</strong>
-                <p>Completing all campus locations unlocks a digital dining coupon, negotiated as a campaign partnership — a reward designed to motivate the Indifferent student who won't move for environmental conviction alone.</p>
+                <p>A digital dining coupon, negotiated as a campaign partnership, motivates students who won't move for environmental conviction alone.</p>
               </div>
             </div>
           </div>
-
-          <div class="cs-pull">
-            <p>"Sort It Out is not a standalone minigame. It is the spatial node in a transmedia documentary campaign — the physical touchpoint that makes the documentary's story present at the moment of disposal."</p>
-          </div>
-
-          <p>The non-standardisation across locations is a deliberate design choice: the game at Woodworth is not the same game as the game at DeHority, because those communities have different waste streams and different stories. This site-specificity is what makes a student who plays at Woodworth want to also scan the bin at the Student Center. The novelty is structural, not cosmetic.</p>
         </div>
       </section>
 
@@ -869,12 +927,13 @@
         </div>
         <h2 class="cs-section-title">The mechanic,<br><em>demonstrated</em></h2>
         <div class="cs-body">
-          <p>The web-based prototype demonstrates the core sort-and-explain mechanic: waste items appear, the player sorts them by flicking toward the correct bin, wrong sorts trigger one-line explanations before resetting, correct sorts score points. Built mobile-first in HTML, CSS, and JavaScript, playable in-browser on any smartphone without a download. The prototype was coded with the assistance of Claude (Anthropic).</p>
+          <p>Two prototypes are in development.</p>
+          <p>The first is a working web build demonstrating the core sort-and-explain mechanic. Waste items are launched toward the correct bin in an Angry Birds-style interaction. Wrong sorts trigger a brief explanation before the item resets; correct sorts score points. Built mobile-first in HTML, CSS, and JavaScript, playable in-browser without a download.</p>
+          <p>The second prototype, currently in progress, layers the mechanic onto a camera view to simulate the AR experience: waste items appear superimposed on a scanned image of an actual bin, closer to the intended in-context experience.</p>
 
           <div class="cs-callout">
-            <p class="cs-callout-label">▸ WHAT THIS PROTOTYPE DEMONSTRATES</p>
-            <p>The sort-and-explain loop is satisfying and teachable. The explanation model — brief, specific, consequence-framed — works better than signage as a teaching mechanism at the point of disposal.</p>
-            <p>Full AR implementation (camera overlay, geofencing, QR trigger, live leaderboard backend, location-specific item sets) is outside the scope of this prototype. This is a proof of concept for the interactive layer, not the finished product.</p>
+            <p class="cs-callout-label">▸ SCOPE NOTE</p>
+            <p>Full AR implementation, including geofencing, QR trigger, live leaderboard backend, and location-specific item sets, is outside the scope of these prototypes. They are proofs of concept for the interactive layer, not the finished product.</p>
           </div>
 
           <div class="cs-embed">
@@ -909,62 +968,27 @@
             <span class="cs-step-name">Test</span>
           </div>
         </div>
-        <h2 class="cs-section-title">Formative testing,<br><em>summative goals</em></h2>
+        <h2 class="cs-section-title"><em>Testing plan</em></h2>
         <div class="cs-body">
           <p>Testing is structured in two phases aligned with the production and deployment timeline.</p>
 
           <div class="cs-callout">
-            <p class="cs-callout-label">▸ FORMATIVE TESTING (Fall 2025 → Spring 2026 prototyping)</p>
-            <p><strong>Think Aloud Protocol:</strong> Task-based walkthroughs with 5–8 students per round. Participants narrate everything they notice, question, or feel while using the game. The facilitator listens without guiding. The data comes from what students <em>actually do</em>, not what they report they would do. Think Aloud reveals friction at the bin — moments where the spatial overlay feels disorienting, where explanation text moves too fast, where a wrong-sort explanation doesn't land.</p>
-            <p><strong>Concept testing questions (after each session):</strong> Does this make sense to you? What would you change? Does this feel relevant to your daily life?</p>
-            <p><strong>Early social media analytics:</strong> Engagement data from Explainer Series and Comedic Reels posts (saves, DM shares, comments) as leading indicators of content resonance before full production begins. DM shares are the strongest signal of non-follower reach.</p>
-          </div>
-
-          <div class="findings-grid">
-            <div class="finding-card">
-              <p class="finding-card-label">▸ PROTOTYPE FINDING</p>
-              <h4>The explanation model works</h4>
-              <p>Wrong-sort explanations were rated more immediately useful than signage. Players reported learning specific rules they hadn't known — especially the pizza box and plastic bag rules.</p>
-            </div>
-            <div class="finding-card">
-              <p class="finding-card-label">▸ PROTOTYPE FINDING</p>
-              <h4>Site-specificity resonates</h4>
-              <p>Location-specific splash screens landed well. Players responded to seeing their hall named — the game felt locally relevant rather than generic, which is the entire design premise.</p>
-            </div>
-            <div class="finding-card">
-              <p class="finding-card-label">▸ STILL TO TEST</p>
-              <h4>Live leaderboard motivation</h4>
-              <p>Without a functional leaderboard backend in the prototype, the social competition layer is untested. "Your floor is 4th on campus" needs real data to be felt — not to be simulated.</p>
-            </div>
-            <div class="finding-card">
-              <p class="finding-card-label">▸ STILL TO TEST</p>
-              <h4>QR trigger in situ</h4>
-              <p>The prototype cannot test the QR-triggered launch at a physical bin. The critical question — does intercepting the student at the disposal moment change the behaviour? — requires real-world deployment to answer.</p>
-            </div>
+            <p class="cs-callout-label">▸ FORMATIVE TESTING (Spring 2026)</p>
+            <p><strong>Think Aloud walkthroughs</strong> with 5 to 8 students per round. Participants narrate what they notice, question, or feel while using the game. The facilitator listens without guiding. This phase will surface friction in the sort mechanic, explanation pacing, and spatial overlay clarity.</p>
+            <p><strong>Concept testing questions</strong> after each session: Does this make sense? What would you change? Does this feel relevant to your daily life?</p>
+            <p><strong>Early social media analytics</strong> from the Explainer Series, using saves and direct message shares as leading indicators of content resonance before full deployment.</p>
           </div>
 
           <div class="cs-callout">
-            <p class="cs-callout-label">▸ SUMMATIVE TESTING (Spring 2027 deployment)</p>
-            <p><strong>Pre/post survey design:</strong> Administered at move-in (baseline) and before finals (post-campaign). Measures recycling confidence, correct item identification, and self-reported disposal habits. Modelled on Digital Literacy Assessment Survey methodology.</p>
-            <p><strong>Physical contamination data:</strong> Contamination rate data from Facilities Planning & Management and Republic Services, compared against Fall 2026 baseline. Primary goal: 20% improvement in correct recycling in two target dining halls.</p>
-            <p><strong>App analytics:</strong> Sorting challenge completions, contamination score changes over the semester, residence hall performance comparison across the leaderboard.</p>
-            <p><strong>Semi-structured exit interviews:</strong> 10–15 students including both engaged participants and passive-exposure-only students. Capturing which story elements were most memorable, most useful, and most likely to have changed behaviour at the bin.</p>
+            <p class="cs-callout-label">▸ SUMMATIVE TESTING (Spring 2027)</p>
+            <p><strong>Pre and post surveys</strong> measuring recycling confidence, correct item identification, and self-reported disposal habits, administered at move-in and before finals.</p>
+            <p><strong>Physical contamination data</strong> from Facilities Planning and Management and Republic Services, compared against a Fall 2026 baseline. Primary goal: 20% improvement in correct recycling in two target dining halls.</p>
+            <p><strong>App analytics</strong> tracking sorting completions, contamination score changes, and leaderboard performance across residence halls.</p>
+            <p><strong>Semi-structured exit interviews</strong> with 10 to 15 students capturing which story elements were most memorable and most likely to have changed behaviour at the bin.</p>
           </div>
 
           <div class="cs-pull">
             <p>"The test is not whether players found the game fun. The test is whether, the next time they stand at a bin holding a greasy cup, they know what to do."</p>
-          </div>
-
-          <p>The project is not complete. The prototype demonstrates that the mechanic works and the framework is sound. What the testing phase will verify is whether that mechanic — embedded in the full storyworld, triggered at the physical bin, connected to a live leaderboard and a documentary campaign — produces a measurable change in the behaviour it was designed to change.</p>
-
-          <div class="cs-callout">
-            <p class="cs-callout-label">▸ REFERENCES</p>
-            <p>Liakas, A. (2025). Where does it go? Ball State has a complex relationship with recycling. <em>Cardinal Media / Ball Bearings Magazine.</em></p>
-            <p>Noh, M. (2021). Understanding the effect of information sources on college students' recycling behavior. <em>Sustainability, 13</em>(11).</p>
-            <p>Cho, Y. (2019). The influence of perceived behavioral control and environmental attitudes on recycling behavior among college students. <em>Journal of Environmental Education Research, 25</em>(5).</p>
-            <p>Yusoff, S., Ahmad, N., & Rahman, M. (2024). Predictors of sustainable waste management behavior among university students. <em>Sustainability, 16</em>(2), 1123.</p>
-            <p>U.S. Environmental Protection Agency. (2023). National overview: Facts and figures on materials, wastes and recycling.</p>
-            <p>Jenkins, H. (2006). <em>Convergence culture: Where old and new media collide.</em> New York University Press.</p>
           </div>
         </div>
       </section>
