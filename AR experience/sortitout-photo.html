@@ -237,6 +237,92 @@ body {
 }
 #replay-btn:active { background: #1a7a3a; }
 
+/* ── BIN QUIZ ── */
+#bin-quiz {
+  position: fixed; inset: 0; z-index: 45;
+  background: #0c120c;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 2rem 1.5rem;
+  transition: opacity 0.4s ease;
+}
+#bin-quiz.fade-out { opacity: 0; pointer-events: none; }
+#bin-quiz.hidden   { display: none; }
+
+.quiz-eyebrow {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.18em; color: rgba(255,255,255,0.35);
+  margin-bottom: 1.25rem;
+}
+#quiz-progress {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.14em; color: #4ade80;
+  margin-bottom: 1rem;
+}
+#quiz-question {
+  font-size: clamp(17px, 4.5vw, 21px); font-weight: 800;
+  color: white; margin-bottom: 1.25rem; line-height: 1.3;
+}
+#quiz-photo-wrap {
+  position: relative;
+  border-radius: 14px; overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.12);
+  box-shadow: 0 8px 36px rgba(0,0,0,0.6);
+  margin-bottom: 1.5rem;
+}
+#quiz-photo {
+  width: 160px; height: 190px;
+  object-fit: cover; object-position: center top;
+  display: block;
+}
+/* Scanline overlay on quiz photo */
+#quiz-photo-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+  );
+  pointer-events: none;
+}
+#quiz-choices {
+  display: flex; gap: 14px; margin-bottom: 1.25rem;
+}
+.quiz-choice {
+  flex: 1; padding: 14px 20px;
+  border-radius: 14px; border: 2px solid;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  touch-action: manipulation;
+}
+.quiz-choice.recycle {
+  background: rgba(59,130,246,0.12);
+  border-color: rgba(59,130,246,0.4);
+  color: #93c5fd;
+}
+.quiz-choice.recycle:hover { background: rgba(59,130,246,0.25); }
+.quiz-choice.trash {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.75);
+}
+.quiz-choice.trash:hover { background: rgba(255,255,255,0.12); }
+.quiz-choice:active { transform: scale(0.96); }
+.quiz-choice.correct-flash {
+  background: rgba(74,222,128,0.2) !important;
+  border-color: #4ade80 !important;
+  color: #4ade80 !important;
+}
+.quiz-choice.wrong-flash {
+  background: rgba(248,113,113,0.2) !important;
+  border-color: #f87171 !important;
+  color: #f87171 !important;
+}
+#quiz-feedback-line {
+  font-size: 13px; color: rgba(255,255,255,0.5);
+  line-height: 1.55; min-height: 2.5em;
+}
+
 /* ── LOCATION SPLASH ── */
 #location-splash {
   position: fixed; inset: 0; z-index: 50;
@@ -322,6 +408,21 @@ body {
   <h1 id="splash-title">You're at Woodworth.<br>Let's see what ends up here.</h1>
   <p id="splash-sub">Eight items. Two bins. One right answer each time — we'll tell you why when you miss.</p>
   <button id="splash-start">Start Sorting →</button>
+</div>
+
+<!-- Bin identification quiz -->
+<div id="bin-quiz" class="hidden">
+  <p class="quiz-eyebrow">📍 Woodworth Dining Hall · Ball State University</p>
+  <p id="quiz-progress">Bin 1 of 2</p>
+  <p id="quiz-question">Which bin is this?</p>
+  <div id="quiz-photo-wrap">
+    <img id="quiz-photo" src="" alt="A campus bin">
+  </div>
+  <div id="quiz-choices">
+    <button class="quiz-choice recycle" data-choice="recycle">♻ Recycle</button>
+    <button class="quiz-choice trash"   data-choice="trash">🗑 Trash</button>
+  </div>
+  <p id="quiz-feedback-line"></p>
 </div>
 
 <!-- HUD -->
@@ -626,17 +727,83 @@ itemImg.addEventListener('pointercancel', () => {
   clearCanvas();
 });
 
+// ── BIN QUIZ ──
+const BIN_QUIZ_ITEMS = [
+  { src: 'bin-recycle.jpg', alt: 'Recycle bin at Woodworth', correct: 'recycle',
+    feedback: 'This is the recycling bin — blue label, typically for bottles, cans, and clean paper.' },
+  { src: 'bin-trash.jpg',   alt: 'Trash bin at Woodworth',   correct: 'trash',
+    feedback: 'This is the trash bin — for items contaminated with food or that can\'t be recycled.' },
+];
+
+let quizQueue, quizIndex;
+const quizEl       = document.getElementById('bin-quiz');
+const quizProgress = document.getElementById('quiz-progress');
+const quizPhoto    = document.getElementById('quiz-photo');
+const quizFeedback = document.getElementById('quiz-feedback-line');
+const quizChoices  = document.querySelectorAll('.quiz-choice');
+
+function startQuiz() {
+  quizQueue  = [...BIN_QUIZ_ITEMS].sort(() => Math.random() - 0.5);
+  quizIndex  = 0;
+  quizEl.classList.remove('hidden');
+  loadQuizBin();
+}
+
+function loadQuizBin() {
+  const item = quizQueue[quizIndex];
+  quizProgress.textContent = `Bin ${quizIndex + 1} of ${quizQueue.length}`;
+  quizPhoto.src = item.src;
+  quizPhoto.alt = item.alt;
+  quizFeedback.textContent = '';
+  quizChoices.forEach(btn => {
+    btn.classList.remove('correct-flash', 'wrong-flash');
+    btn.disabled = false;
+  });
+}
+
+function handleQuizChoice(choice) {
+  const item    = quizQueue[quizIndex];
+  const correct = choice === item.correct;
+
+  quizChoices.forEach(btn => {
+    btn.disabled = true;
+    if (btn.dataset.choice === item.correct) btn.classList.add('correct-flash');
+    if (btn.dataset.choice === choice && !correct) btn.classList.add('wrong-flash');
+  });
+
+  quizFeedback.textContent = (correct ? '✓ Correct! ' : '✗ Not quite. ') + item.feedback;
+  quizFeedback.style.color  = correct ? '#4ade80' : '#f87171';
+
+  setTimeout(() => {
+    quizIndex++;
+    if (quizIndex < quizQueue.length) {
+      loadQuizBin();
+    } else {
+      // All bins identified — transition to the sorting game
+      quizEl.classList.add('fade-out');
+      setTimeout(() => { quizEl.classList.add('hidden'); }, 500);
+      initGame();
+    }
+  }, 1600);
+}
+
+quizChoices.forEach(btn => {
+  btn.addEventListener('click', () => handleQuizChoice(btn.dataset.choice));
+});
+
 // Splash
 document.getElementById('splash-start').addEventListener('click', () => {
   const splash = document.getElementById('location-splash');
   splash.classList.add('fade-out');
   setTimeout(() => { splash.style.display = 'none'; }, 500);
-  initGame();
+  startQuiz();
 });
 
 document.getElementById('replay-btn').addEventListener('click', () => {
   endScreen.classList.remove('show');
-  initGame();
+  quizEl.style.opacity = '';
+  quizEl.classList.remove('fade-out', 'hidden');
+  startQuiz();
 });
 
 // Prevent scroll pull-to-refresh on mobile
