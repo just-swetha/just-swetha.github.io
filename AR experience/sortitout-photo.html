@@ -715,10 +715,12 @@ const delay = ms => new Promise(r => setTimeout(r, ms));
 /* ═══ AI / CAMERA SCANNING ════════════════════════════════ */
 
 // Capture one frame from a <video> and return it as a base64 JPEG string (no data-URI prefix).
+// Returns null if the video hasn't started streaming yet.
 function videoToBase64(videoEl) {
+  if (!videoEl.videoWidth || !videoEl.videoHeight) return null;
   const canvas = document.createElement('canvas');
-  canvas.width  = videoEl.videoWidth  || 640;
-  canvas.height = videoEl.videoHeight || 480;
+  canvas.width  = videoEl.videoWidth;
+  canvas.height = videoEl.videoHeight;
   canvas.getContext('2d').drawImage(videoEl, 0, 0);
   return canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
 }
@@ -732,32 +734,30 @@ function captureFrame(videoEl) {
   return canvas.toDataURL('image/jpeg', 0.9);
 }
 
-const RF_MODEL   = 'bin-koznr';
-const RF_VERSION = '1';
-const BIN_CONFIDENCE_THRESHOLD = 0.5;
-
 // Ask the Netlify proxy if there's a bin in the current video frame.
-// The Roboflow classification API returns { top, confidence, predictions:{...} }
-// — predictions is a keyed object, NOT an array.
+// Uses a Roboflow Workflow that returns outputs[0].bin_detected (boolean).
 async function checkBinInFrame(videoEl) {
+  const b64 = videoToBase64(videoEl);
+  if (!b64) { console.warn('checkBinInFrame: video not ready yet'); return null; }
+
   try {
     const res = await fetch('/.netlify/functions/check-bin', {
       method: 'POST',
-      body: JSON.stringify({ image: videoToBase64(videoEl), model: RF_MODEL, version: RF_VERSION }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: b64 }),
     });
     const data = await res.json();
-    if (data.error) { console.warn('check-bin:', data.error); return null; }
+    if (data.error) { console.warn('check-bin error:', data.error, data.detail); return null; }
 
-    // data.top is the winning class name; data.confidence is its score (0–1)
-    // Check for "bin" but exclude "not bin" — "not bin".includes('bin') is true
-    const top = data.top?.toLowerCase() ?? '';
-    const detected = top.includes('bin') && !top.includes('not')
-                     && data.confidence >= BIN_CONFIDENCE_THRESHOLD;
-    console.log(`RF: ${data.top} ${Math.round((data.confidence ?? 0) * 100)}%`);
-    return { detected, confidence: data.confidence ?? 0, label: data.top };
+    const output = data.outputs?.[0];
+    if (!output) { console.warn('check-bin: no outputs in response', data); return null; }
+
+    const detected = output.bin_detected === true;
+    console.log(`RF Workflow: bin_detected=${output.bin_detected} — ${detected ? 'DETECTED' : 'not detected'}`);
+    return { detected };
   } catch (e) {
     console.error('checkBinInFrame:', e);
-    return null; // network error — caller will retry
+    return null;
   }
 }
 

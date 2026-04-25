@@ -5,6 +5,9 @@ const CORS = {
   "Content-Type": "application/json",
 };
 
+const WORKSPACE   = "swethas-workspace-pg00r";
+const WORKFLOW_ID = "bin-presence-checker-verified-1777140256575";
+
 export const handler = async (event) => {
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers: CORS, body: "" };
@@ -16,23 +19,24 @@ export const handler = async (event) => {
       body: JSON.stringify({ error: "ROBOFLOW_API_KEY env var not set" }) };
   }
 
-  let image, model, version;
+  let image;
   try {
-    ({ image, model, version } = JSON.parse(event.body));
+    ({ image } = JSON.parse(event.body));
   } catch {
     return { statusCode: 400, headers: CORS,
       body: JSON.stringify({ error: "Invalid JSON body" }) };
   }
 
-  // Strip data-URI prefix if caller accidentally included it
-  const cleanImage = image.includes(',') ? image.split(',')[1] : image;
-  const url = `https://classify.roboflow.com/${model}/${version}?api_key=${apiKey}`;
+  const url = `https://detect.roboflow.com/infer/workflows/${WORKSPACE}/${WORKFLOW_ID}`;
 
   try {
     const response = await fetch(url, {
       method:  "POST",
-      body:    cleanImage,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: apiKey,
+        inputs: { image: { type: "base64", value: image } },
+      }),
     });
 
     if (!response.ok) {
