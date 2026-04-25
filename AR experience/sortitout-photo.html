@@ -205,6 +205,23 @@ body {
   box-shadow:0 4px 16px rgba(117,201,98,.4); transition:transform .12s;
 }
 .cam-panel-btn:active { transform:scale(.97); }
+.cam-panel-btn-ghost {
+  width:100%; background:transparent; border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.45); border-radius:12px; padding:11px;
+  font-size:13px; font-weight:600; cursor:pointer; margin-top:8px;
+  transition:color .15s, border-color .15s;
+}
+.cam-panel-btn-ghost:hover { color:rgba(255,255,255,.7); border-color:rgba(255,255,255,.35); }
+
+.cam-notfound {
+  position:absolute; bottom:0; left:0; right:0;
+  background:rgba(5,10,10,.94); padding:22px 22px 44px;
+  transform:translateY(100%); transition:transform .5s cubic-bezier(.22,1,.36,1);
+  border-top:1px solid rgba(255,100,100,.25);
+}
+.cam-notfound.show { transform:translateY(0); }
+.cam-notfound-title { font-size:15px; font-weight:800; color:#fff; margin-bottom:8px; }
+.cam-notfound-msg { font-size:12px; color:rgba(255,255,255,.62); line-height:1.65; margin-bottom:18px; }
 
 .cam-dark {
   position:absolute; inset:0; background:#080d08;
@@ -498,6 +515,12 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
         </div>
         <div class="cam-conf" id="conf-trash"><div class="cam-conf-fill" id="conf-fill-trash"></div></div>
         <button class="cam-skip" id="skip-trash" onclick="skipScan()">Not at a bin? Skip →</button>
+        <div class="cam-notfound" id="notfound-trash">
+          <div class="cam-notfound-title">Bin not found</div>
+          <div class="cam-notfound-msg">Make sure the bin fills most of your camera view and is well lit.</div>
+          <button class="cam-panel-btn" onclick="retryBinScan('trash')">Try Again</button>
+          <button class="cam-panel-btn-ghost" onclick="skipBinScan('trash')">Skip to Demo</button>
+        </div>
         <div class="cam-panel" id="panel-trash">
           <div class="cam-panel-title">You found the trash bin! 🗑️</div>
           <div class="cam-panel-msg">Now, let's find the recycling bin. Point your camera at the recycling bin and continue.</div>
@@ -526,6 +549,12 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
         </div>
         <div class="cam-conf" id="conf-recycle"><div class="cam-conf-fill" id="conf-fill-recycle"></div></div>
         <button class="cam-skip" id="skip-recycle" onclick="skipScan()">Not at a bin? Skip →</button>
+        <div class="cam-notfound" id="notfound-recycle">
+          <div class="cam-notfound-title">Bin not found</div>
+          <div class="cam-notfound-msg">Make sure the bin fills most of your camera view and is well lit.</div>
+          <button class="cam-panel-btn" onclick="retryBinScan('recycle')">Try Again</button>
+          <button class="cam-panel-btn-ghost" onclick="skipBinScan('recycle')">Skip to Demo</button>
+        </div>
         <div class="cam-panel" id="panel-recycle">
           <div class="cam-panel-title">You've found the recycling bin! ♻️</div>
           <div class="cam-panel-msg">Both bins are registered. Drag each item to the correct bin to sort your tray.</div>
@@ -811,23 +840,37 @@ async function runScan(suffix, onDone) {
   $('s-scan-' + suffix).classList.remove('scan-done');
 
   if (cameraStream) {
-    stxt.textContent = 'Aim camera at the bin...';
-    if (conf) conf.classList.add('show');
-    if (skipBtn) skipBtn.classList.add('visible');
-
     const videoEl = $('cam-live-' + suffix);
-    const scanResult = await waitForBin(videoEl, confFill, stxt);
+    let scanResult;
+
+    while (true) {
+      stxt.textContent = 'Aim camera at the bin...';
+      if (conf) conf.classList.add('show');
+      if (skipBtn) skipBtn.classList.add('visible');
+
+      scanResult = await waitForBin(videoEl, confFill, stxt);
+
+      if (conf) conf.classList.remove('show');
+      if (skipBtn) skipBtn.classList.remove('visible');
+      _skipResolve = null;
+
+      if (scanResult !== 'timeout') break;
+
+      // Timeout — show not-found panel and wait for user choice
+      const notFound = $('notfound-' + suffix);
+      notFound.classList.add('show');
+      const action = await new Promise(resolve => { _notFoundResolve = resolve; });
+
+      if (action === 'skip') { scanResult = 'skipped'; break; }
+      // action === 'retry' — loop and try again
+    }
+
     const isDemo = scanResult !== 'detected';
-
-    if (conf) conf.classList.remove('show');
-    if (skipBtn) skipBtn.classList.remove('visible');
-    _skipResolve = null;
-
     if (isDemo) {
       const demoLabel = suffix === 'trash' ? '🗑️ Trash Bin (Demo)' : '♻️ Recycling Bin (Demo)';
       badge.textContent = demoLabel;
     } else {
-      capturedBins[suffix] = captureFrame($('cam-live-' + suffix));
+      capturedBins[suffix] = captureFrame(videoEl);
     }
   } else {
     stxt.textContent = 'Scanning...';
@@ -855,9 +898,20 @@ async function runScan(suffix, onDone) {
 
 let cameraStream = null;
 let _skipResolve = null;
+let _notFoundResolve = null;
 
 function skipScan() {
   if (_skipResolve) { _skipResolve(); _skipResolve = null; }
+}
+
+function retryBinScan(suffix) {
+  $('notfound-' + suffix).classList.remove('show');
+  if (_notFoundResolve) { _notFoundResolve('retry'); _notFoundResolve = null; }
+}
+
+function skipBinScan(suffix) {
+  $('notfound-' + suffix).classList.remove('show');
+  if (_notFoundResolve) { _notFoundResolve('skip'); _notFoundResolve = null; }
 }
 
 async function startCamera() {
