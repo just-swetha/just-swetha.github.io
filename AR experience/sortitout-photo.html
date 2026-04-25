@@ -91,6 +91,13 @@ body {
   box-shadow:0 6px 20px rgba(117,201,98,.45); transition:transform .12s;
 }
 .btn-begin:active { transform:scale(.96); }
+.btn-demo {
+  background:transparent; border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.4); font-size:11px; font-weight:600;
+  padding:8px 20px; border-radius:10px; cursor:pointer; letter-spacing:.03em;
+  transition:color .15s, border-color .15s;
+}
+.btn-demo:hover { color:rgba(255,255,255,.65); border-color:rgba(255,255,255,.35); }
 
 /* ── SCAN SCREENS (trash + recycle) ─────────────────────── */
 .scan-bg { background:#000; }
@@ -198,6 +205,12 @@ body {
   box-shadow:0 4px 16px rgba(117,201,98,.4); transition:transform .12s;
 }
 .cam-panel-btn:active { transform:scale(.97); }
+
+.cam-dark {
+  position:absolute; inset:0; background:#080d08;
+  opacity:0; pointer-events:none; transition:opacity .7s ease;
+}
+.scan-done .cam-dark { opacity:1; }
 
 .cam-skip {
   position:absolute; bottom:220px; left:50%; transform:translateX(-50%);
@@ -460,6 +473,7 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
           <div class="splash-sub">Point your camera at the bins and let AI guide your sorting</div>
           <div class="splash-loc">📍 Woodworth Dining Hall</div>
           <button class="btn-begin" onclick="startTrashScan()">Begin AR Session</button>
+          <button class="btn-demo" onclick="startTrashScanDemo()">Try without camera</button>
         </div>
       </div>
 
@@ -467,6 +481,7 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
         <img class="cam-photo" id="cam-photo-trash" src="bin-trash.jpg" alt="Camera feed — trash bin">
         <video class="cam-live" id="cam-live-trash" autoplay playsinline muted></video>
         <div class="cam-crt"></div>
+        <div class="cam-dark"></div>
         <div class="cam-sweep" id="sweep-trash"></div>
         <div class="cam-frame" id="frame-trash">
           <div class="c tl"></div><div class="c tr"></div>
@@ -494,6 +509,7 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
         <img class="cam-photo" id="cam-photo-recycle" src="bin-recycle.jpg" alt="Camera feed — recycling bin">
         <video class="cam-live" id="cam-live-recycle" autoplay playsinline muted></video>
         <div class="cam-crt"></div>
+        <div class="cam-dark"></div>
         <div class="cam-sweep" id="sweep-recycle"></div>
         <div class="cam-frame" id="frame-recycle">
           <div class="c tl"></div><div class="c tr"></div>
@@ -651,6 +667,7 @@ const ITEMS = [
 
 /* ═══ STATE ═══════════════════════════════════════════════ */
 let gScore = 0, gWrong = 0, gIdx = 0, gShuffled = [];
+const capturedBins = {}; // { trash: dataURL, recycle: dataURL } — filled on real detection
 let dragging = false, launching = false;
 let itemX = 0, itemY = 0, startX = 0, startY = 0;
 
@@ -677,13 +694,22 @@ const delay = ms => new Promise(r => setTimeout(r, ms));
 
 /* ═══ AI / CAMERA SCANNING ════════════════════════════════ */
 
-// Capture one frame from a <video> and return it as a base64 JPEG string.
+// Capture one frame from a <video> and return it as a base64 JPEG string (no data-URI prefix).
 function videoToBase64(videoEl) {
   const canvas = document.createElement('canvas');
   canvas.width  = videoEl.videoWidth  || 640;
   canvas.height = videoEl.videoHeight || 480;
   canvas.getContext('2d').drawImage(videoEl, 0, 0);
   return canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+}
+
+// Capture one frame and return a full data URL suitable for use as an img src.
+function captureFrame(videoEl) {
+  const canvas = document.createElement('canvas');
+  canvas.width  = videoEl.videoWidth  || 640;
+  canvas.height = videoEl.videoHeight || 480;
+  canvas.getContext('2d').drawImage(videoEl, 0, 0);
+  return canvas.toDataURL('image/jpeg', 0.9);
 }
 
 const RF_MODEL   = 'bin-koznr';
@@ -703,7 +729,9 @@ async function checkBinInFrame(videoEl) {
     if (data.error) { console.warn('check-bin:', data.error); return null; }
 
     // data.top is the winning class name; data.confidence is its score (0–1)
-    const detected = data.top?.toLowerCase().includes('bin')
+    // Check for "bin" but exclude "not bin" — "not bin".includes('bin') is true
+    const top = data.top?.toLowerCase() ?? '';
+    const detected = top.includes('bin') && !top.includes('not')
                      && data.confidence >= BIN_CONFIDENCE_THRESHOLD;
     console.log(`RF: ${data.top} ${Math.round((data.confidence ?? 0) * 100)}%`);
     return { detected, confidence: data.confidence ?? 0, label: data.top };
@@ -736,7 +764,7 @@ async function waitForBin(videoEl, confFill, stxt) {
       if (Date.now() - start > TIMEOUT_MS) {
         done = true; clearInterval(poll); clearInterval(barAnim);
         if (confFill) confFill.style.width = '100%';
-        resolve(); return;
+        resolve('timeout'); return;
       }
       const result = await checkBinInFrame(videoEl);
       if (!result) {
@@ -745,7 +773,7 @@ async function waitForBin(videoEl, confFill, stxt) {
         done = true; clearInterval(poll); clearInterval(barAnim);
         if (confFill) confFill.style.width = '100%';
         if (stxt) stxt.textContent = 'Bin detected!';
-        resolve();
+        resolve('detected');
       } else {
         if (stxt) stxt.textContent = 'Aim camera at the bin…';
       }
@@ -756,7 +784,7 @@ async function waitForBin(videoEl, confFill, stxt) {
       if (done) return;
       done = true; clearInterval(poll); clearInterval(barAnim);
       if (confFill) confFill.style.width = '100%';
-      resolve();
+      resolve('skipped');
     };
   });
 }
@@ -780,6 +808,7 @@ async function runScan(suffix, onDone) {
   reticle.classList.remove('hide');
   status.style.opacity = '1';
   if (skipBtn) skipBtn.classList.remove('visible');
+  $('s-scan-' + suffix).classList.remove('scan-done');
 
   if (cameraStream) {
     stxt.textContent = 'Aim camera at the bin...';
@@ -787,11 +816,19 @@ async function runScan(suffix, onDone) {
     if (skipBtn) skipBtn.classList.add('visible');
 
     const videoEl = $('cam-live-' + suffix);
-    await waitForBin(videoEl, confFill, stxt);
+    const scanResult = await waitForBin(videoEl, confFill, stxt);
+    const isDemo = scanResult !== 'detected';
 
     if (conf) conf.classList.remove('show');
     if (skipBtn) skipBtn.classList.remove('visible');
     _skipResolve = null;
+
+    if (isDemo) {
+      const demoLabel = suffix === 'trash' ? '🗑️ Trash Bin (Demo)' : '♻️ Recycling Bin (Demo)';
+      badge.textContent = demoLabel;
+    } else {
+      capturedBins[suffix] = captureFrame($('cam-live-' + suffix));
+    }
   } else {
     stxt.textContent = 'Scanning...';
     await delay(1200);
@@ -808,6 +845,7 @@ async function runScan(suffix, onDone) {
   await delay(400);
   badge.classList.add('show');
   stxt.textContent = 'Object identified ✓';
+  $('s-scan-' + suffix).classList.add('scan-done');
 
   await delay(800);
   status.style.opacity = '0';
@@ -851,6 +889,11 @@ function startTrashScan() {
   });
 }
 
+function startTrashScanDemo() {
+  showScreen('s-scan-trash');
+  runScan('trash');
+}
+
 function startRecycleScan() {
   showScreen('s-scan-recycle');
   runScan('recycle');
@@ -861,6 +904,16 @@ function initGame() {
   gScore = 0; gWrong = 0; gIdx = 0;
   gShuffled = shuffle([...ITEMS]);
   updateHUD();
+
+  // Replace bin images with photos the player took during scanning
+  if (capturedBins.trash) {
+    document.querySelector('#bin-trash img').src = capturedBins.trash;
+  }
+  if (capturedBins.recycle) {
+    document.querySelector('#bin-recycle img').src = capturedBins.recycle;
+    document.querySelector('.succ-bin-img img').src = capturedBins.recycle;
+  }
+
   showScreen('s-game');
   resizeCanvas();
   loadItem();
