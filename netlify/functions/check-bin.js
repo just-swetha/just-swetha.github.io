@@ -1,6 +1,4 @@
 // netlify/functions/check-bin.js
-const fetch = require('node-fetch');
-
 exports.handler = async (event) => {
   // 1. Get the secret key from Netlify's environment variables
   const apiKey = process.env.ROBOFLOW_API_KEY; 
@@ -15,9 +13,10 @@ exports.handler = async (event) => {
   const url = `https://classify.roboflow.com/${model}/${version}?api_key=${apiKey}`;
 
   try {
+    // We can use fetch() directly now without requiring anything!
     const response = await fetch(url, {
       method: 'POST',
-      body: cleanImage, // Send the cleaned string
+      body: cleanImage, 
       headers: { "Content-Type": "application/x-www-form-urlencoded" }
     });
 
