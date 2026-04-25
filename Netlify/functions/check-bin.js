@@ -14,7 +14,8 @@ exports.handler = async (event) => {
   try {
     const response = await fetch(url, {
       method: 'POST',
-      body: image, // This is the base64 image from your webcam
+      // Inside check-bin.js
+        body: image.includes(',') ? image.split(',')[1] : image,, // This is the base64 image from your webcam
       headers: { "Content-Type": "application/x-www-form-urlencoded" }
     });
 
