@@ -827,9 +827,10 @@ async function runScan(suffix, onDone) {
   if (skipBtn) skipBtn.classList.remove('visible');
   $('s-scan-' + suffix).classList.remove('scan-done');
 
+  let scanResult;
+
   if (cameraStream) {
     const videoEl = $('cam-live-' + suffix);
-    let scanResult;
 
     while (true) {
       stxt.textContent = 'Aim camera at the bin...';
