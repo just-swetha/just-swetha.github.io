@@ -72,6 +72,7 @@
     /* ── HERO ── */
     .case-hero {
       min-height: 100vh;
+      padding-top: 72px;
       background: var(--deep);
       position: relative;
       display: flex; flex-direction: column;
@@ -205,6 +206,7 @@
     .case-section {
       padding: 7rem 0 5rem;
       border-top: 1px solid rgba(9,23,64,0.08);
+      scroll-margin-top: 72px;
     }
     .case-section:first-child { border-top: none; padding-top: 6rem; }
 
@@ -212,13 +214,7 @@
       display: flex; align-items: center; gap: 1rem;
       margin-bottom: 2rem;
     }
-    .cs-circle {
-      width: 48px; height: 48px; border-radius: 50%;
-      border: 2px solid var(--teal);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .cs-circle-icon { font-size: 1.1rem; }
+    .cs-circle { width: 48px; height: 48px; flex-shrink: 0; }
     .cs-step-info { display: flex; flex-direction: column; gap: 0.25rem; }
     .cs-step-num {
       font-family: 'Press Start 2P', monospace;
@@ -565,6 +561,7 @@
       <a href="#ideate">Ideate</a>
       <a href="#prototype">Prototype</a>
       <a href="#test">Test</a>
+      <a href="#reflection">Reflection</a>
     </div>
     <button id="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
   </nav>
@@ -579,7 +576,7 @@
     <div class="transmedia-banner">
       <span class="banner-icon">🔗</span>
       <p class="banner-text">
-        <strong>This is a transmedia project.</strong> Sort It Out is one interactive node in a larger documentary campaign following a recycled item from campus bin to processing facility. The game is the physical touchpoint. The documentary is the backstory.
+        <strong>This is a transmedia project.</strong> Sort It Out is one interactive node in a larger transmedia campaign focused on turning recycling from a chore to a narrative by allowing audiences to follow a recycled item from campus bin to processing facility. The game is the interactive AR touchpoint.
       </p>
     </div>
     <div class="hero-content">
@@ -697,7 +694,7 @@
       <!-- EMPATHY -->
       <section class="case-section" id="empathy">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">🔍</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sm1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#05BCBC"/><stop offset="100%" stop-color="#04A0A0"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#sm1)"/><g transform="translate(24,24) scale(0.55)" fill="white"><path d="M0,10 C0,10 -16,1 -16,-6 C-16,-13 -11,-16 -6,-16 C-3,-16 0,-13 0,-13 C0,-13 3,-16 6,-16 C11,-16 16,-13 16,-6 C16,1 0,10 0,10Z"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 01</span>
             <span class="cs-step-name">Empathy Research</span>
@@ -753,7 +750,7 @@
       <!-- DEFINE -->
       <section class="case-section" id="define">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">🎯</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sm2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#038C8C"/><stop offset="100%" stop-color="#027474"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#sm2)"/><g transform="translate(24,24) scale(0.55)" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="0" cy="0" r="12"/><circle cx="0" cy="0" r="4" fill="white" stroke="none"/><line x1="0" y1="-17" x2="0" y2="-13"/><line x1="0" y1="13" x2="0" y2="17"/><line x1="-17" y1="0" x2="-13" y2="0"/><line x1="13" y1="0" x2="17" y2="0"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 02</span>
             <span class="cs-step-name">Define</span>
@@ -806,7 +803,7 @@
       <!-- IDEATE -->
       <section class="case-section" id="ideate">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">💡</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sm3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#026868"/><stop offset="100%" stop-color="#025858"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#sm3)"/><g transform="translate(24,24) scale(0.55)" fill="white"><path d="M4,-17 L-9,3 H1 L-2,17 L13,-3 H3 Z"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 03</span>
             <span class="cs-step-name">Ideate</span>
@@ -888,7 +885,7 @@
       <!-- PROTOTYPE -->
       <section class="case-section" id="prototype">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">🛠</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sm4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#024868"/><stop offset="100%" stop-color="#023050"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#sm4)"/><g transform="translate(24,24) scale(0.55)" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><rect x="-16" y="-12" width="32" height="20" rx="2"/><line x1="0" y1="8" x2="0" y2="14"/><line x1="-8" y1="14" x2="8" y2="14"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 04</span>
             <span class="cs-step-name">Prototype</span>
@@ -924,6 +921,7 @@
             <a href="AR experience/sortitout.html" target="_blank" rel="noopener" class="cs-embed-link">
               Open full screen ↗
             </a>
+            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">This prototype illustrates the core sorting mechanic: students slingshot waste items toward the correct bin — trash or recycling — to sort their tray.</p>
           </div>
 
           <div class="cs-embed">
@@ -946,6 +944,7 @@
             <a href="AR experience/sortitout-photo.html" target="_blank" rel="noopener" class="cs-embed-link">
               Open full screen ↗
             </a>
+            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">This prototype shows how the physical bins are scanned and identified before being brought into the game, with a video reward at the end — footage of Ball State's recycling truck and sorting facility — reasserting that the recycling students do here actually goes somewhere.</p>
           </div>
         </div>
       </section>
@@ -953,7 +952,7 @@
       <!-- TEST -->
       <section class="case-section" id="test">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">🧪</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sm5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#022840"/><stop offset="100%" stop-color="#011830"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#sm5)"/><g transform="translate(24,24) scale(0.55)" fill="white"><circle cx="-7" cy="-10" r="5"/><circle cx="7" cy="-10" r="5"/><path d="M-17,12 C-17,4 -12,0 -7,0 C-4,0 -1.5,1.5 0,3 C1.5,1.5 4,0 7,0 C12,0 17,4 17,12"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 05</span>
             <span class="cs-step-name">Test</span>
@@ -981,6 +980,38 @@
           <div class="cs-pull">
             <p>"The test is not whether players found the game fun. The test is whether, the next time they stand at a bin holding a greasy cup, they know what to do."</p>
           </div>
+        </div>
+      </section>
+
+      <!-- REFLECTION -->
+      <section class="case-section" id="reflection">
+        <div class="cs-step-marker">
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sm6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#038C8C"/><stop offset="100%" stop-color="#026868"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#sm6)"/><g transform="translate(24,24) scale(0.55)" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M0,-14 A14,14 0 1,1 -14,0"/><polyline points="-10,-5 -14,0 -10,5"/></g></svg></div>
+          <div class="cs-step-info">
+            <span class="cs-step-num">Step 06</span>
+            <span class="cs-step-name">Reflection &amp; Next Steps</span>
+          </div>
+        </div>
+        <h2 class="cs-section-title">What changed, and<br><em>what still needs to.</em></h2>
+        <div class="cs-body">
+
+          <p>The hardest design problem in Sort It Out is not the recycling taxonomy. It is finding the balance between flow state, convenience, and education — three things that pull against each other. Push too hard on education and the game feels like a quiz at the worst possible moment. Optimise entirely for flow and students complete a round without retaining anything that changes their next disposal decision. The sorting mechanic lives in the tension between those two failure modes.</p>
+
+          <p>The first prototype solved the mechanism. It demonstrated that the slingshot sort interaction was legible and fast enough to work in a standing, between-class moment. What it did not do was connect the action to consequence — a student could sort eight items correctly and leave having played a game, without feeling that anything was at stake beyond the score.</p>
+
+          <p>Professor feedback named the gap precisely: the game needed to mean something beyond itself, and that meaning had to come from the transmedia system it belongs to. The video reward — a short documentary clip showing where a sorted item actually goes — was the response to that note. It transforms completion from a win screen into an entry point into the campaign's larger story. The sort earns the story; the story earns the next sort.</p>
+
+          <div class="cs-callout">
+            <p class="cs-callout-label">▸ WHAT THE NEXT ITERATION ADDRESSES</p>
+            <p><strong>Location specificity.</strong> The current prototype runs the same eight items at every bin. The next version differentiates by location — Woodworth sees different waste patterns than DeHority, and the game's item set should reflect that. Location-specific data from facilities and observation will inform which items are most likely to be misorted at each site, making the intervention more accurate and the narrative more grounded in that specific student's context.</p>
+            <p><strong>Semester-long sustain.</strong> A single play session is not enough to shift a habit. The leaderboard, stamp map, and rotating item sets are designed to bring students back across the semester. The next design challenge is pacing that re-engagement — knowing when to introduce new content, when to raise stakes, and how to keep the experience feeling fresh without demanding too much from a student who has two minutes at a bin.</p>
+            <p><strong>A more specific user.</strong> The current design targets a tech-savvy Ball State student — broad enough to be safe, narrow enough to be meaningless. The next iteration requires a real persona: not a demographic average, but a specific student navigating a specific moment. A junior commuter between classes is a different user than a freshman in the dining hall with time to kill. Each has a different threshold for friction, a different relationship to the leaderboard, and a different reason to care. Designing for both requires choosing which one to prioritise first.</p>
+          </div>
+
+          <div class="cs-pull">
+            <p>"The first prototype proved the mechanic works. The next one has to prove it changes something."</p>
+          </div>
+
         </div>
       </section>
 
@@ -1018,7 +1049,7 @@
     });
 
     // Update active step on scroll
-    const sections = ['empathy','define','ideate','prototype','test'];
+    const sections = ['empathy','define','ideate','prototype','test','reflection'];
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {

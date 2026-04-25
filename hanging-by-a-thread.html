@@ -92,6 +92,7 @@
     /* ── HERO ── */
     .case-hero {
       min-height: 100vh;
+      padding-top: 72px;
       background: var(--pixel);
       position: relative;
       display: flex; flex-direction: column;
@@ -207,6 +208,7 @@
     .case-section {
       padding: 7rem 0 5rem;
       border-top: 1px solid rgba(9,23,64,0.08);
+      scroll-margin-top: 72px;
     }
     .case-section:first-child { border-top: none; padding-top: 6rem; }
 
@@ -215,12 +217,9 @@
       margin-bottom: 2rem;
     }
     .cs-circle {
-      width: 48px; height: 48px; border-radius: 50%;
-      border: 2px solid var(--gold);
-      display: flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px;
       flex-shrink: 0;
     }
-    .cs-circle-icon { font-size: 1.1rem; }
     .cs-step-info { display: flex; flex-direction: column; gap: 0.25rem; }
     .cs-step-num {
       font-family: 'Press Start 2P', monospace;
@@ -603,7 +602,7 @@
       <!-- EMPATHY -->
       <section class="case-section" id="empathy">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">🔍</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hb1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4942C"/><stop offset="100%" stop-color="#C8923A"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#hb1)"/><g transform="translate(24,24) scale(0.55)" fill="white"><path d="M0,10 C0,10 -16,1 -16,-6 C-16,-13 -11,-16 -6,-16 C-3,-16 0,-13 0,-13 C0,-13 3,-16 6,-16 C11,-16 16,-13 16,-6 C16,1 0,10 0,10Z"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 01</span>
             <span class="cs-step-name">Empathy Research</span>
@@ -620,7 +619,7 @@
       <!-- DEFINE -->
       <section class="case-section" id="define">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">🎯</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hb2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#B87220"/><stop offset="100%" stop-color="#A05818"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#hb2)"/><g transform="translate(24,24) scale(0.55)" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="0" cy="0" r="12"/><circle cx="0" cy="0" r="4" fill="white" stroke="none"/><line x1="0" y1="-17" x2="0" y2="-13"/><line x1="0" y1="13" x2="0" y2="17"/><line x1="-17" y1="0" x2="-13" y2="0"/><line x1="13" y1="0" x2="17" y2="0"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 02</span>
             <span class="cs-step-name">Define</span>
@@ -661,7 +660,7 @@
       <!-- IDEATE -->
       <section class="case-section" id="ideate">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">💡</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hb3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8A4018"/><stop offset="100%" stop-color="#6A2828"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#hb3)"/><g transform="translate(24,24) scale(0.55)" fill="white"><path d="M4,-17 L-9,3 H1 L-2,17 L13,-3 H3 Z"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 03</span>
             <span class="cs-step-name">Ideate</span>
@@ -703,7 +702,7 @@
       <!-- PROTOTYPE -->
       <section class="case-section" id="prototype">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">🛠</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hb4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#502040"/><stop offset="100%" stop-color="#321858"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#hb4)"/><g transform="translate(24,24) scale(0.55)" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><rect x="-16" y="-12" width="32" height="20" rx="2"/><line x1="0" y1="8" x2="0" y2="14"/><line x1="-8" y1="14" x2="8" y2="14"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 04</span>
             <span class="cs-step-name">Prototype</span>
@@ -768,7 +767,7 @@
       <!-- TEST -->
       <section class="case-section" id="test">
         <div class="cs-step-marker">
-          <div class="cs-circle"><span class="cs-circle-icon">🧪</span></div>
+          <div class="cs-circle"><svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hb5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#201858"/><stop offset="100%" stop-color="#0d1530"/></linearGradient></defs><polygon points="24,2 43,13 43,35 24,46 5,35 5,13" fill="url(#hb5)"/><g transform="translate(24,24) scale(0.55)" fill="white"><circle cx="-7" cy="-10" r="5"/><circle cx="7" cy="-10" r="5"/><path d="M-17,12 C-17,4 -12,0 -7,0 C-4,0 -1.5,1.5 0,3 C1.5,1.5 4,0 7,0 C12,0 17,4 17,12"/></g></svg></div>
           <div class="cs-step-info">
             <span class="cs-step-num">Step 05</span>
             <span class="cs-step-name">Test</span>
