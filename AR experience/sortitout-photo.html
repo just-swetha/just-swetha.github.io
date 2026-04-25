@@ -1163,7 +1163,7 @@ async function checkBinInFrame(videoEl) {
   const base64Image = videoToBase64(videoEl);
   
   try {
-    const res = await fetch('/.netlify/functions/check-bin', {
+    const res = await fetch('../.netlify/functions/check-bin', { 
       method: 'POST',
       body: JSON.stringify({
         image: base64Image,
