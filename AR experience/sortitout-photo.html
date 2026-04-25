@@ -720,54 +720,48 @@ function videoToBase64(videoEl) {
 // Returns true/false, or null if the request failed.
 async function checkBinInFrame(videoEl) {
   const base64Image = videoToBase64(videoEl);
-  
   try {
-    // 1. Call your NEW Netlify proxy instead of Roboflow directly
     const res = await fetch('/.netlify/functions/check-bin', {
       method: 'POST',
       body: JSON.stringify({
         image: base64Image,
-        model: "YOUR_MODEL_ID", // Change this to your actual Roboflow Model ID
-        version: "1"            // Change if you are on a different version
+        model: "bin-koznr/1", 
+        version: "1"
       })
     });
     
     const data = await res.json();
     
-    // 2. Logic to interpret the response
     if (data.predictions && data.predictions.length > 0) {
       const topClass = data.predictions[0].class;
       const confidence = data.predictions[0].confidence;
       
       console.log(`AI sees: ${topClass} (${Math.round(confidence*100)}%)`);
       
-      // 3. Return true if it's a bin and confidence is high (e.g. 60%)
-      // Make sure 'trash' matches the exact label name in your Roboflow project
-      if (topClass === 'trash' && confidence > 0.6) {
-        return true; 
-      }
+      // If AI is 60% sure it's a bin
+      if (confidence > 0.6) return { detected: true, label: topClass };
     }
-    return false;
+    // Return false but keep it as an object so we know the call worked
+    return { detected: false }; 
   } catch (e) {
     console.error("Proxy Error:", e);
-    return false;
+    return null; // Error state
   }
 }
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
-/* ═══ SCAN SEQUENCE helper ════════════════════════════════ */
 async function runScan(suffix, onDone) {
   const sweep    = $('sweep-'     + suffix);
   const frame_   = $('frame-'     + suffix);
   const reticle  = $('reticle-'   + suffix);
   const badge    = $('badge-'     + suffix);
-  const stxt     = $('stxt-'      + suffix);
+  const stxt     = $('stxt-'      + suffix); // This is your text element
   const status   = $('status-'    + suffix);
   const panel    = $('panel-'     + suffix);
   const conf     = $('conf-'      + suffix);
   const confFill = $('conf-fill-' + suffix);
 
-  // reset
+  // 1. Reset UI
   sweep.classList.remove('go');
   frame_.classList.remove('show');
   badge.classList.remove('show');
@@ -775,34 +769,34 @@ async function runScan(suffix, onDone) {
   reticle.classList.remove('hide');
   status.style.opacity = '1';
 
-  if (tmModel && cameraStream) {
-    // Phase 1 — wait for the model to see a bin
-    stxt.textContent = 'Aim camera at the bin…';
+  // 2. AI Scanning Logic
+  if (cameraStream) {
+    // Note: No 'const' here because stxt was defined above
+    stxt.textContent = 'Aim camera at the bin...';
     if (conf) conf.classList.add('show');
+    
     const videoEl = $('cam-live-' + suffix);
-    await waitForBin(videoEl, confFill);
+
+    // Pass stxt to the helper so it can update the text live
+    await waitForBin(videoEl, confFill, stxt); 
+    
     if (conf) conf.classList.remove('show');
   } else {
-    // No model loaded — brief pause then proceed (original timer feel)
-    stxt.textContent = 'Scanning…';
-    await delay(400);
+    // Fallback if camera is blocked
+    stxt.textContent = 'Scanning...';
+    await delay(1200);
   }
 
-  // Phase 2 — run the scan animation
+  // 3. Success Animation (Triggers after AI finds the bin)
+  stxt.textContent = 'Bin Verified!';
   sweep.classList.add('go');
-  stxt.textContent = 'Analyzing…';
-
-  await delay(1700);
-  reticle.classList.add('hide');
   frame_.classList.add('show');
-
-  await delay(400);
   badge.classList.add('show');
-  stxt.textContent = 'Object identified ✓';
-
-  await delay(800);
+  
+  await delay(1000);
   status.style.opacity = '0';
   panel.classList.add('show');
+  
   if (onDone) onDone();
 }
 
@@ -1125,6 +1119,79 @@ function startVideo() {
 function replayGame() { showScreen('s-splash'); }
 
 window.addEventListener('resize', resizeCanvas);
+
+/* ═══ AI HELPERS ═══════════════════════════════════════════ */
+
+/**
+ * The "Poller": It keeps asking the AI "Do you see it?" 
+ * until the AI says yes.
+ */
+async function waitForBin(videoEl, confFill, statusTextEl) {
+  const POLL_MS = 600; // How often to check (0.6 seconds)
+  
+  return new Promise(resolve => {
+    let done = false;
+    
+    const poll = setInterval(async () => {
+      if (done) return;
+
+      // 1. Call our secure proxy
+      const result = await checkBinInFrame(videoEl);
+
+      if (!result) {
+        // If the proxy fails or network is down
+        statusTextEl.textContent = "Connecting to AI...";
+      } else if (result.detected) {
+        // 2. SUCCESS: Stop the loop and continue the game
+        done = true;
+        clearInterval(poll);
+        statusTextEl.textContent = "Bin detected!";
+        resolve();
+      } else {
+        // 3. FEEDBACK: It's working, but no bin in sight
+        statusTextEl.textContent = "Searching... (No bin seen)";
+      }
+    }, POLL_MS);
+  });
+}
+
+/**
+ * The "Messenger": It captures a frame and sends it to your 
+ * Netlify Proxy.
+ */
+async function checkBinInFrame(videoEl) {
+  const base64Image = videoToBase64(videoEl);
+  
+  try {
+    const res = await fetch('/.netlify/functions/check-bin', {
+      method: 'POST',
+      body: JSON.stringify({
+        image: base64Image,
+        model: "bin-koznr", // Replace with your actual Roboflow Model ID
+        version: "1" 
+      })
+    });
+    
+    const data = await res.json();
+    
+    if (data.predictions && data.predictions.length > 0) {
+      const topClass = data.predictions[0].class;
+      const confidence = data.predictions[0].confidence;
+      
+      console.log(`AI Result: ${topClass} (${Math.round(confidence*100)}%)`);
+      
+      // Update this to match your Roboflow label (e.g., 'bin', 'trash', 'recycling')
+      if (topClass === 'trash' && confidence > 0.6) {
+        return { detected: true, label: topClass };
+      }
+    }
+    return { detected: false };
+  } catch (e) {
+    console.error("AI Communication Error:", e);
+    return null;
+  }
+}
+
 </script>
 </body>
 </html>
