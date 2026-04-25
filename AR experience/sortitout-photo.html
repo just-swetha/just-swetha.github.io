@@ -737,9 +737,9 @@ function captureFrame(videoEl) {
   return canvas.toDataURL('image/jpeg', 0.9);
 }
 
-const RF_API_KEY    = 'rf_M8Umm1qwd6UD3iBzxJP54S4aSgG3';
-const RF_WORKSPACE  = 'swethas-workspace-pg00r';
-const RF_WORKFLOW   = 'bin-presence-checker-verified-1777140256575';
+const RF_API_KEY = 'rf_M8Umm1qwd6UD3iBzxJP54S4aSgG3';
+const RF_MODEL   = 'bin-koznr/1';
+const RF_THRESHOLD = 0.6;
 
 async function checkBinInFrame(videoEl) {
   const b64 = videoToBase64(videoEl);
@@ -747,24 +747,19 @@ async function checkBinInFrame(videoEl) {
 
   try {
     const res = await fetch(
-      `https://detect.roboflow.com/infer/workflows/${RF_WORKSPACE}/${RF_WORKFLOW}`,
+      `https://detect.roboflow.com/${RF_MODEL}?api_key=${RF_API_KEY}`,
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          api_key: RF_API_KEY,
-          inputs: { image: { type: 'base64', value: b64 } },
-        }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: b64,
       }
     );
     const data = await res.json();
     if (!res.ok) { console.warn('Roboflow error:', data); return null; }
 
-    const output = data.outputs?.[0];
-    if (!output) { console.warn('Roboflow: no outputs in response', data); return null; }
-
-    const detected = output.bin_detected === true;
-    console.log(`RF: bin_detected=${output.bin_detected} — ${detected ? 'DETECTED' : 'not detected'}`);
+    const predictions = data.predictions ?? [];
+    const detected = predictions.some(p => p.confidence >= RF_THRESHOLD);
+    console.log(`RF: ${predictions.length} prediction(s), detected=${detected}`);
     return { detected };
   } catch (e) {
     console.error('checkBinInFrame:', e);
