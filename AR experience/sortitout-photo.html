@@ -8,438 +8,397 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-  background: #0d1117;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  overflow: hidden;
+  background: #2B1B1F;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; overflow: hidden;
 }
 
-/* ── Phone shell ─────────────────────────────────────────────── */
-.phone-outer {
-  position: relative;
-  width: 340px;
-  height: 720px;
-  flex-shrink: 0;
-}
+/* ── Phone shell ──────────────────────────────────────────── */
+.phone-outer { position:relative; width:340px; height:720px; flex-shrink:0; }
 .phone-vol {
-  position: absolute;
-  left: -4px; top: 120px;
-  display: flex; flex-direction: column; gap: 10px;
-  z-index: 10;
+  position:absolute; left:-4px; top:120px;
+  display:flex; flex-direction:column; gap:10px; z-index:10;
 }
-.phone-vol span {
-  display: block; width: 4px; border-radius: 2px; background: #3a3a3c;
-}
-.phone-vol span:nth-child(1) { height: 32px; }
-.phone-vol span:nth-child(2) { height: 44px; }
-.phone-vol span:nth-child(3) { height: 44px; }
+.phone-vol span { display:block; width:4px; border-radius:2px; background:#3a3a3c; }
+.phone-vol span:nth-child(1){height:32px}
+.phone-vol span:nth-child(2){height:44px}
+.phone-vol span:nth-child(3){height:44px}
 .phone-power {
-  position: absolute;
-  right: -4px; top: 150px;
-  width: 4px; height: 60px;
-  border-radius: 2px; background: #3a3a3c; z-index: 10;
+  position:absolute; right:-4px; top:150px;
+  width:4px; height:60px; border-radius:2px; background:#3a3a3c; z-index:10;
 }
 .phone-frame {
-  position: absolute; inset: 0;
-  background: #1c1c1e;
-  border-radius: 50px;
-  border: 6px solid #2c2c2e;
-  box-shadow:
-    0 0 0 1px #3a3a3c,
-    0 40px 80px rgba(0,0,0,0.8),
-    inset 0 1px 0 rgba(255,255,255,0.08);
-  overflow: hidden;
+  position:absolute; inset:0; background:#1c1c1e;
+  border-radius:50px; border:6px solid #2c2c2e;
+  box-shadow:0 0 0 1px #3a3a3c,0 40px 80px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.08);
+  overflow:hidden;
 }
 .phone-island {
-  position: absolute;
-  top: 12px; left: 50%; transform: translateX(-50%);
-  width: 110px; height: 28px;
-  background: #000; border-radius: 20px;
-  z-index: 100;
+  position:absolute; top:12px; left:50%; transform:translateX(-50%);
+  width:110px; height:28px; background:#000; border-radius:20px; z-index:100;
 }
 .phone-home {
-  position: absolute;
-  bottom: 10px; left: 50%; transform: translateX(-50%);
-  width: 100px; height: 4px;
-  background: rgba(255,255,255,0.3); border-radius: 2px;
-  z-index: 100;
+  position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+  width:100px; height:4px; background:rgba(255,255,255,.3); border-radius:2px; z-index:100;
 }
-.phone-screen {
-  position: absolute; inset: 0;
-  border-radius: 44px; overflow: hidden;
-}
+.phone-screen { position:absolute; inset:0; border-radius:44px; overflow:hidden; }
 
-/* ── Screen system ───────────────────────────────────────────── */
+/* ── Screen base ──────────────────────────────────────────── */
 .screen {
-  position: absolute; inset: 0;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.35s ease;
-  overflow: hidden;
+  position:absolute; inset:0;
+  opacity:0; pointer-events:none; transition:opacity .35s ease; overflow:hidden;
 }
-.screen.active { opacity: 1; pointer-events: all; }
+.screen.active { opacity:1; pointer-events:all; }
 
-/* ── Status bar ──────────────────────────────────────────────── */
-.status-bar {
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 50px;
-  display: flex; align-items: flex-end; justify-content: space-between;
-  padding: 0 22px 6px;
-  z-index: 50; font-size: 11px; font-weight: 600; color: #fff;
+/* ── Status bar ───────────────────────────────────────────── */
+.sb {
+  position:absolute; top:0; left:0; right:0; height:50px;
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding:0 22px 6px; z-index:50; color:#fff; font-size:11px; font-weight:600;
 }
-.status-time { font-size: 14px; font-weight: 700; }
+.sb-time { font-size:14px; font-weight:700; }
 
-/* ── SCREEN 1 — SPLASH ───────────────────────────────────────── */
-#screen-splash { background: linear-gradient(160deg, #022a2a 0%, #011818 100%); }
+/* ── SPLASH ───────────────────────────────────────────────── */
+#s-splash { background:linear-gradient(160deg,#2B1B1F,#1A1013); }
 .splash-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(5,188,188,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(5,188,188,0.07) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-.splash-content {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 16px; padding: 60px 28px 80px;
-}
-.splash-app-icon {
-  width: 64px; height: 64px;
-  background: linear-gradient(135deg, #05bcbc, #038080);
-  border-radius: 16px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 30px;
-  box-shadow: 0 8px 24px rgba(5,188,188,0.4);
-  margin-bottom: 4px;
-}
-.splash-title {
-  font-size: 26px; font-weight: 800; color: #fff;
-  letter-spacing: -0.5px; text-align: center;
-}
-.splash-sub {
-  font-size: 13px; color: rgba(255,255,255,0.55);
-  text-align: center; line-height: 1.5; max-width: 220px;
-}
-.splash-location {
-  display: flex; align-items: center; gap: 6px;
-  background: rgba(5,188,188,0.15);
-  border: 1px solid rgba(5,188,188,0.3);
-  border-radius: 20px; padding: 6px 14px;
-  color: #05bcbc; font-size: 12px; font-weight: 600;
-}
-.btn-begin {
-  margin-top: 8px;
-  background: linear-gradient(135deg, #05bcbc, #038080);
-  color: #fff; border: none; border-radius: 14px;
-  padding: 14px 36px; font-size: 15px; font-weight: 700;
-  cursor: pointer; width: 100%; max-width: 220px;
-  box-shadow: 0 6px 20px rgba(5,188,188,0.45);
-  transition: transform 0.12s;
-}
-.btn-begin:active { transform: scale(0.96); }
-
-/* ── SCREEN 2 — VIEWFINDER ───────────────────────────────────── */
-#screen-viewfinder { background: #000; }
-.vf-bg { position: absolute; inset: 0; background: linear-gradient(160deg,#0d1f1f,#050f0f); }
-.vf-scanlines {
-  position: absolute; inset: 0; pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg, transparent, transparent 2px,
-    rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
-  );
-}
-.vf-corners { position: absolute; inset: 20%; pointer-events: none; }
-.vf-corner {
-  position: absolute; width: 22px; height: 22px;
-  border-color: rgba(5,188,188,0.8); border-style: solid; border-width: 0;
-}
-.vf-corner.tl { top:0;left:0;border-top-width:3px;border-left-width:3px; }
-.vf-corner.tr { top:0;right:0;border-top-width:3px;border-right-width:3px; }
-.vf-corner.bl { bottom:0;left:0;border-bottom-width:3px;border-left-width:3px; }
-.vf-corner.br { bottom:0;right:0;border-bottom-width:3px;border-right-width:3px; }
-.vf-reticle {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  width: 40px; height: 40px;
-  border: 2px solid rgba(5,188,188,0.7); border-radius: 50%;
-  animation: reticlePulse 1.4s ease-in-out infinite;
-}
-@keyframes reticlePulse {
-  0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
-  50%      { transform: translate(-50%,-50%) scale(1.25); opacity: 0.5; }
-}
-.vf-sweep {
-  position: absolute; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(5,188,188,0.9), transparent);
-  animation: sweepDown 2.2s ease-in-out infinite;
-}
-@keyframes sweepDown {
-  0%   { top: 15%; opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { top: 85%; opacity: 0; }
-}
-.vf-status {
-  position: absolute; bottom: 90px; left: 0; right: 0;
-  text-align: center; color: rgba(255,255,255,0.9);
-  font-size: 13px; font-weight: 600; letter-spacing: 0.03em;
-}
-.blink-dot {
-  display: inline-block; width: 7px; height: 7px;
-  background: #05bcbc; border-radius: 50%;
-  margin-right: 6px; vertical-align: middle;
-  animation: blink 1s step-end infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-.vf-flash {
-  position: absolute; inset: 0; background: #fff;
-  opacity: 0; pointer-events: none; transition: opacity 0.1s;
-}
-.vf-flash.on { opacity: 1; }
-.vf-flash.off { opacity: 0; transition: opacity 0.5s; }
-
-/* ── SCREEN 3 — RECOGNITION ──────────────────────────────────── */
-#screen-recognition { background: #000; }
-.rec-bg { position:absolute;inset:0;background:linear-gradient(160deg,#071a1a,#030d0d); }
-.rec-header {
-  position: absolute; top: 52px; left: 0; right: 0;
-  text-align: center; color: rgba(255,255,255,0.65);
-  font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-}
-.rec-row {
-  position: absolute; top: 50%; left: 0; right: 0;
-  transform: translateY(-55%);
-  display: flex; justify-content: center; gap: 18px; padding: 0 20px;
-}
-.rec-bin {
-  position: relative; width: 118px; height: 140px;
-  border-radius: 12px; overflow: hidden;
-  opacity: 0; transform: translateY(14px);
-  transition: opacity 0.5s, transform 0.5s;
-}
-.rec-bin.show { opacity: 1; transform: translateY(0); }
-.rec-bin img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
-.rec-scan-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg,transparent 0%,rgba(5,188,188,0.18) 50%,transparent 100%);
-  opacity: 0; animation: binSweep 1.6s ease-in-out forwards;
-}
-@keyframes binSweep {
-  0%  { clip-path: inset(0 0 100% 0); opacity: 1; }
-  80% { clip-path: inset(0 0 0 0);   opacity: 1; }
-  100%{ opacity: 0; }
-}
-.rec-corners {
-  position: absolute; inset: 0; pointer-events: none;
-  opacity: 0; transition: opacity 0.4s;
-}
-.rec-corners.show { opacity: 1; }
-.rec-corners svg { width: 100%; height: 100%; }
-.rec-label {
-  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
-  background: rgba(5,188,188,0.9); color: #fff;
-  font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 6px;
-  white-space: nowrap; opacity: 0; transition: opacity 0.4s;
-}
-.rec-label.show { opacity: 1; }
-.rec-conf {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: rgba(0,0,0,0.72); padding: 5px 8px;
-  opacity: 0; transition: opacity 0.4s;
-}
-.rec-conf.show { opacity: 1; }
-.rec-conf-lbl { font-size: 9px; color: rgba(255,255,255,0.55); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 3px; }
-.rec-conf-bg  { height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; }
-.rec-conf-fill { height: 100%; background: linear-gradient(90deg,#05bcbc,#a0f0f0); border-radius: 2px; width: 0; transition: width 1.2s ease; }
-.rec-status {
-  position: absolute; bottom: 105px; left: 0; right: 0;
-  text-align: center; color: #05bcbc;
-  font-size: 13px; font-weight: 700;
-  opacity: 0; transition: opacity 0.5s;
-}
-.rec-status.show { opacity: 1; }
-.btn-rec-continue {
-  position: absolute; bottom: 52px; left: 50%; transform: translateX(-50%);
-  background: linear-gradient(135deg,#05bcbc,#038080);
-  color: #fff; border: none; border-radius: 12px;
-  padding: 12px 32px; font-size: 14px; font-weight: 700;
-  cursor: pointer; white-space: nowrap;
-  box-shadow: 0 6px 20px rgba(5,188,188,0.4);
-  opacity: 0; transition: opacity 0.4s;
-}
-.btn-rec-continue.show { opacity: 1; }
-.btn-rec-continue:active { transform: translateX(-50%) scale(0.96); }
-
-/* ── SCREEN 4 — VERIFY ───────────────────────────────────────── */
-#screen-verify { background: #000; }
-.ver-bg { position:absolute;inset:0;background:linear-gradient(160deg,#071a1a,#030d0d); }
-.ver-prompt { position:absolute;top:60px;left:0;right:0;text-align:center;padding:0 24px; }
-.ver-eyebrow { font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(5,188,188,0.85);margin-bottom:8px; }
-.ver-q { font-size:16px;font-weight:700;color:#fff;line-height:1.4; }
-.ver-sub { font-size:11px;color:rgba(255,255,255,0.45);margin-top:6px; }
-.ver-row {
-  position:absolute;top:50%;left:0;right:0;
-  transform:translateY(-55%);
-  display:flex;justify-content:center;gap:18px;padding:0 20px;
-}
-.ver-card {
-  width:118px;cursor:pointer;border-radius:14px;overflow:hidden;
-  border:2.5px solid transparent;
-  transition:border-color 0.2s, transform 0.15s;
-  background:#111;
-}
-.ver-card:active { transform:scale(0.96); }
-.ver-card img { width:100%;height:110px;object-fit:cover;display:block; }
-.ver-card-name { text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.8);padding:8px 6px; }
-.ver-feedback {
-  position:absolute;bottom:100px;left:0;right:0;
-  text-align:center;font-size:13px;font-weight:600;
-  opacity:0;transition:opacity 0.3s;padding:0 24px;
-}
-.ver-feedback.show { opacity:1; }
-.ver-feedback.ok  { color:#4ade80; }
-.ver-feedback.err { color:#f87171; }
-.ver-hint { position:absolute;bottom:65px;left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,0.28);letter-spacing:0.04em; }
-
-/* ── SCREEN 5 — GAME ─────────────────────────────────────────── */
-#screen-game { background:#05172b; }
-.game-bg {
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse at 30% 80%,rgba(5,120,80,0.18) 0%,transparent 55%),
-    radial-gradient(ellipse at 70% 80%,rgba(5,100,188,0.12) 0%,transparent 55%),
-    linear-gradient(160deg,#07203a,#040f1f);
-}
-.game-hud {
-  position:absolute;top:52px;left:0;right:0;
-  display:flex;justify-content:space-between;align-items:center;padding:0 16px;
-}
-.game-score {
-  background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.12);
-  border-radius:10px;padding:5px 10px;font-size:11px;font-weight:700;color:rgba(255,255,255,0.85);
-}
-.game-lives { font-size:16px;letter-spacing:2px; }
-.game-progress {
-  position:absolute;top:90px;left:50%;transform:translateX(-50%);
-  font-size:10px;font-weight:700;color:rgba(255,255,255,0.38);
-  letter-spacing:0.07em;white-space:nowrap;
-}
-
-/* bins */
-.bins-area {
-  position:absolute;bottom:26px;left:0;right:0;
-  display:flex;justify-content:center;gap:16px;padding:0 16px;
-  pointer-events:none;
-}
-.bin-slot {
-  position:relative;width:130px;height:155px;
-  pointer-events:all;border-radius:12px;overflow:hidden;
-}
-.bin-slot img { width:100%;height:100%;object-fit:cover;border-radius:12px;transition:filter 0.15s;will-change:transform; }
-.ar-corners { position:absolute;inset:0;pointer-events:none; }
-.ar-corners svg { width:100%;height:100%; }
-.bin-tag {
-  position:absolute;top:8px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,0.75);color:#fff;
-  font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;
-  padding:3px 8px;border-radius:6px;white-space:nowrap;
-}
-.bin-slot.lit img { filter:brightness(1.25); }
-
-/* item card */
-.items-area {
-  position:absolute;top:78px;left:0;right:0;bottom:200px;
-  display:flex;align-items:center;justify-content:center;
-}
-.item-card {
-  width:100px;height:100px;border-radius:16px;
-  background:rgba(255,255,255,0.08);
-  border:1.5px solid rgba(255,255,255,0.14);
-  display:flex;align-items:center;justify-content:center;
-  cursor:grab;user-select:none;touch-action:none;
-  position:absolute;
-  box-shadow:0 4px 20px rgba(0,0,0,0.5),0 0 0 1px rgba(5,188,188,0.14);
-  transition:box-shadow 0.15s, transform 0.1s;
-  will-change:transform;
-}
-.item-card img { width:68px;height:68px;object-fit:contain;pointer-events:none;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
-.item-card.drag {
-  cursor:grabbing;
-  box-shadow:0 12px 40px rgba(5,188,188,0.35),0 0 0 2px rgba(5,188,188,0.5);
-  z-index:200;transform:scale(1.08) rotate(3deg);transition:none;
-}
-.item-name {
-  position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);
-  font-size:9px;font-weight:700;color:rgba(255,255,255,0.6);
-  white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;
-}
-
-/* toast */
-.game-toast {
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(0.85);
-  background:rgba(0,0,0,0.88);color:#fff;
-  border-radius:14px;padding:14px 18px;text-align:center;max-width:240px;
-  opacity:0;pointer-events:none;
-  transition:opacity 0.25s, transform 0.25s;z-index:300;
-}
-.game-toast.show { opacity:1;transform:translate(-50%,-50%) scale(1); }
-.toast-r { font-size:20px;margin-bottom:6px; }
-.toast-f { font-size:10px;color:rgba(255,255,255,0.7);line-height:1.55; }
-
-canvas#traj { position:absolute;inset:0;pointer-events:none;z-index:50; }
-
-/* ── SCREEN 6 — VIDEO ────────────────────────────────────────── */
-#screen-video { background:#000; }
-#screen-video video {
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;opacity:0;transition:opacity 0.4s;
-}
-#screen-video video.vis { opacity:1; }
-.vid-hint {
-  position:absolute;bottom:70px;left:0;right:0;
-  text-align:center;font-size:11px;color:rgba(255,255,255,0.38);
-  pointer-events:none;opacity:0;
-}
-
-/* ── SCREEN 7 — END ──────────────────────────────────────────── */
-#screen-end { background:linear-gradient(160deg,#022a2a,#011818); }
-.end-grid {
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(5,188,188,0.07) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(5,188,188,0.07) 1px,transparent 1px);
+  position:absolute; inset:0;
+  background-image:linear-gradient(rgba(117,201,98,.07) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(117,201,98,.07) 1px,transparent 1px);
   background-size:32px 32px;
 }
-.end-content {
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:12px;padding:60px 28px 80px;
+.splash-body {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:16px; padding:60px 28px 80px;
 }
-.end-emoji { font-size:52px;margin-bottom:4px; }
-.end-title { font-size:22px;font-weight:800;color:#fff;text-align:center; }
-.end-big { font-size:48px;font-weight:900;color:#05bcbc;line-height:1; }
-.end-label { font-size:11px;color:rgba(255,255,255,0.42);letter-spacing:0.07em;text-transform:uppercase;margin-top:-4px; }
-.end-stars { font-size:28px;letter-spacing:4px;margin:4px 0; }
-.end-fact { font-size:12px;color:rgba(255,255,255,0.52);text-align:center;line-height:1.6;max-width:232px; }
-.btn-replay {
-  margin-top:8px;
-  background:linear-gradient(135deg,#05bcbc,#038080);
-  color:#fff;border:none;border-radius:14px;
-  padding:13px 32px;font-size:14px;font-weight:700;
-  cursor:pointer;width:100%;max-width:210px;
-  box-shadow:0 6px 20px rgba(5,188,188,0.45);
-  transition:transform 0.12s;
+.splash-icon {
+  width:64px; height:64px; border-radius:16px;
+  background:linear-gradient(135deg,#75C962,#487354);
+  display:flex; align-items:center; justify-content:center; font-size:30px;
+  box-shadow:0 8px 24px rgba(117,201,98,.4); margin-bottom:4px;
 }
-.btn-replay:active { transform:scale(0.96); }
+.splash-title { font-size:26px; font-weight:800; color:#fff; letter-spacing:-.5px; text-align:center; }
+.splash-sub { font-size:13px; color:rgba(255,255,255,.55); text-align:center; line-height:1.5; max-width:220px; }
+.splash-loc {
+  display:flex; align-items:center; gap:6px;
+  background:rgba(117,201,98,.15); border:1px solid rgba(117,201,98,.3);
+  border-radius:20px; padding:6px 14px; color:#75C962; font-size:12px; font-weight:600;
+}
+.btn-begin {
+  margin-top:8px; background:linear-gradient(135deg,#75C962,#487354);
+  color:#fff; border:none; border-radius:14px; padding:14px 36px;
+  font-size:15px; font-weight:700; cursor:pointer; width:100%; max-width:220px;
+  box-shadow:0 6px 20px rgba(117,201,98,.45); transition:transform .12s;
+}
+.btn-begin:active { transform:scale(.96); }
 
-/* ── Mobile full-bleed ───────────────────────────────────────── */
+/* ── SCAN SCREENS (trash + recycle) ─────────────────────── */
+.scan-bg { background:#000; }
+
+.cam-photo {
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; filter:brightness(.82) saturate(.9);
+}
+.cam-crt {
+  position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);
+}
+/* Scan sweep line */
+.cam-sweep {
+  position:absolute; left:12%; right:12%; height:2px;
+  background:linear-gradient(90deg,transparent,rgba(117,201,98,.95),transparent);
+  top:15%; opacity:0; pointer-events:none;
+}
+.cam-sweep.go { animation:camSweep 1.9s ease-in-out forwards; }
+@keyframes camSweep {
+  0%   { top:15%; opacity:0; }
+  5%   { opacity:1; }
+  92%  { opacity:1; }
+  100% { top:85%; opacity:0; }
+}
+/* AR corner frame (tracks the bin object) */
+.cam-frame {
+  position:absolute; inset:12%; pointer-events:none;
+  opacity:0; transition:opacity .5s;
+}
+.cam-frame.show { opacity:1; }
+.cam-frame .c {
+  position:absolute; width:28px; height:28px;
+  border-color:#75C962; border-style:solid; border-width:0;
+}
+.cam-frame .c.tl { top:0;left:0;border-top-width:3px;border-left-width:3px; }
+.cam-frame .c.tr { top:0;right:0;border-top-width:3px;border-right-width:3px; }
+.cam-frame .c.bl { bottom:0;left:0;border-bottom-width:3px;border-left-width:3px; }
+.cam-frame .c.br { bottom:0;right:0;border-bottom-width:3px;border-right-width:3px; }
+/* Pulsing reticle before scan */
+.cam-reticle {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:44px; height:44px;
+  border:2px solid rgba(117,201,98,.65); border-radius:50%;
+  animation:rPulse 1.4s ease-in-out infinite;
+}
+@keyframes rPulse {
+  0%,100% { transform:translate(-50%,-50%) scale(1); opacity:1; }
+  50%      { transform:translate(-50%,-50%) scale(1.3); opacity:.5; }
+}
+.cam-reticle.hide { opacity:0; transition:opacity .3s; pointer-events:none; }
+
+/* Status text */
+.cam-status {
+  position:absolute; bottom:270px; left:0; right:0;
+  text-align:center; color:rgba(255,255,255,.88);
+  font-size:12px; font-weight:600; letter-spacing:.04em;
+  transition:opacity .3s;
+}
+.blink-dot {
+  display:inline-block; width:7px; height:7px;
+  background:#75C962; border-radius:50%; margin-right:6px; vertical-align:middle;
+  animation:bdot 1s step-end infinite;
+}
+@keyframes bdot { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* Identified badge */
+.cam-badge {
+  position:absolute; top:32%; left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:rgba(117,201,98,.92); color:#fff;
+  font-size:13px; font-weight:800; padding:8px 18px; border-radius:22px;
+  white-space:nowrap; opacity:0; transition:opacity .4s, transform .4s;
+  box-shadow:0 4px 16px rgba(117,201,98,.5);
+}
+.cam-badge.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* Bottom slide-up panel */
+.cam-panel {
+  position:absolute; bottom:0; left:0; right:0;
+  background:rgba(5,10,10,.94);
+  padding:22px 22px 44px;
+  transform:translateY(100%); transition:transform .5s cubic-bezier(.22,1,.36,1);
+  border-top:1px solid rgba(117,201,98,.2);
+}
+.cam-panel.show { transform:translateY(0); }
+.cam-panel-title { font-size:15px; font-weight:800; color:#fff; margin-bottom:8px; }
+.cam-panel-msg { font-size:12px; color:rgba(255,255,255,.62); line-height:1.65; margin-bottom:18px; }
+.cam-panel-btn {
+  width:100%; background:linear-gradient(135deg,#75C962,#487354);
+  color:#fff; border:none; border-radius:12px; padding:13px;
+  font-size:14px; font-weight:700; cursor:pointer;
+  box-shadow:0 4px 16px rgba(117,201,98,.4); transition:transform .12s;
+}
+.cam-panel-btn:active { transform:scale(.97); }
+
+/* ── GAME ─────────────────────────────────────────────────── */
+#s-game { background:#2B1B1F; }
+.game-bg {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 30% 20%,rgba(117,201,98,.12) 0%,transparent 55%),
+    radial-gradient(ellipse at 70% 20%,rgba(72,115,84,.10) 0%,transparent 55%),
+    linear-gradient(160deg,#2B1B1F,#1A1013);
+}
+/* HUD */
+.game-hud {
+  position:absolute; top:52px; left:0; right:0;
+  display:flex; justify-content:space-between; align-items:center; padding:0 14px;
+}
+.hud-chip {
+  background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.1);
+  border-radius:8px; padding:4px 10px;
+  font-size:11px; font-weight:700;
+}
+.hud-ok    { color:#75C962; }
+.hud-wrong { color:rgba(241,228,210,.55); }
+.hud-wrong.warn { color:#E07070; }
+.hud-prog  { font-size:10px; font-weight:700; color:rgba(241,228,210,.45); letter-spacing:.07em; }
+
+/* Bins row — TOP of game area */
+.bins-top {
+  position:absolute; top:86px; left:0; right:0;
+  display:flex; justify-content:center; gap:20px; padding:0 20px;
+}
+.bin-target {
+  position:relative; width:130px; height:130px;
+  border-radius:12px; overflow:hidden; pointer-events:all;
+}
+.bin-target img { width:100%; height:100%; object-fit:cover; border-radius:12px; transition:filter .15s; }
+.bin-target.lit img { filter:brightness(1.3) saturate(1.2); }
+.bin-arc { position:absolute; inset:0; pointer-events:none; }
+.bin-arc svg { width:100%; height:100%; }
+.bin-tag {
+  position:absolute; top:7px; left:50%; transform:translateX(-50%);
+  background:rgba(0,0,0,.78); color:#fff;
+  font-size:8px; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
+  padding:3px 7px; border-radius:5px; white-space:nowrap;
+}
+
+/* Item zone — below bins */
+.item-zone {
+  position:absolute; top:200px; left:0; right:0; bottom:120px;
+  display:flex; align-items:center; justify-content:center;
+}
+.item-card {
+  width:106px; height:106px; border-radius:18px;
+  background:rgba(255,255,255,.08); border:1.5px solid rgba(255,255,255,.14);
+  display:flex; align-items:center; justify-content:center;
+  cursor:grab; user-select:none; touch-action:none;
+  position:absolute; z-index:60;
+  box-shadow:0 4px 22px rgba(0,0,0,.55),0 0 0 1px rgba(117,201,98,.14);
+  transition:box-shadow .15s, transform .1s; will-change:transform;
+}
+.item-card img { width:70px; height:70px; object-fit:contain; pointer-events:none; filter:drop-shadow(0 4px 8px rgba(0,0,0,.5)); }
+.item-card.drag {
+  cursor:grabbing;
+  box-shadow:0 14px 44px rgba(117,201,98,.38),0 0 0 2px rgba(117,201,98,.55);
+  z-index:200; transform:scale(1.09) rotate(2deg); transition:none;
+}
+.item-lbl {
+  position:absolute; bottom:-28px; left:50%; transform:translateX(-50%);
+  font-size:9px; font-weight:700; color:rgba(255,255,255,.58);
+  white-space:nowrap; max-width:130px; overflow:hidden; text-overflow:ellipsis;
+}
+.drag-hint {
+  position:absolute; bottom:22px; left:0; right:0;
+  text-align:center; font-size:10px; color:rgba(255,255,255,.28);
+  letter-spacing:.04em; pointer-events:none;
+}
+
+/* Trajectory canvas */
+canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
+
+/* Game toast */
+.game-toast {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%) scale(.85);
+  background:rgba(0,0,0,.9); color:#fff;
+  border-radius:14px; padding:14px 18px; text-align:center; max-width:240px;
+  opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:300;
+}
+.game-toast.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
+.toast-r { font-size:22px; margin-bottom:6px; }
+.toast-f { font-size:10px; color:rgba(255,255,255,.68); line-height:1.55; }
+
+/* ── SUCCESS ─────────────────────────────────────────────── */
+#s-success { background:linear-gradient(160deg,#2B1B1F,#1A1013); }
+.succ-grid {
+  position:absolute; inset:0;
+  background-image:linear-gradient(rgba(117,201,98,.07) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(117,201,98,.07) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.succ-body {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; padding:60px 24px 80px; overflow-y:auto;
+}
+.succ-icon { font-size:46px; margin-bottom:2px; }
+.succ-title { font-size:18px; font-weight:800; color:#fff; text-align:center; line-height:1.35; max-width:240px; }
+.succ-stat {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(117,201,98,.15); border:1px solid rgba(117,201,98,.3);
+  border-radius:20px; padding:6px 14px;
+}
+.succ-pct { font-size:16px; font-weight:900; color:#75C962; }
+.succ-pct-lbl { font-size:11px; color:rgba(255,255,255,.55); }
+.succ-divider { width:80%; height:1px; background:rgba(255,255,255,.08); margin:4px 0; }
+.succ-recycle-lbl { font-size:10px; font-weight:700; color:rgba(255,255,255,.45); text-transform:uppercase; letter-spacing:.08em; }
+.succ-items {
+  display:flex; gap:10px; justify-content:center;
+}
+.succ-item {
+  display:flex; flex-direction:column; align-items:center; gap:4px; width:58px;
+}
+.succ-item img { width:46px; height:46px; object-fit:contain; filter:drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
+.succ-item span { font-size:8px; text-align:center; color:rgba(255,255,255,.55); line-height:1.3; }
+.succ-bin-img {
+  width:190px; height:110px; border-radius:12px; overflow:hidden; position:relative;
+}
+.succ-bin-img img { width:100%; height:100%; object-fit:cover; }
+.succ-bin-cap {
+  position:absolute; bottom:0; left:0; right:0;
+  background:rgba(117,201,98,.88); color:#fff;
+  font-size:9px; font-weight:700; text-align:center;
+  padding:4px; letter-spacing:.06em; text-transform:uppercase;
+}
+.btn-watch {
+  width:100%; max-width:230px;
+  background:linear-gradient(135deg,#75C962,#487354);
+  color:#fff; border:none; border-radius:14px;
+  padding:13px 28px; font-size:14px; font-weight:700;
+  cursor:pointer; box-shadow:0 6px 20px rgba(117,201,98,.45); transition:transform .12s;
+}
+.btn-watch:active { transform:scale(.96); }
+
+/* ── FAIL ─────────────────────────────────────────────────── */
+#s-fail { background:linear-gradient(160deg,#591417,#2B1B1F); }
+.fail-grid {
+  position:absolute; inset:0;
+  background-image:linear-gradient(rgba(89,20,23,.12) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(89,20,23,.12) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.fail-body {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:14px; padding:60px 28px 80px;
+}
+.fail-icon { font-size:52px; }
+.fail-title { font-size:22px; font-weight:800; color:#F1E4D2; text-align:center; }
+.fail-stat {
+  background:rgba(89,20,23,.3); border:1px solid rgba(89,20,23,.6);
+  border-radius:20px; padding:6px 16px;
+  font-size:14px; font-weight:900; color:#F1E4D2;
+}
+.fail-msg { font-size:12px; color:rgba(241,228,210,.65); text-align:center; line-height:1.65; max-width:240px; }
+.fail-detail {
+  font-size:11px; color:rgba(241,228,210,.45); text-align:center; line-height:1.55; max-width:230px;
+  background:rgba(255,255,255,.05); border-radius:10px; padding:10px 14px;
+}
+.btn-retry {
+  margin-top:6px; background:rgba(89,20,23,.35); border:2px solid rgba(89,20,23,.7);
+  color:#F1E4D2; border-radius:14px; padding:13px 32px;
+  font-size:14px; font-weight:700; cursor:pointer; transition:transform .12s, background .15s;
+  width:100%; max-width:210px;
+}
+.btn-retry:hover { background:rgba(89,20,23,.55); }
+.btn-retry:active { transform:scale(.96); }
+
+/* ── VIDEO ───────────────────────────────────────────────── */
+#s-video { background:#000; }
+#s-video video { position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s; }
+#s-video video.vis { opacity:1; }
+.vid-hint { position:absolute;bottom:70px;left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.38);pointer-events:none;opacity:0; }
+
+/* ── END ──────────────────────────────────────────────────── */
+#s-end { background:linear-gradient(160deg,#2B1B1F,#1A1013); }
+.end-grid {
+  position:absolute; inset:0;
+  background-image:linear-gradient(rgba(117,201,98,.07) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(117,201,98,.07) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.end-body {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:12px; padding:60px 28px 80px;
+}
+.end-emoji { font-size:52px; margin-bottom:4px; }
+.end-title { font-size:22px; font-weight:800; color:#fff; text-align:center; }
+.end-sub { font-size:12px; color:rgba(255,255,255,.45); text-align:center; line-height:1.6; max-width:230px; }
+.btn-replay {
+  margin-top:8px; background:linear-gradient(135deg,#75C962,#487354);
+  color:#fff; border:none; border-radius:14px; padding:13px 32px;
+  font-size:14px; font-weight:700; cursor:pointer;
+  box-shadow:0 6px 20px rgba(117,201,98,.45); width:100%; max-width:210px; transition:transform .12s;
+}
+.btn-replay:active { transform:scale(.96); }
+
+/* ── Mobile full-bleed ───────────────────────────────────── */
 @media (max-height:740px),(max-width:380px) {
   body { background:#000; }
-  .phone-outer { width:100vw;height:100vh; }
+  .phone-outer { width:100vw; height:100vh; }
   .phone-vol,.phone-power { display:none; }
-  .phone-frame { border-radius:0;border:none;box-shadow:none; }
+  .phone-frame { border-radius:0; border:none; box-shadow:none; }
   .phone-screen { border-radius:0; }
   .phone-island,.phone-home { display:none; }
 }
@@ -450,216 +409,196 @@ canvas#traj { position:absolute;inset:0;pointer-events:none;z-index:50; }
 <div class="phone-outer">
   <div class="phone-vol"><span></span><span></span><span></span></div>
   <div class="phone-power"></div>
-
   <div class="phone-frame">
     <div class="phone-island"></div>
     <div class="phone-home"></div>
     <div class="phone-screen">
 
-      <!-- ═══ SCREEN 1: SPLASH ══════════════════════════════════ -->
-      <div class="screen active" id="screen-splash">
+      <!-- ══ SCREEN 1: SPLASH ══════════════════════════════ -->
+      <div class="screen active" id="s-splash">
         <div class="splash-grid"></div>
-        <div class="status-bar">
-          <span class="status-time">9:41</span>
+        <div class="sb">
+          <span class="sb-time">9:41</span>
           <div style="display:flex;gap:5px;align-items:center">
-            <!-- signal bars -->
-            <svg width="17" height="12" viewBox="0 0 17 12" fill="white" opacity="0.8">
-              <rect x="0" y="5" width="3" height="7" rx="1"/>
-              <rect x="4.5" y="3" width="3" height="9" rx="1"/>
-              <rect x="9" y="1" width="3" height="11" rx="1"/>
-              <rect x="13.5" y="0" width="3" height="12" rx="1" opacity="0.3"/>
-            </svg>
-            <!-- wifi -->
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="white" opacity="0.8">
-              <path d="M8 3C10.5 3 12.7 4 14.3 5.7L15.2 4.7C13.3 2.7 10.8 1.5 8 1.5C5.2 1.5 2.7 2.7 0.8 4.7L1.7 5.7C3.3 4 5.5 3 8 3Z"/>
-              <path d="M8 6.5C9.7 6.5 11.2 7.2 12.3 8.4L13.2 7.5C11.8 6 10 5 8 5C6 5 4.2 6 2.8 7.5L3.7 8.4C4.8 7.2 6.3 6.5 8 6.5Z"/>
-              <circle cx="8" cy="11" r="1.5"/>
-            </svg>
-            <!-- battery -->
-            <svg width="26" height="12" viewBox="0 0 26 12" fill="none">
-              <rect x="0.5" y="0.5" width="22" height="11" rx="3.5" stroke="white" stroke-opacity="0.35"/>
-              <rect x="23" y="4" width="3" height="4" rx="1.5" fill="white" fill-opacity="0.4"/>
-              <rect x="2" y="2" width="18" height="8" rx="2" fill="white"/>
-            </svg>
+            <svg width="17" height="12" viewBox="0 0 17 12" fill="white" opacity="0.8"><rect x="0" y="5" width="3" height="7" rx="1"/><rect x="4.5" y="3" width="3" height="9" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity="0.3"/></svg>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="white" opacity="0.8"><path d="M8 3C10.5 3 12.7 4 14.3 5.7L15.2 4.7C13.3 2.7 10.8 1.5 8 1.5C5.2 1.5 2.7 2.7 0.8 4.7L1.7 5.7C3.3 4 5.5 3 8 3Z"/><path d="M8 6.5C9.7 6.5 11.2 7.2 12.3 8.4L13.2 7.5C11.8 6 10 5 8 5C6 5 4.2 6 2.8 7.5L3.7 8.4C4.8 7.2 6.3 6.5 8 6.5Z"/><circle cx="8" cy="11" r="1.5"/></svg>
+            <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="3.5" stroke="white" stroke-opacity="0.35"/><rect x="23" y="4" width="3" height="4" rx="1.5" fill="white" fill-opacity="0.4"/><rect x="2" y="2" width="18" height="8" rx="2" fill="white"/></svg>
           </div>
         </div>
-        <div class="splash-content">
-          <div class="splash-app-icon">♻️</div>
+        <div class="splash-body">
+          <div class="splash-icon">♻️</div>
           <div class="splash-title">Sort It Out AR</div>
-          <div class="splash-sub">Point your camera at a bin area and let AI guide your sorting</div>
-          <div class="splash-location">📍 Woodworth Dining Hall</div>
-          <button class="btn-begin" onclick="startViewfinder()">Begin AR Session</button>
+          <div class="splash-sub">Point your camera at the bins and let AI guide your sorting</div>
+          <div class="splash-loc">📍 Woodworth Dining Hall</div>
+          <button class="btn-begin" onclick="startTrashScan()">Begin AR Session</button>
         </div>
       </div>
 
-      <!-- ═══ SCREEN 2: VIEWFINDER ══════════════════════════════ -->
-      <div class="screen" id="screen-viewfinder">
-        <div class="vf-bg"></div>
-        <!-- faint bin silhouettes to suggest a real scene -->
-        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.07"
-             viewBox="0 0 340 720" preserveAspectRatio="xMidYMid slice">
-          <rect x="50" y="390" width="98" height="198" rx="8" fill="#05bcbc"/>
-          <rect x="192" y="402" width="98" height="186" rx="8" fill="#05bcbc"/>
-          <rect x="34" y="348" width="272" height="44" rx="4" fill="#05bcbc" opacity="0.5"/>
-        </svg>
-        <div class="vf-scanlines"></div>
-        <div class="status-bar">
-          <span class="status-time">9:41</span>
-          <span style="font-size:11px;font-weight:700;color:#05bcbc">● REC</span>
+      <!-- ══ SCREEN 2: SCAN TRASH ══════════════════════════ -->
+      <div class="screen scan-bg" id="s-scan-trash">
+        <img class="cam-photo" src="bin-trash.jpg" alt="Camera feed — trash bin">
+        <div class="cam-crt"></div>
+        <div class="cam-sweep" id="sweep-trash"></div>
+        <div class="cam-frame" id="frame-trash">
+          <div class="c tl"></div><div class="c tr"></div>
+          <div class="c bl"></div><div class="c br"></div>
         </div>
-        <div class="vf-corners">
-          <div class="vf-corner tl"></div>
-          <div class="vf-corner tr"></div>
-          <div class="vf-corner bl"></div>
-          <div class="vf-corner br"></div>
+        <div class="cam-reticle" id="reticle-trash"></div>
+        <div class="cam-badge" id="badge-trash">🗑️ Trash Bin Identified</div>
+        <div class="sb" style="z-index:60">
+          <span class="sb-time">9:41</span>
+          <span style="font-size:11px;font-weight:700;color:#75C962">● REC</span>
         </div>
-        <div class="vf-reticle"></div>
-        <div class="vf-sweep"></div>
-        <div class="vf-status">
-          <span class="blink-dot"></span>
-          <span id="vf-txt">Scanning environment…</span>
+        <div class="cam-status" id="status-trash">
+          <span class="blink-dot"></span><span id="stxt-trash">Scanning…</span>
         </div>
-        <div class="vf-flash" id="vf-flash"></div>
+        <div class="cam-panel" id="panel-trash">
+          <div class="cam-panel-title">You found the trash bin! 🗑️</div>
+          <div class="cam-panel-msg">Now, let's find the recycling bin. Point your camera at the recycling bin and continue.</div>
+          <button class="cam-panel-btn" onclick="startRecycleScan()">→ Find Recycling Bin</button>
+        </div>
       </div>
 
-      <!-- ═══ SCREEN 3: RECOGNITION ═════════════════════════════ -->
-      <div class="screen" id="screen-recognition">
-        <div class="rec-bg"></div>
-        <div class="status-bar">
-          <span class="status-time">9:41</span>
-          <span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.55);letter-spacing:0.07em">AR ACTIVE</span>
+      <!-- ══ SCREEN 3: SCAN RECYCLE ════════════════════════ -->
+      <div class="screen scan-bg" id="s-scan-recycle">
+        <img class="cam-photo" src="bin-recycle.jpg" alt="Camera feed — recycling bin">
+        <div class="cam-crt"></div>
+        <div class="cam-sweep" id="sweep-recycle"></div>
+        <div class="cam-frame" id="frame-recycle">
+          <div class="c tl"></div><div class="c tr"></div>
+          <div class="c bl"></div><div class="c br"></div>
         </div>
-        <div class="rec-header">AI Object Recognition</div>
-
-        <div class="rec-row">
-          <!-- Recycling bin -->
-          <div class="rec-bin" id="rb0">
-            <img src="bin-recycle.jpg" alt="Recycling bin">
-            <div class="rec-scan-overlay"></div>
-            <div class="rec-corners" id="rc0">
-              <svg viewBox="0 0 118 140" fill="none">
-                <path d="M4 18L4 4L18 4"     stroke="#05bcbc" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M100 4L114 4L114 18" stroke="#05bcbc" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M4 122L4 136L18 136" stroke="#05bcbc" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M100 136L114 136L114 122" stroke="#05bcbc" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="rec-label" id="rl0">♻️ Recycling</div>
-            <div class="rec-conf" id="rconf0">
-              <div class="rec-conf-lbl">Confidence</div>
-              <div class="rec-conf-bg"><div class="rec-conf-fill" id="rf0"></div></div>
-            </div>
-          </div>
-          <!-- Trash bin -->
-          <div class="rec-bin" id="rb1">
-            <img src="bin-trash.jpg" alt="Trash bin">
-            <div class="rec-scan-overlay"></div>
-            <div class="rec-corners" id="rc1">
-              <svg viewBox="0 0 118 140" fill="none">
-                <path d="M4 18L4 4L18 4"     stroke="#05bcbc" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M100 4L114 4L114 18" stroke="#05bcbc" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M4 122L4 136L18 136" stroke="#05bcbc" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M100 136L114 136L114 122" stroke="#05bcbc" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="rec-label" id="rl1">🗑️ Trash</div>
-            <div class="rec-conf" id="rconf1">
-              <div class="rec-conf-lbl">Confidence</div>
-              <div class="rec-conf-bg"><div class="rec-conf-fill" id="rf1"></div></div>
-            </div>
-          </div>
+        <div class="cam-reticle" id="reticle-recycle"></div>
+        <div class="cam-badge" id="badge-recycle">♻️ Recycling Bin Identified</div>
+        <div class="sb" style="z-index:60">
+          <span class="sb-time">9:41</span>
+          <span style="font-size:11px;font-weight:700;color:#75C962">● REC</span>
         </div>
-
-        <div class="rec-status" id="rec-status">2 bins registered ✓</div>
-        <button class="btn-rec-continue" id="btn-rec" onclick="showVerify()">Start Sorting →</button>
+        <div class="cam-status" id="status-recycle">
+          <span class="blink-dot"></span><span id="stxt-recycle">Scanning…</span>
+        </div>
+        <div class="cam-panel" id="panel-recycle">
+          <div class="cam-panel-title">You've found the recycling bin! ♻️</div>
+          <div class="cam-panel-msg">Both bins are registered. Drag each item to the correct bin to sort your tray.</div>
+          <button class="cam-panel-btn" onclick="initGame()">Start Sorting →</button>
+        </div>
       </div>
 
-      <!-- ═══ SCREEN 4: VERIFY ══════════════════════════════════ -->
-      <div class="screen" id="screen-verify">
-        <div class="ver-bg"></div>
-        <div class="status-bar"><span class="status-time">9:41</span></div>
-        <div class="ver-prompt">
-          <div class="ver-eyebrow">Quick Check</div>
-          <div class="ver-q">Tap the recycling bin</div>
-          <div class="ver-sub">Let's make sure the AI got it right</div>
-        </div>
-        <div class="ver-row" id="ver-row"></div>
-        <div class="ver-feedback" id="ver-fb"></div>
-        <div class="ver-hint">Tap a bin to confirm</div>
-      </div>
-
-      <!-- ═══ SCREEN 5: GAME ════════════════════════════════════ -->
-      <div class="screen" id="screen-game">
+      <!-- ══ SCREEN 4: GAME ════════════════════════════════ -->
+      <div class="screen" id="s-game">
         <div class="game-bg"></div>
         <canvas id="traj"></canvas>
-        <div class="status-bar">
-          <span class="status-time">9:41</span>
-          <span style="font-size:9px;font-weight:700;color:#05bcbc;letter-spacing:0.08em">AR SORT</span>
+        <div class="sb">
+          <span class="sb-time">9:41</span>
+          <span style="font-size:9px;font-weight:700;color:#75C962;letter-spacing:.08em">AR SORT</span>
         </div>
         <div class="game-hud">
-          <div class="game-score">Score: <span id="score-num">0</span></div>
-          <div class="game-lives" id="lives-disp">❤️❤️❤️</div>
-        </div>
-        <div class="game-progress" id="game-prog"></div>
-
-        <div class="items-area" id="items-area">
-          <div id="item-card" class="item-card">
-            <img id="item-img" src="" alt="">
-            <div class="item-name" id="item-name"></div>
-          </div>
+          <div class="hud-chip hud-ok">✓ <span id="g-ok">0</span></div>
+          <div class="hud-prog" id="g-prog">1 of 8</div>
+          <div class="hud-chip hud-wrong" id="g-wrong-chip">⚠ <span id="g-wr">0</span> contaminated</div>
         </div>
 
-        <div class="bins-area">
-          <div class="bin-slot" id="bin-recycle">
-            <img src="bin-recycle.jpg" alt="Recycling">
-            <div class="ar-corners">
-              <svg viewBox="0 0 130 155" fill="none">
-                <path d="M4 22L4 4L22 4"       stroke="#05bcbc" stroke-width="2" stroke-linecap="round"/>
-                <path d="M108 4L126 4L126 22"   stroke="#05bcbc" stroke-width="2" stroke-linecap="round"/>
-                <path d="M4 133L4 151L22 151"   stroke="#05bcbc" stroke-width="2" stroke-linecap="round"/>
-                <path d="M108 151L126 151L126 133" stroke="#05bcbc" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="bin-tag">♻️ Recycling</div>
-          </div>
-          <div class="bin-slot" id="bin-trash">
+        <!-- Bins at top as drop targets -->
+        <div class="bins-top">
+          <div class="bin-target" id="bin-trash">
             <img src="bin-trash.jpg" alt="Trash">
-            <div class="ar-corners">
-              <svg viewBox="0 0 130 155" fill="none">
-                <path d="M4 22L4 4L22 4"       stroke="#05bcbc" stroke-width="2" stroke-linecap="round"/>
-                <path d="M108 4L126 4L126 22"   stroke="#05bcbc" stroke-width="2" stroke-linecap="round"/>
-                <path d="M4 133L4 151L22 151"   stroke="#05bcbc" stroke-width="2" stroke-linecap="round"/>
-                <path d="M108 151L126 151L126 133" stroke="#05bcbc" stroke-width="2" stroke-linecap="round"/>
+            <div class="bin-arc">
+              <svg viewBox="0 0 130 130" fill="none">
+                <path d="M4 20L4 4L20 4" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+                <path d="M110 4L126 4L126 20" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 110L4 126L20 126" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+                <path d="M110 126L126 126L126 110" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </div>
             <div class="bin-tag">🗑️ Trash</div>
           </div>
+          <div class="bin-target" id="bin-recycle">
+            <img src="bin-recycle.jpg" alt="Recycling">
+            <div class="bin-arc">
+              <svg viewBox="0 0 130 130" fill="none">
+                <path d="M4 20L4 4L20 4" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+                <path d="M110 4L126 4L126 20" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 110L4 126L20 126" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+                <path d="M110 126L126 126L126 110" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="bin-tag">♻️ Recycling</div>
+          </div>
         </div>
 
+        <!-- Item zone (anchor for center calculation only) -->
+        <div class="item-zone" id="item-zone"></div>
+
+        <!-- Item card lives at game level so left/top are frame-relative -->
+        <div id="item-card" class="item-card">
+          <img id="item-img" src="" alt="">
+          <div class="item-lbl" id="item-lbl"></div>
+        </div>
+        <div class="drag-hint">↑ Drag item to the correct bin above</div>
+
+        <!-- Toast -->
         <div class="game-toast" id="game-toast">
           <div class="toast-r" id="toast-r"></div>
           <div class="toast-f" id="toast-f"></div>
         </div>
       </div>
 
-      <!-- ═══ SCREEN 6: VIDEO ═══════════════════════════════════ -->
-      <div class="screen" id="screen-video">
+      <!-- ══ SCREEN 5: SUCCESS ══════════════════════════════ -->
+      <div class="screen" id="s-success">
+        <div class="succ-grid"></div>
+        <div class="sb"><span class="sb-time">9:41</span></div>
+        <div class="succ-body">
+          <div class="succ-icon">✅</div>
+          <div class="succ-title">Great job! You sorted with minimal contamination.</div>
+          <div class="succ-stat">
+            <span class="succ-pct" id="succ-pct">0%</span>
+            <span class="succ-pct-lbl">contamination rate</span>
+          </div>
+          <div class="succ-divider"></div>
+          <div class="succ-recycle-lbl">These items can be recycled here:</div>
+          <div class="succ-items">
+            <div class="succ-item"><img src="bottle.png" alt=""><span>Plastic bottle</span></div>
+            <div class="succ-item"><img src="tin_can.png" alt=""><span>Soda can</span></div>
+            <div class="succ-item"><img src="glass_jar.png" alt=""><span>Glass bottle</span></div>
+            <div class="succ-item"><img src="unused_paper.png" alt=""><span>Cardboard</span></div>
+          </div>
+          <div class="succ-bin-img">
+            <img src="bin-recycle.jpg" alt="Recycling bin">
+            <div class="succ-bin-cap">BSU Blue Recycling Bag</div>
+          </div>
+          <button class="btn-watch" onclick="startVideo()">See where it goes →</button>
+        </div>
+      </div>
+
+      <!-- ══ SCREEN 6: FAIL ══════════════════════════════ -->
+      <div class="screen" id="s-fail">
+        <div class="fail-grid"></div>
+        <div class="sb"><span class="sb-time">9:41</span></div>
+        <div class="fail-body">
+          <div class="fail-icon">🚫</div>
+          <div class="fail-title">Load Rejected</div>
+          <div class="fail-stat" id="fail-pct-badge">25% contamination</div>
+          <div class="fail-msg">Your recycling had too much contamination to be accepted at BSU's facility. Loads above 15% are rejected.</div>
+          <div class="fail-detail">Contaminated recycling gets sent to landfill instead — undoing the work of sorting. Even one greasy container can compromise a whole bag.</div>
+          <button class="btn-retry" onclick="replayGame()">Try Again ↺</button>
+        </div>
+      </div>
+
+      <!-- ══ SCREEN 7: VIDEO ════════════════════════════════ -->
+      <div class="screen" id="s-video">
         <video id="vid1" src="trash_collected.mp4" playsinline muted></video>
         <video id="vid2" src="trash_sorted.mp4"    playsinline muted></video>
         <div class="vid-hint" id="vid-hint">Tap to skip</div>
       </div>
 
-      <!-- ═══ SCREEN 7: END ═════════════════════════════════════ -->
-      <div class="screen" id="screen-end">
+      <!-- ══ SCREEN 8: END ══════════════════════════════════ -->
+      <div class="screen" id="s-end">
         <div class="end-grid"></div>
-        <div class="status-bar"><span class="status-time">9:41</span></div>
-        <div class="end-content">
-          <div class="end-emoji" id="end-emoji">🌿</div>
-          <div class="end-title" id="end-title">Great Sorting!</div>
-          <div class="end-big" id="end-score">0/8</div>
-          <div class="end-label">items sorted correctly</div>
-          <div class="end-stars" id="end-stars">⭐⭐⭐</div>
-          <div class="end-fact">At BSU's Woodworth Dining Hall, proper sorting keeps the entire recycling batch clean — one contaminated item can send a whole load to landfill.</div>
+        <div class="sb"><span class="sb-time">9:41</span></div>
+        <div class="end-body">
+          <div class="end-emoji">🌿</div>
+          <div class="end-title">Mission Complete!</div>
+          <div class="end-sub">Your recycling has been accepted and processed at BSU's facility. Every correct sort keeps contamination low and the recycling clean.</div>
           <button class="btn-replay" onclick="replayGame()">Sort Again ↺</button>
         </div>
       </div>
@@ -669,33 +608,36 @@ canvas#traj { position:absolute;inset:0;pointer-events:none;z-index:50; }
 </div><!-- /phone-outer -->
 
 <script>
-/* ═══ DATA ═══════════════════════════════════════════════════════ */
+/* ═══ DATA ════════════════════════════════════════════════ */
 const ITEMS = [
-  { key:'bottle',       name:'Plastic water bottle',   correct:'recycle', img:'bottle.png',
-    fact:'Empty plastic bottles are recyclable in BSU\'s blue bags — give them a quick rinse first.' },
-  { key:'tin_can',      name:'Aluminum soda can',      correct:'recycle', img:'tin_can.png',
-    fact:'Aluminum cans are accepted at all BSU dining locations. Republic Services picks these up weekly.' },
-  { key:'glass_jar',    name:'Glass kombucha bottle',  correct:'recycle', img:'glass_jar.png',
+  { name:'Plastic water bottle',   correct:'recycle', img:'bottle.png',
+    fact:'Empty plastic bottles are recyclable in BSU\'s blue bags — rinse them first.' },
+  { name:'Aluminum soda can',      correct:'recycle', img:'tin_can.png',
+    fact:'Aluminum cans are accepted at all BSU dining locations. Republic Services picks them up weekly.' },
+  { name:'Glass kombucha bottle',  correct:'recycle', img:'glass_jar.png',
     fact:'Glass goes in BSU\'s blue recycling bags. Remove the lid — metal lids go separately.' },
-  { key:'unused_paper', name:'Clean cardboard sleeve', correct:'recycle', img:'unused_paper.png',
+  { name:'Clean cardboard sleeve', correct:'recycle', img:'unused_paper.png',
     fact:'Clean, dry cardboard is recyclable at Woodworth. Grease or liquid contact means trash.' },
-  { key:'pizza_box',    name:'Greasy pizza box',       correct:'trash',   img:'pizza_box.png',
-    fact:'Grease contaminates the whole load at BSU\'s facility. This box sends an entire batch to landfill.' },
-  { key:'plastic_bag',  name:'Plastic bag',            correct:'trash',   img:'plastic_bag.png',
+  { name:'Greasy pizza box',       correct:'trash',   img:'pizza_box.png',
+    fact:'Grease contaminates the whole load. This box sends an entire batch to landfill.' },
+  { name:'Plastic bag',            correct:'trash',   img:'plastic_bag.png',
     fact:'Soft plastics jam Republic Services\' sorting machinery. Drop bags at grocery store collection points.' },
-  { key:'styrofoam_cup',name:'Styrofoam to-go cup',   correct:'trash',   img:'styrofoam_cup.png',
-    fact:'Styrofoam is not accepted in BSU blue bags. These always go to landfill at Woodworth.' },
-  { key:'used_napkin',  name:'Used paper napkin',      correct:'trash',   img:'used_napkin.png',
-    fact:'Paper touched by food or liquid is contaminated at BSU\'s facility. Always trash.' },
+  { name:'Styrofoam to-go cup',    correct:'trash',   img:'styrofoam_cup.png',
+    fact:'Styrofoam is not accepted in BSU blue bags — always landfill at Woodworth.' },
+  { name:'Used paper napkin',      correct:'trash',   img:'used_napkin.png',
+    fact:'Paper touched by food or liquid is contaminated. It always goes in the trash.' },
 ];
 
-/* ═══ STATE ══════════════════════════════════════════════════════ */
-let score = 0, lives = 3, itemIdx = 0;
-let shuffled = [];
-let dragging = false, dragOX = 0, dragOY = 0;
-let traj = [];
+/* ═══ STATE ═══════════════════════════════════════════════ */
+let gScore = 0, gWrong = 0, gIdx = 0, gShuffled = [];
+let dragging = false, launching = false;
+let itemX = 0, itemY = 0, startX = 0, startY = 0;
 
-/* ═══ HELPERS ════════════════════════════════════════════════════ */
+const GRAVITY      = 0.1;
+const LAUNCH_SCALE = 0.25;
+const MIN_PULL     = 35;
+
+/* ═══ UTILS ═══════════════════════════════════════════════ */
 const $ = id => document.getElementById(id);
 const frame = () => document.querySelector('.phone-screen');
 
@@ -703,117 +645,6 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   $(id).classList.add('active');
 }
-
-/* ═══ SPLASH → VIEWFINDER ════════════════════════════════════════ */
-function startViewfinder() {
-  showScreen('screen-viewfinder');
-  runScan();
-}
-
-function runScan() {
-  const txt = $('vf-txt'), flash = $('vf-flash');
-  setTimeout(() => txt.textContent = 'Scanning environment…', 200);
-  setTimeout(() => txt.textContent = 'Detecting objects…',    2400);
-  setTimeout(() => txt.textContent = 'Bins detected!',        4200);
-  setTimeout(() => {
-    flash.classList.add('on');
-    setTimeout(() => {
-      flash.classList.remove('on');
-      flash.classList.add('off');
-      setTimeout(() => flash.classList.remove('off'), 600);
-      showScreen('screen-recognition');
-      runRecognition();
-    }, 160);
-  }, 5200);
-}
-
-/* ═══ RECOGNITION ════════════════════════════════════════════════ */
-function runRecognition() {
-  // reset
-  ['rb0','rb1'].forEach((id,i) => {
-    $(id).classList.remove('show');
-    $('rc'+i).classList.remove('show');
-    $('rl'+i).classList.remove('show');
-    $('rconf'+i).classList.remove('show');
-    $('rf'+i).style.width = '0%';
-  });
-  $('rec-status').classList.remove('show');
-  $('btn-rec').classList.remove('show');
-
-  // bin 0
-  setTimeout(() => $('rb0').classList.add('show'), 300);
-  setTimeout(() => {
-    $('rc0').classList.add('show');
-    $('rconf0').classList.add('show');
-    setTimeout(() => $('rf0').style.width = '94%', 80);
-  }, 950);
-  setTimeout(() => $('rl0').classList.add('show'), 1500);
-  // bin 1
-  setTimeout(() => $('rb1').classList.add('show'), 1300);
-  setTimeout(() => {
-    $('rc1').classList.add('show');
-    $('rconf1').classList.add('show');
-    setTimeout(() => $('rf1').style.width = '89%', 80);
-  }, 1950);
-  setTimeout(() => $('rl1').classList.add('show'), 2500);
-  // final
-  setTimeout(() => $('rec-status').classList.add('show'), 2800);
-  setTimeout(() => $('btn-rec').classList.add('show'),    3100);
-}
-
-/* ═══ VERIFY ═════════════════════════════════════════════════════ */
-function showVerify() {
-  showScreen('screen-verify');
-  buildVerify();
-}
-
-function buildVerify() {
-  const row = $('ver-row');
-  row.innerHTML = '';
-  const bins = [
-    { id:'recycle', img:'bin-recycle.jpg', name:'Recycling Bin' },
-    { id:'trash',   img:'bin-trash.jpg',   name:'Trash Bin' },
-  ];
-  if (Math.random() < 0.5) bins.reverse();
-  bins.forEach(b => {
-    const card = document.createElement('div');
-    card.className = 'ver-card';
-    card.innerHTML = `<img src="${b.img}" alt="${b.name}"><div class="ver-card-name">${b.name}</div>`;
-    card.onclick = () => handleVerify(b.id, card);
-    row.appendChild(card);
-  });
-  const fb = $('ver-fb');
-  fb.className = 'ver-feedback';
-  fb.textContent = '';
-}
-
-function handleVerify(id, card) {
-  document.querySelectorAll('.ver-card').forEach(c => c.onclick = null);
-  const fb = $('ver-fb');
-  if (id === 'recycle') {
-    card.style.borderColor = '#4ade80';
-    fb.textContent = '✓ Correct! The AR system is calibrated.';
-    fb.className = 'ver-feedback ok show';
-    setTimeout(initGame, 1400);
-  } else {
-    card.style.borderColor = '#f87171';
-    fb.textContent = 'That\'s the trash bin — try again!';
-    fb.className = 'ver-feedback err show';
-    setTimeout(() => { card.style.borderColor = 'transparent'; buildVerify(); }, 1700);
-  }
-}
-
-/* ═══ GAME ═══════════════════════════════════════════════════════ */
-function initGame() {
-  score = 0; lives = 3; itemIdx = 0;
-  shuffled = shuffle([...ITEMS]);
-  updateScore(); updateLives();
-  showScreen('screen-game');
-  setupParallax();
-  resizeCanvas();
-  loadItem();
-}
-
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -822,206 +653,336 @@ function shuffle(arr) {
   return arr;
 }
 
+/* ═══ SCAN SEQUENCE helper ════════════════════════════════ */
+function runScan(suffix, onDone) {
+  const sweep   = $('sweep-' + suffix);
+  const frame_  = $('frame-' + suffix);
+  const reticle = $('reticle-' + suffix);
+  const badge   = $('badge-' + suffix);
+  const stxt    = $('stxt-' + suffix);
+  const status  = $('status-' + suffix);
+  const panel   = $('panel-' + suffix);
+
+  // reset
+  sweep.classList.remove('go');
+  frame_.classList.remove('show');
+  badge.classList.remove('show');
+  panel.classList.remove('show');
+  reticle.classList.remove('hide');
+  stxt.textContent = 'Scanning…';
+
+  // t=400: start sweep
+  setTimeout(() => {
+    sweep.classList.add('go');
+    stxt.textContent = 'Analyzing…';
+  }, 400);
+
+  // t=2100: hide reticle, show AR frame
+  setTimeout(() => {
+    reticle.classList.add('hide');
+    frame_.classList.add('show');
+  }, 2100);
+
+  // t=2500: show badge + update status
+  setTimeout(() => {
+    badge.classList.add('show');
+    stxt.textContent = 'Object identified ✓';
+  }, 2500);
+
+  // t=3300: slide up panel
+  setTimeout(() => {
+    status.style.opacity = '0';
+    panel.classList.add('show');
+    if (onDone) onDone();
+  }, 3300);
+}
+
+/* ═══ SPLASH → SCAN TRASH ════════════════════════════════ */
+function startTrashScan() {
+  showScreen('s-scan-trash');
+  runScan('trash');
+}
+
+/* ═══ SCAN TRASH → SCAN RECYCLE ══════════════════════════ */
+function startRecycleScan() {
+  showScreen('s-scan-recycle');
+  runScan('recycle');
+}
+
+/* ═══ GAME INIT ═══════════════════════════════════════════ */
+function initGame() {
+  gScore = 0; gWrong = 0; gIdx = 0;
+  gShuffled = shuffle([...ITEMS]);
+  updateHUD();
+  showScreen('s-game');
+  resizeCanvas();
+  loadItem();
+}
+
+function updateHUD() {
+  $('g-ok').textContent = gScore;
+  $('g-wr').textContent = gWrong;
+  $('g-wrong-chip').classList.toggle('warn', gWrong > 1);
+}
+
+/* ═══ ITEMS ═══════════════════════════════════════════════ */
 function loadItem() {
-  if (itemIdx >= shuffled.length) { endGame(); return; }
-  const it = shuffled[itemIdx];
+  if (gIdx >= gShuffled.length) { endGame(); return; }
+  const it = gShuffled[gIdx];
   $('item-img').src = it.img;
-  $('item-name').textContent = it.name;
-  $('game-prog').textContent = `${itemIdx + 1} of ${shuffled.length}`;
+  $('item-lbl').textContent = it.name;
+  $('g-prog').textContent = `${gIdx + 1} of ${gShuffled.length}`;
 
   const card = $('item-card');
-  const aRect = $('items-area').getBoundingClientRect();
-  const fRect = frame().getBoundingClientRect();
-  const cx = aRect.left - fRect.left + aRect.width  / 2 - 50;
-  const cy = aRect.top  - fRect.top  + aRect.height / 2 - 50;
-  card.style.left = cx + 'px';
-  card.style.top  = cy + 'px';
+  const c = getItemZoneCenter();
+  itemX = c.x; itemY = c.y;
+  card.style.left = (itemX - 53) + 'px';
+  card.style.top  = (itemY - 53) + 'px';
   card.style.opacity = '0';
   card.style.transform = 'scale(0.7)';
-  card.style.transition = 'opacity 0.3s, transform 0.3s';
+  card.style.transition = 'opacity .3s, transform .3s';
   requestAnimationFrame(() => {
     card.style.opacity = '1';
     card.style.transform = 'scale(1)';
   });
-  card.onpointerdown = startDrag;
+  card.onpointerdown = startSling;
 }
 
-/* drag */
-function startDrag(e) {
+/* ═══ SLINGSHOT ═══════════════════════════════════════════ */
+function getItemZoneCenter() {
+  const zRect = $('item-zone').getBoundingClientRect();
+  const fRect = frame().getBoundingClientRect();
+  return {
+    x: zRect.left - fRect.left + zRect.width  / 2,
+    y: zRect.top  - fRect.top  + zRect.height / 2
+  };
+}
+
+function startSling(e) {
   if ($('game-toast').classList.contains('show')) return;
+  if (launching) return;
   e.preventDefault();
+  dragging = true;
+  startX = e.clientX; startY = e.clientY;
   const card = $('item-card');
-  const fRect = frame().getBoundingClientRect();
-  dragging = true; traj = [];
-  card.classList.add('drag');
-  const cx = parseFloat(card.style.left) + 50;
-  const cy = parseFloat(card.style.top)  + 50;
-  dragOX = e.clientX - fRect.left - cx;
-  dragOY = e.clientY - fRect.top  - cy;
-  card.setPointerCapture(e.pointerId);
-  card.onpointermove = moveDrag;
-  card.onpointerup = card.onpointercancel = endDrag;
-}
-
-function moveDrag(e) {
-  if (!dragging) return;
-  const card = $('item-card');
-  const fRect = frame().getBoundingClientRect();
-  const nx = e.clientX - fRect.left - dragOX - 50;
-  const ny = e.clientY - fRect.top  - dragOY - 50;
-  card.style.left = nx + 'px'; card.style.top = ny + 'px';
   card.style.transition = 'none';
-  traj.push({ x: nx+50, y: ny+50 });
-  if (traj.length > 60) traj.shift();
-  drawTraj();
-  litBins(nx+50, ny+50);
+  card.classList.add('drag');
+  card.setPointerCapture(e.pointerId);
+  card.onpointermove = (e2) => { if (dragging) onPull(e2.clientX, e2.clientY); };
+  card.onpointerup = card.onpointercancel = onRelease;
 }
 
-function endDrag(e) {
+function onPull(clientX, clientY) {
+  const c = getItemZoneCenter();
+  itemX = c.x + (clientX - startX);
+  itemY = c.y + (clientY - startY);
+  const card = $('item-card');
+  card.style.left = (itemX - 53) + 'px';
+  card.style.top  = (itemY - 53) + 'px';
+  let vx = (c.x - itemX) * LAUNCH_SCALE;
+  let vy = (c.y - itemY) * LAUNCH_SCALE;
+  const spd = Math.sqrt(vx * vx + vy * vy);
+  if (spd > 11) { vx = vx / spd * 11; vy = vy / spd * 11; }
+  drawSlingshot(itemX, itemY, vx, vy, c.x, c.y);
+}
+
+function onRelease() {
   if (!dragging) return;
   dragging = false;
   const card = $('item-card');
   card.classList.remove('drag');
   card.onpointermove = card.onpointerup = card.onpointercancel = null;
-  const cx = parseFloat(card.style.left) + 50;
-  const cy = parseFloat(card.style.top)  + 50;
-  const fRect = frame().getBoundingClientRect();
-  const rR = $('bin-recycle').getBoundingClientRect();
-  const tR = $('bin-trash').getBoundingClientRect();
-  const inR = hit(cx+fRect.left, cy+fRect.top, rR);
-  const inT = hit(cx+fRect.left, cy+fRect.top, tR);
-  $('bin-recycle').classList.remove('lit');
-  $('bin-trash').classList.remove('lit');
-  clearTraj();
-  if      (inR) resolveSort('recycle');
-  else if (inT) resolveSort('trash');
-  else          snapBack(card);
-}
-
-function hit(x, y, r) { return x>=r.left && x<=r.right && y>=r.top && y<=r.bottom; }
-
-function litBins(cx, cy) {
-  const fRect = frame().getBoundingClientRect();
-  $('bin-recycle').classList.toggle('lit', hit(cx+fRect.left, cy+fRect.top, $('bin-recycle').getBoundingClientRect()));
-  $('bin-trash').classList.toggle('lit',   hit(cx+fRect.left, cy+fRect.top, $('bin-trash').getBoundingClientRect()));
-}
-
-function snapBack(card) {
-  const aRect = $('items-area').getBoundingClientRect();
-  const fRect = frame().getBoundingClientRect();
-  const cx = aRect.left - fRect.left + aRect.width  / 2 - 50;
-  const cy = aRect.top  - fRect.top  + aRect.height / 2 - 50;
-  card.style.transition = 'left 0.35s cubic-bezier(0.34,1.56,0.64,1), top 0.35s cubic-bezier(0.34,1.56,0.64,1)';
-  card.style.left = cx + 'px'; card.style.top = cy + 'px';
-  card.onpointerdown = startDrag;
-}
-
-/* sort resolution */
-function resolveSort(dropped) {
-  const it = shuffled[itemIdx];
-  const ok = dropped === it.correct;
-  if (ok) score++; else { lives--; updateLives(); }
-  updateScore();
-  const card = $('item-card');
-  card.style.transition = 'opacity 0.25s, transform 0.25s';
-  card.style.opacity = '0';
-  card.style.transform = ok ? 'scale(0.5) translateY(-20px)' : 'scale(1.1)';
+  clearArc();
+  const c = getItemZoneCenter();
+  const pullDist = Math.sqrt((c.x - itemX) ** 2 + (c.y - itemY) ** 2);
+  if (pullDist < MIN_PULL) { resetItemPos(); return; }
+  let vx = (c.x - itemX) * LAUNCH_SCALE;
+  let vy = (c.y - itemY) * LAUNCH_SCALE;
+  const spd = Math.sqrt(vx * vx + vy * vy);
+  if (spd > 11) { vx = vx / spd * 11; vy = vy / spd * 11; }
+  launching = true;
   card.onpointerdown = null;
+  launch(vx, vy);
+}
+
+function resetItemPos() {
+  const c = getItemZoneCenter();
+  itemX = c.x; itemY = c.y;
+  const card = $('item-card');
+  card.style.transition = 'left .4s cubic-bezier(.34,1.56,.64,1), top .4s cubic-bezier(.34,1.56,.64,1), transform .4s';
+  card.style.left = (itemX - 53) + 'px';
+  card.style.top  = (itemY - 53) + 'px';
+  card.style.transform = 'scale(1) rotate(0deg)';
+  card.onpointerdown = startSling;
+}
+
+function hit(cx, cy, r) {
+  return cx >= r.left - 15 && cx <= r.right + 15 &&
+         cy >= r.top - 10  && cy <= r.bottom + 10;
+}
+
+/* ═══ PHYSICS THROW ═══════════════════════════════════════ */
+function launch(vx, vy) {
+  const card = $('item-card');
+  const fRect = frame().getBoundingClientRect();
+  const rEl = $('bin-recycle'), tEl = $('bin-trash');
+  const rRect = rEl.getBoundingClientRect();
+  const tRect = tEl.getBoundingClientRect();
+  const spinRate = (vx >= 0 ? 1 : -1) * 0.13;
+  let px = itemX, py = itemY, spin = 0;
+  card.style.transition = 'none';
+  function step() {
+    vy += GRAVITY; px += vx; py += vy; spin += spinRate;
+    card.style.left = (px - 53) + 'px';
+    card.style.top  = (py - 53) + 'px';
+    card.style.transform = `rotate(${spin}rad)`;
+    const ax = px + fRect.left, ay = py + fRect.top;
+    if (hit(ax, ay, rRect)) {
+      itemX = px; itemY = py;
+      card.style.transform = '';
+      animateThrow('recycle', rEl, () => resolveSort('recycle'));
+      return;
+    }
+    if (hit(ax, ay, tRect)) {
+      itemX = px; itemY = py;
+      card.style.transform = '';
+      animateThrow('trash', tEl, () => resolveSort('trash'));
+      return;
+    }
+    const fw = fRect.width, fh = fRect.height;
+    if (px < -180 || px > fw + 180 || py > fh + 30 || py < -400) {
+      launching = false; resetItemPos(); return;
+    }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function animateThrow(dropped, binEl, onDone) {
+  const card = $('item-card');
+  const fRect = frame().getBoundingClientRect();
+  const bRect = binEl.getBoundingClientRect();
+  const targetX = bRect.left - fRect.left + bRect.width  / 2;
+  const targetY = bRect.top  - fRect.top  + bRect.height / 2;
+  const startXa = itemX, startYa = itemY;
+  const start = performance.now();
+  const duration = 280;
+  card.style.transition = 'none';
+  function step(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+    const cx = startXa + (targetX - startXa) * ease;
+    const cy = startYa + (targetY - startYa) * ease;
+    card.style.left = (cx - 53) + 'px';
+    card.style.top  = (cy - 53) + 'px';
+    card.style.transform = `scale(${1 - ease * 0.88})`;
+    card.style.opacity = (1 - ease) + '';
+    if (t < 1) { requestAnimationFrame(step); }
+    else { launching = false; card.style.opacity = '0'; onDone(); }
+  }
+  requestAnimationFrame(step);
+}
+
+/* ═══ SORT RESOLUTION ═════════════════════════════════════ */
+function resolveSort(dropped) {
+  const it = gShuffled[gIdx];
+  const ok = dropped === it.correct;
+  if (ok) gScore++; else gWrong++;
+  updateHUD();
+  $('game-toast').classList.add('show');
   $('toast-r').textContent = ok ? '✅ Correct!' : '❌ Wrong bin';
   $('toast-f').textContent = it.fact;
-  $('game-toast').classList.add('show');
   setTimeout(() => {
     $('game-toast').classList.remove('show');
-    if (lives <= 0) { endGame(); return; }
-    itemIdx++;
+    gIdx++;
     loadItem();
-  }, 2200);
+  }, 2300);
 }
 
-function updateScore() { $('score-num').textContent = score; }
-function updateLives() { $('lives-disp').textContent = '❤️'.repeat(Math.max(0, lives)); }
-
-/* trajectory canvas */
+/* ═══ ARC CANVAS ══════════════════════════════════════════ */
 function resizeCanvas() {
   const c = $('traj'), f = frame();
   c.width = f.clientWidth; c.height = f.clientHeight;
 }
-function drawTraj() {
-  const c = $('traj'), ctx = c.getContext('2d');
-  ctx.clearRect(0,0,c.width,c.height);
-  if (traj.length < 2) return;
+
+function drawSlingshot(itemPx, itemPy, vx, vy, cX, cY) {
+  const canvas = $('traj'), ctx = canvas.getContext('2d');
+  resizeCanvas();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Rubber-band line from zone center to pulled item
+  ctx.save();
+  ctx.setLineDash([4, 7]);
+  ctx.strokeStyle = 'rgba(117,201,98,0.35)';
+  ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(traj[0].x, traj[0].y);
-  traj.forEach(p => ctx.lineTo(p.x, p.y));
-  ctx.strokeStyle = 'rgba(5,188,188,0.35)';
-  ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.moveTo(cX, cY);
+  ctx.lineTo(itemPx, itemPy);
   ctx.stroke();
-}
-function clearTraj() {
-  const c = $('traj'); c.getContext('2d').clearRect(0,0,c.width,c.height); traj = [];
+  ctx.restore();
+  // Fading dot arc preview
+  let px = itemPx, py = itemPy, pvx = vx, pvy = vy;
+  for (let i = 0; i < 90; i++) {
+    pvy += GRAVITY; px += pvx; py += pvy;
+    if (px < -60 || px > canvas.width + 60 || py > canvas.height + 60 || py < -60) break;
+    const fade = Math.max(0, 0.9 - i * 0.010);
+    const radius = Math.max(2, 6 - i * 0.06);
+    ctx.globalAlpha = fade;
+    ctx.fillStyle = '#75C962';
+    ctx.beginPath();
+    ctx.arc(px, py, radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
 }
 
-/* parallax */
-function setupParallax() {
-  const imgs = document.querySelectorAll('.bin-slot img');
-  function apply(rx, ry) {
-    imgs.forEach((img,i) => {
-      img.style.transform = `translate(${rx*6*(i===0?1:-1)}px,${ry*3}px)`;
-    });
-  }
-  frame().addEventListener('mousemove', e => {
-    const r = frame().getBoundingClientRect();
-    apply((e.clientX-r.left-r.width/2)/(r.width/2), (e.clientY-r.top-r.height/2)/(r.height/2));
-  });
-  if (window.DeviceOrientationEvent) {
-    window.addEventListener('deviceorientation', e => {
-      apply(Math.max(-1,Math.min(1,(e.gamma||0)/20)), Math.max(-1,Math.min(1,(e.beta||0)/20)));
-    });
-  }
+function clearArc() {
+  const c = $('traj');
+  c.getContext('2d').clearRect(0, 0, c.width, c.height);
 }
 
-/* ═══ END GAME ═══════════════════════════════════════════════════ */
+/* ═══ END GAME ═════════════════════════════════════════════ */
 function endGame() {
-  showScreen('screen-video');
-  playVideos();
+  const total  = gShuffled.length;
+  const contam = gWrong / total; // e.g. 1/8 = 0.125 = 12.5%
+  const pct    = Math.round(contam * 100);
+
+  if (contam > 0.15) {
+    // FAIL
+    $('fail-pct-badge').textContent = pct + '% contamination';
+    showScreen('s-fail');
+  } else {
+    // SUCCESS
+    $('succ-pct').textContent = pct + '%';
+    showScreen('s-success');
+  }
 }
 
-function playVideos() {
-  const v1=$('vid1'), v2=$('vid2'), hint=$('vid-hint');
+/* ═══ VIDEO ════════════════════════════════════════════════ */
+function startVideo() {
+  showScreen('s-video');
+  const v1 = $('vid1'), v2 = $('vid2'), hint = $('vid-hint');
   v1.classList.remove('vis'); v2.classList.remove('vis');
-  v1.currentTime=0; v2.currentTime=0;
+  v1.currentTime = 0; v2.currentTime = 0;
+  hint.style.opacity = '0';
 
-  $('screen-video').addEventListener('click', () => { v1.pause(); v2.pause(); showEnd(); }, { once:true });
+  $('s-video').addEventListener('click', () => { v1.pause(); v2.pause(); showScreen('s-end'); }, { once:true });
 
   v1.classList.add('vis');
   const p1 = v1.play();
-  if (p1 && p1.catch) p1.catch(() => { v1.classList.remove('vis'); showEnd(); });
+  if (p1 && p1.catch) p1.catch(() => { v1.classList.remove('vis'); showScreen('s-end'); });
 
   v1.onended = () => {
     v1.classList.remove('vis');
     v2.classList.add('vis');
     const p2 = v2.play();
-    if (p2 && p2.catch) p2.catch(() => { v2.classList.remove('vis'); showEnd(); });
-    v2.onended = () => { v2.classList.remove('vis'); showEnd(); };
+    if (p2 && p2.catch) p2.catch(() => { v2.classList.remove('vis'); showScreen('s-end'); });
+    v2.onended = () => { v2.classList.remove('vis'); showScreen('s-end'); };
   };
 
-  setTimeout(() => { hint.style.opacity='1'; hint.style.transition='opacity 0.5s'; }, 2000);
+  setTimeout(() => { hint.style.opacity = '1'; hint.style.transition = 'opacity .5s'; }, 2000);
 }
 
-function showEnd() {
-  const total = shuffled.length, pct = score / total;
-  let emoji='🗑️', title='Keep learning!', stars='⭐';
-  if      (pct===1)   { emoji='🏆'; title='Perfect Sorter!'; stars='⭐⭐⭐'; }
-  else if (pct>=0.75) { emoji='🌱'; title='Great Sorting!';  stars='⭐⭐⭐'; }
-  else if (pct>=0.5)  { emoji='♻️'; title='Not bad!';        stars='⭐⭐'; }
-  $('end-emoji').textContent = emoji;
-  $('end-title').textContent = title;
-  $('end-score').textContent = `${score}/${total}`;
-  $('end-stars').textContent = stars;
-  showScreen('screen-end');
-}
-
-function replayGame() { showScreen('screen-splash'); }
+function replayGame() { showScreen('s-splash'); }
 
 window.addEventListener('resize', resizeCanvas);
 </script>

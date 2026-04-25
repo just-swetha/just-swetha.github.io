@@ -42,6 +42,27 @@
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(200,146,58,0.18);
     }
+    .iteration-loop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      padding: 1.5rem;
+      border: 1px solid rgba(200,146,58,0.2);
+      border-radius: 8px;
+    }
+
+.loop-arrow {
+  font-size: 1.5rem;
+  color: var(--gold);
+  animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
     .nav-back {
       font-family: 'Press Start 2P', monospace;
       font-size: 0.5rem; color: var(--gold);
@@ -422,6 +443,7 @@
       .case-footer { grid-template-columns: 1fr; padding: 3rem 2rem; gap: 2rem; }
       .footer-copy { grid-column: 1; }
     }
+    
 
     @media (max-width: 680px) {
       #nav-toggle { display: block; }
@@ -736,6 +758,12 @@
           </div>
         </div>
       </section>
+      <div class="iteration-loop">
+        <span class="loop-arrow">↻</span>
+          <p style="font-family:'Press Start 2P', monospace; font-size:0.4rem; color:var(--gold); letter-spacing:0.1em;">
+            FEEDBACK LOOP: DATA FROM STEP 05 INFORMS STEP 04
+          </p>
+      </div>
 
       <!-- TEST -->
       <section class="case-section" id="test">
@@ -774,6 +802,21 @@
           </div>
 
           <p>The next iteration addresses art direction (character redraw), script revision based on playtester feedback about pacing in act two, and the introduction of a glossary system for players unfamiliar with the mythological references. The core mechanic is not under revision. It worked.</p>
+        </div>
+        <div class="cs-callout" style="border-style: solid; border-color: var(--gold); background: rgba(200,146,58,0.03);">
+          <p class="cs-callout-label" style="color: var(--navy);">Reflection & Iteration 05</p>
+          <div class="cs-body">
+            <p> Presenting at a live symposium provided a "stress test" for the UI that private playtesting hadn't fully captured. While I successfully fostered emotional investment, I observed a significant accessibility gap in the interface.</p>
+    
+            <p>Observational data showed a divide: players who leaned in and focused intensely could navigate the systems, but more casual or visually-taxed users became frustrated. They often missed task instructions due to small text size and peripheral positioning.</p>
+    
+            <p><strong>The Next Loop:</strong> This feedback has turned the "Test" phase directly back into a "Prototype" phase. The next iteration will focus on:</p>
+            <ul style="margin-left: 1.5rem; color: rgba(26,26,46,0.75); line-height: 1.8;">
+              <li>- Increasing base font sizes for critical instructions and using high-contrast font colors.</li>
+              <li>- Moving "how-to" prompts from the periphery to the center of the viewport during task transitions.</li>
+              <li>- Ensuring that the intended "clutter" of a bureaucracy doesn't sacrifice the "clarity" required for a functional game.</li>
+            </ul>
+          </div>
         </div>
       </section>
 
