@@ -199,6 +199,15 @@ body {
 }
 .cam-panel-btn:active { transform:scale(.97); }
 
+.cam-skip {
+  position:absolute; bottom:220px; left:50%; transform:translateX(-50%);
+  background:transparent; border:1px solid rgba(255,255,255,.22);
+  color:rgba(255,255,255,.45); font-size:11px; font-weight:600;
+  padding:6px 18px; border-radius:20px; cursor:pointer; letter-spacing:.04em;
+  display:none; white-space:nowrap;
+}
+.cam-skip.visible { display:block; }
+
 /* ── GAME ─────────────────────────────────────────────────── */
 #s-game { background:#2B1B1F; }
 body.ar-active #s-game { background: transparent; }
@@ -473,6 +482,7 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
           <span class="blink-dot"></span><span id="stxt-trash">Scanning…</span>
         </div>
         <div class="cam-conf" id="conf-trash"><div class="cam-conf-fill" id="conf-fill-trash"></div></div>
+        <button class="cam-skip" id="skip-trash" onclick="skipScan()">Not at a bin? Skip →</button>
         <div class="cam-panel" id="panel-trash">
           <div class="cam-panel-title">You found the trash bin! 🗑️</div>
           <div class="cam-panel-msg">Now, let's find the recycling bin. Point your camera at the recycling bin and continue.</div>
@@ -499,6 +509,7 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
           <span class="blink-dot"></span><span id="stxt-recycle">Scanning…</span>
         </div>
         <div class="cam-conf" id="conf-recycle"><div class="cam-conf-fill" id="conf-fill-recycle"></div></div>
+        <button class="cam-skip" id="skip-recycle" onclick="skipScan()">Not at a bin? Skip →</button>
         <div class="cam-panel" id="panel-recycle">
           <div class="cam-panel-title">You've found the recycling bin! ♻️</div>
           <div class="cam-panel-msg">Both bins are registered. Drag each item to the correct bin to sort your tray.</div>
@@ -675,61 +686,78 @@ function videoToBase64(videoEl) {
   return canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
 }
 
-// Ask Proxy if there's a bin in the current video frame.
+const RF_MODEL   = 'bin-koznr';
+const RF_VERSION = '1';
+const BIN_CONFIDENCE_THRESHOLD = 0.75;
+
+// Ask the Netlify proxy if there's a bin in the current video frame.
+// The Roboflow classification API returns { top, confidence, predictions:{...} }
+// — predictions is a keyed object, NOT an array.
 async function checkBinInFrame(videoEl) {
-  const base64Image = videoToBase64(videoEl);
   try {
-      const res = await fetch('/.netlify/functions/check-bin', {
+    const res = await fetch('/.netlify/functions/check-bin', {
       method: 'POST',
-      body: JSON.stringify({
-        image: base64Image,
-        model: "bin-koznr", // Replace with your actual Roboflow Model ID if needed
-        version: "1" 
-      })
+      body: JSON.stringify({ image: videoToBase64(videoEl), model: RF_MODEL, version: RF_VERSION }),
     });
-    
     const data = await res.json();
-    
-    if (data.predictions && data.predictions.length > 0) {
-      const topClass = data.predictions[0].class;
-      const confidence = data.predictions[0].confidence;
-      
-      console.log(`AI Result: ${topClass} (${Math.round(confidence*100)}%)`);
-      
-      // If AI detects anything with > 60% confidence, we accept it as found.
-      if (confidence > 0.6) {
-        return { detected: true, label: topClass };
-      }
-    }
-    return { detected: false };
+    if (data.error) { console.warn('check-bin:', data.error); return null; }
+
+    // data.top is the winning class name; data.confidence is its score (0–1)
+    const detected = data.top?.toLowerCase().includes('bin')
+                     && data.confidence >= BIN_CONFIDENCE_THRESHOLD;
+    console.log(`RF: ${data.top} ${Math.round((data.confidence ?? 0) * 100)}%`);
+    return { detected, confidence: data.confidence ?? 0, label: data.top };
   } catch (e) {
-    console.error("AI Communication Error:", e);
-    return null;
+    console.error('checkBinInFrame:', e);
+    return null; // network error — caller will retry
   }
 }
 
-async function waitForBin(videoEl, confFill, statusTextEl) {
-  const POLL_MS = 600; 
-  
+async function waitForBin(videoEl, confFill, stxt) {
+  const POLL_MS    = 600;
+  const TIMEOUT_MS = 15000;
+
   return new Promise(resolve => {
     let done = false;
-    
+    const start = Date.now();
+
+    // Indeterminate shimmer on the confidence bar while searching
+    let barPos = 0, barDir = 1;
+    const barAnim = setInterval(() => {
+      if (done || !confFill) return;
+      barPos = Math.max(0, Math.min(78, barPos + barDir * 4));
+      if (barPos >= 78 || barPos <= 0) barDir *= -1;
+      confFill.style.width = barPos + '%';
+    }, 40);
+
     const poll = setInterval(async () => {
       if (done) return;
-
+      // Timeout fallback — never leave the user permanently stuck
+      if (Date.now() - start > TIMEOUT_MS) {
+        done = true; clearInterval(poll); clearInterval(barAnim);
+        if (confFill) confFill.style.width = '100%';
+        resolve(); return;
+      }
       const result = await checkBinInFrame(videoEl);
-
       if (!result) {
-        statusTextEl.textContent = "Connecting to AI...";
+        if (stxt) stxt.textContent = 'Connecting to AI…';
       } else if (result.detected) {
-        done = true;
-        clearInterval(poll);
-        statusTextEl.textContent = "Bin detected!";
+        done = true; clearInterval(poll); clearInterval(barAnim);
+        if (confFill) confFill.style.width = '100%';
+        if (stxt) stxt.textContent = 'Bin detected!';
         resolve();
       } else {
-        statusTextEl.textContent = "Searching... (No bin seen)";
+        if (stxt) stxt.textContent = 'Aim camera at the bin…';
       }
     }, POLL_MS);
+
+    // Expose a way for the skip button to resolve immediately
+    _skipResolve = () => {
+      if (done) return;
+      done = true; clearInterval(poll); clearInterval(barAnim);
+      if (confFill) confFill.style.width = '100%';
+      resolve();
+    };
   });
 }
 
@@ -743,6 +771,7 @@ async function runScan(suffix, onDone) {
   const panel    = $('panel-'     + suffix);
   const conf     = $('conf-'      + suffix);
   const confFill = $('conf-fill-' + suffix);
+  const skipBtn  = $('skip-'      + suffix);
 
   sweep.classList.remove('go');
   frame_.classList.remove('show');
@@ -750,34 +779,48 @@ async function runScan(suffix, onDone) {
   panel.classList.remove('show');
   reticle.classList.remove('hide');
   status.style.opacity = '1';
+  if (skipBtn) skipBtn.classList.remove('visible');
 
   if (cameraStream) {
     stxt.textContent = 'Aim camera at the bin...';
     if (conf) conf.classList.add('show');
-    
-    const videoEl = $('cam-live-' + suffix);
+    if (skipBtn) skipBtn.classList.add('visible');
 
-    await waitForBin(videoEl, confFill, stxt); 
-    
+    const videoEl = $('cam-live-' + suffix);
+    await waitForBin(videoEl, confFill, stxt);
+
     if (conf) conf.classList.remove('show');
+    if (skipBtn) skipBtn.classList.remove('visible');
+    _skipResolve = null;
   } else {
     stxt.textContent = 'Scanning...';
     await delay(1200);
   }
 
-  stxt.textContent = 'Bin Verified!';
+  // Staggered scan animation
   sweep.classList.add('go');
+  stxt.textContent = 'Analyzing…';
+
+  await delay(1700);
+  reticle.classList.add('hide');
   frame_.classList.add('show');
+
+  await delay(400);
   badge.classList.add('show');
-  
-  await delay(1000);
+  stxt.textContent = 'Object identified ✓';
+
+  await delay(800);
   status.style.opacity = '0';
   panel.classList.add('show');
-  
   if (onDone) onDone();
 }
 
 let cameraStream = null;
+let _skipResolve = null;
+
+function skipScan() {
+  if (_skipResolve) { _skipResolve(); _skipResolve = null; }
+}
 
 async function startCamera() {
   if (cameraStream) return true;
