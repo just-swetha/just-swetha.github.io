@@ -722,71 +722,37 @@ async function checkBinInFrame(videoEl) {
   const base64Image = videoToBase64(videoEl);
   
   try {
-    // We call our internal Netlify path
+    // 1. Call your NEW Netlify proxy instead of Roboflow directly
     const res = await fetch('/.netlify/functions/check-bin', {
       method: 'POST',
       body: JSON.stringify({
         image: base64Image,
-        model: "bin-koznr/1", // Put your model ID string here
-        version: "1"            // Your version number
+        model: "YOUR_MODEL_ID", // Change this to your actual Roboflow Model ID
+        version: "1"            // Change if you are on a different version
       })
     });
     
     const data = await res.json();
     
-    // Check the results (standard classification response)
+    // 2. Logic to interpret the response
     if (data.predictions && data.predictions.length > 0) {
       const topClass = data.predictions[0].class;
       const confidence = data.predictions[0].confidence;
       
       console.log(`AI sees: ${topClass} (${Math.round(confidence*100)}%)`);
       
-      // If AI is 60% sure it's a bin, return true to trigger the game
-      if (confidence > 0.6) return true;
+      // 3. Return true if it's a bin and confidence is high (e.g. 60%)
+      // Make sure 'trash' matches the exact label name in your Roboflow project
+      if (topClass === 'trash' && confidence > 0.6) {
+        return true; 
+      }
     }
     return false;
   } catch (e) {
     console.error("Proxy Error:", e);
-    return null;
+    return false;
   }
 }
-
-// Poll until a bin is detected, the user gives up (timeout), or camera isn't active.
-async function waitForBin(videoEl, confFill) {
-  const POLL_MS    = 600;  // Roboflow API call ~200-400ms, so don't hammer it
-  const TIMEOUT_MS = 15000;
-  return new Promise(resolve => {
-    let done  = false;
-    let ticks = 0;
-    const start = Date.now();
-
-    // Animate the bar left-right while searching (indeterminate style via JS)
-    let barDir = 1, barPos = 0;
-    const barAnim = setInterval(() => {
-      if (done || !confFill) return;
-      barPos = Math.max(0, Math.min(85, barPos + barDir * 3));
-      if (barPos >= 85 || barPos <= 0) barDir *= -1;
-      confFill.style.width = barPos + '%';
-    }, 40);
-
-    const poll = setInterval(async () => {
-      if (done) return;
-      if (Date.now() - start > TIMEOUT_MS) {
-        // Timeout: proceed anyway so the demo never gets permanently stuck
-        done = true; clearInterval(poll); clearInterval(barAnim);
-        if (confFill) confFill.style.width = '100%';
-        resolve(); return;
-      }
-      const detected = await checkBinInFrame(videoEl);
-      if (detected === true) {
-        done = true; clearInterval(poll); clearInterval(barAnim);
-        if (confFill) confFill.style.width = '100%';
-        resolve();
-      }
-    }, POLL_MS);
-  });
-}
-
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
 /* ═══ SCAN SEQUENCE helper ════════════════════════════════ */
