@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sort It Out — AR Prototype</title>
+<script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -811,27 +812,20 @@ function captureFrame(videoEl) {
   return canvas.toDataURL('image/jpeg', 0.9);
 }
 
-const RF_API_KEY = 'rf_M8Umm1qwd6UD3iBzxJP54S4aSgG3';
-const RF_MODEL   = 'bin-koznr/1';
+const RF_API_KEY   = 'rf_M8Umm1qwd6UD3iBzxJP54S4aSgG3';
 const RF_THRESHOLD = 0.6;
 
+let rfModel = null;
+roboflow.auth({ publishable_key: RF_API_KEY })
+  .load({ model: 'bin-koznr', version: 1 })
+  .then(m => { rfModel = m; console.log('Roboflow model ready'); })
+  .catch(e => console.warn('Roboflow model load failed:', e));
+
 async function checkBinInFrame(videoEl) {
-  const b64 = videoToBase64(videoEl);
-  if (!b64) { console.warn('checkBinInFrame: video not ready yet'); return null; }
-
+  if (!rfModel) { console.warn('Model not loaded yet'); return null; }
+  if (!videoEl.videoWidth) return null;
   try {
-    const res = await fetch(
-      `https://detect.roboflow.com/${RF_MODEL}?api_key=${RF_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: b64,
-      }
-    );
-    const data = await res.json();
-    if (!res.ok) { console.warn('Roboflow error:', data); return null; }
-
-    const predictions = data.predictions ?? [];
+    const predictions = await rfModel.detect(videoEl);
     const detected = predictions.some(p => p.confidence >= RF_THRESHOLD);
     console.log(`RF: ${predictions.length} prediction(s), detected=${detected}`);
     return { detected };
