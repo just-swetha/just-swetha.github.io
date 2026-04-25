@@ -185,7 +185,6 @@ body {
 .cam-conf.show { opacity:1; }
 .cam-conf-fill {
   height:100%; width:0%; background:#75C962; border-radius:2px;
-  transition:width .35s ease;
 }
 
 .cam-panel {
@@ -240,19 +239,12 @@ body {
 
 /* ── GAME ─────────────────────────────────────────────────── */
 #s-game { background:#2B1B1F; }
-body.ar-active #s-game { background: transparent; }
 .game-bg {
   position:absolute; inset:0;
   background:
     radial-gradient(ellipse at 30% 20%,rgba(117,201,98,.12) 0%,transparent 55%),
     radial-gradient(ellipse at 70% 20%,rgba(72,115,84,.10) 0%,transparent 55%),
     linear-gradient(160deg,#2B1B1F,#1A1013);
-}
-body.ar-active .game-bg {
-  background:
-    radial-gradient(ellipse at 30% 20%,rgba(117,201,98,.15) 0%,transparent 55%),
-    radial-gradient(ellipse at 70% 20%,rgba(72,115,84,.12) 0%,transparent 55%),
-    linear-gradient(160deg,rgba(43,27,31,.62),rgba(26,16,19,.62));
 }
 .cam-denied {
   position:absolute; bottom:130px; left:16px; right:16px; z-index:400;
@@ -563,7 +555,6 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
       </div>
 
       <div class="screen" id="s-game">
-        <video class="cam-live" id="cam-live-game" autoplay playsinline muted></video>
         <div class="game-bg"></div>
         <div class="cam-denied">📷 Camera access was denied — playing in standard mode. To enable AR, allow camera in your browser settings and reload.</div>
         <canvas id="traj"></canvas>
@@ -778,13 +769,10 @@ async function waitForBin(videoEl, confFill, stxt) {
     let done = false;
     const start = Date.now();
 
-    // Indeterminate shimmer on the confidence bar while searching
-    let barPos = 0, barDir = 1;
+    // Fill bar linearly from 0→100% over TIMEOUT_MS
     const barAnim = setInterval(() => {
       if (done || !confFill) return;
-      barPos = Math.max(0, Math.min(78, barPos + barDir * 4));
-      if (barPos >= 78 || barPos <= 0) barDir *= -1;
-      confFill.style.width = barPos + '%';
+      confFill.style.width = Math.min(100, ((Date.now() - start) / TIMEOUT_MS) * 100) + '%';
     }, 40);
 
     const poll = setInterval(async () => {
@@ -875,6 +863,14 @@ async function runScan(suffix, onDone) {
   } else {
     stxt.textContent = 'Scanning...';
     await delay(1200);
+  }
+
+  if (scanResult === 'skipped') {
+    // User explicitly skipped — go straight to the panel, no scan animation
+    status.style.opacity = '0';
+    panel.classList.add('show');
+    if (onDone) onDone();
+    return;
   }
 
   // Staggered scan animation
