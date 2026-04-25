@@ -734,7 +734,7 @@ function captureFrame(videoEl) {
 
 const RF_MODEL   = 'bin-koznr';
 const RF_VERSION = '1';
-const BIN_CONFIDENCE_THRESHOLD = 0.75;
+const BIN_CONFIDENCE_THRESHOLD = 0.5;
 
 // Ask the Netlify proxy if there's a bin in the current video frame.
 // The Roboflow classification API returns { top, confidence, predictions:{...} }
