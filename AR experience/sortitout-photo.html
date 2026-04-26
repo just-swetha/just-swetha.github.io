@@ -463,6 +463,17 @@ canvas#traj {
 .toast-r { font-size:22px; margin-bottom:6px; }
 .toast-f { font-size:10px; color:rgba(241,228,210,.68); line-height:1.55; }
 
+.ar-radar {
+  position:absolute; bottom:108px; left:50%; transform:translateX(-50%);
+  z-index:110; display:flex; align-items:center; gap:8px;
+  background:rgba(0,0,0,0.52); border:1px solid rgba(117,201,98,0.5);
+  border-radius:100px; padding:8px 18px;
+  opacity:0; transition:opacity 0.4s; pointer-events:none; white-space:nowrap;
+}
+.ar-radar.show { opacity:1; }
+.ar-radar-arrow { font-size:18px; color:#75C962; }
+.ar-radar-label { font-size:11px; color:rgba(255,255,255,0.82); font-weight:600; letter-spacing:0.04em; }
+
 /* ── SUCCESS ─────────────────────────────────────────────── */
 #s-success { background:#F1E4D2; }
 .succ-grid { display:none; }
@@ -595,7 +606,8 @@ canvas#traj {
           <div class="disc-loc">📍 Woodworth Dining Hall</div>
           <div class="disc-sub">Head to Woodworth to scan the bins and help keep BSU's recycling clean.</div>
           <a class="btn-directions" href="https://maps.google.com/?q=Woodworth+Commons+Ball+State+University+Muncie+Indiana" target="_blank">Get Directions →</a>
-          <button class="btn-begin" onclick="showScreen('s-splash')">I'm Here →</button>
+          <div style="flex:1"></div>
+          <button class="btn-begin" style="margin-top:0" onclick="showScreen('s-splash')">I'm Here →</button>
         </div>
       </div>
 
@@ -750,7 +762,31 @@ canvas#traj {
     <div class="toast-res" id="toast-r"></div>
     <div class="toast-fact" id="toast-f"></div>
   </div>
+
+  <div id="ar-radar" class="ar-radar">
+    <span id="ar-radar-arrow" class="ar-radar-arrow">→</span>
+    <span id="ar-radar-label" class="ar-radar-label">Scan right</span>
+  </div>
 </div>
+
+      <div class="screen" id="s-success">
+        <div class="blob-shape"></div>
+        <div class="sb"><span class="sb-time">9:41</span></div>
+        <div class="succ-body">
+          <div class="succ-icon">♻️</div>
+          <div class="succ-title">Clean load! Your recycling is heading to the facility.</div>
+          <div class="succ-stat">
+            <span class="succ-pct" id="succ-pct">0</span><span class="succ-pct-lbl">% contamination</span>
+          </div>
+          <div class="succ-divider"></div>
+          <div class="succ-recycle-lbl">Your scanned bin</div>
+          <div class="succ-bin-img">
+            <img src="bin-recycle.jpg" alt="Your scanned recycling bin">
+            <div class="succ-bin-cap">Woodworth Dining Hall</div>
+          </div>
+          <button class="btn-watch" onclick="startVideo()">Watch the Journey →</button>
+        </div>
+      </div>
 
       <div class="screen" id="s-fail">
         <div class="sb"><span class="sb-time">9:41</span></div>
@@ -785,21 +821,21 @@ canvas#traj {
 /* ═══ DATA ════════════════════════════════════════════════ */
 const ITEMS = [
   { name:'Plastic water bottle',   correct:'recycle', img:'bottle.png',
-    fact:'Empty plastic bottles are recyclable in BSU\'s blue bags — rinse them first.', bearing: Math.random() * 360 },
+    fact:'Empty plastic bottles are recyclable in BSU\'s blue bags — rinse them first.' },
   { name:'Aluminum soda can',      correct:'recycle', img:'tin_can.png',
-    fact:'Aluminum cans are accepted at all BSU dining locations. Republic Services picks them up weekly.', bearing: Math.random() * 360 },
+    fact:'Aluminum cans are accepted at all BSU dining locations. Republic Services picks them up weekly.' },
   { name:'Glass kombucha bottle',  correct:'recycle', img:'glass_jar.png',
-    fact:'Glass goes in BSU\'s blue recycling bags. Remove the lid — metal lids go separately.', bearing: Math.random() * 360 },
+    fact:'Glass goes in BSU\'s blue recycling bags. Remove the lid — metal lids go separately.' },
   { name:'Clean cardboard sleeve', correct:'recycle', img:'unused_paper.png',
-    fact:'Clean, dry cardboard is recyclable at Woodworth. Grease or liquid contact means trash.', bearing: Math.random() * 360 },
+    fact:'Clean, dry cardboard is recyclable at Woodworth. Grease or liquid contact means trash.' },
   { name:'Greasy pizza box',       correct:'trash',   img:'pizza_box.png',
-    fact:'Grease contaminates the whole load. This box sends an entire batch to landfill.', bearing: Math.random() * 360 },
+    fact:'Grease contaminates the whole load. This box sends an entire batch to landfill.' },
   { name:'Plastic bag',            correct:'trash',   img:'plastic_bag.png',
-    fact:'Soft plastics jam Republic Services\' sorting machinery. Drop bags at grocery store collection points.', bearing: Math.random() * 360 },
+    fact:'Soft plastics jam Republic Services\' sorting machinery. Drop bags at grocery store collection points.' },
   { name:'Styrofoam to-go cup',    correct:'trash',   img:'styrofoam_cup.png',
-    fact:'Styrofoam is not accepted in BSU blue bags — always landfill at Woodworth.', bearing: Math.random() * 360 },
+    fact:'Styrofoam is not accepted in BSU blue bags — always landfill at Woodworth.' },
   { name:'Used paper napkin',      correct:'trash',   img:'used_napkin.png',
-    fact:'Paper touched by food or liquid is contaminated. It always goes in the trash.', bearing: Math.random() * 360 },
+    fact:'Paper touched by food or liquid is contaminated. It always goes in the trash.' },
 ];
 
 /* ═══ STATE ═══════════════════════════════════════════════ */
@@ -811,7 +847,6 @@ let itemY = 320;        // Stores the vertical position of the trash
 const capturedBins = {}; // { trash: dataURL, recycle: dataURL } — filled on real detection
 let dragging = false, launching = false;
 /* ═══ AR SCAVENGER HUNT LOGIC ══════════════════════════════ */
-let currentHeading = 0; 
 
 function updateARItemPosition() {
   const card = document.getElementById('item-card');
@@ -820,6 +855,7 @@ function updateARItemPosition() {
   const sIcon = document.getElementById('status-icon');
   
   if (!card || dragging || launching) return;
+  if (!gShuffled.length || gIdx >= gShuffled.length) return;
 
   const item = gShuffled[gIdx];
   // Calculate the difference between where the item is and where the phone is pointing
@@ -831,10 +867,11 @@ function updateARItemPosition() {
   if (Math.abs(diff) < 40) {
     // ITEM IS IN VIEW
     card.style.opacity = "1";
+    card.style.transform = 'scale(1)';
     card.style.pointerEvents = "all";
-    
-    itemX = 170 + (diff * 7); 
-    card.style.left = (itemX - 53) + 'px'; // 53 is half of your 106px card width
+
+    itemX = 170 + (diff * 7);
+    card.style.left = (itemX - 53) + 'px';
 
     if (bar && sText && sIcon) {
       bar.style.borderColor = "#75C962";
@@ -876,10 +913,10 @@ async function startARMode() {
   arActive = true;
   window.addEventListener('deviceorientation', (e) => {
     // Apple uses webkitCompassHeading, Android uses alpha
-    if (e.webkitCompassHeading) {
+    if (e.webkitCompassHeading !== undefined) {
       currentHeading = e.webkitCompassHeading;
-    } else if (e.alpha) {
-      currentHeading = 360 - e.alpha; 
+    } else if (e.alpha !== undefined) {
+      currentHeading = 360 - e.alpha;
     }
 
     // 3. Move the trash based on the new heading (only if we aren't currently touching it)
@@ -889,17 +926,7 @@ async function startARMode() {
   }, true);
 }
 
-  window.addEventListener('deviceorientation', (e) => {
-    // CurrentHeading is global, so updateARItemPosition can see it
-    currentHeading = e.webkitCompassHeading || (360 - e.alpha);
-    
-    // Only move the item if the user isn't currently dragging it to a bin
-    if (!dragging && !launching) {
-      updateARItemPosition();
-    }
-  }, true);
-}
-let itemX = 0, itemY = 0, startX = 0, startY = 0;
+let startX = 0, startY = 0;
 
 const GRAVITY      = 0.1;
 const LAUNCH_SCALE = 0.25;
@@ -1441,7 +1468,7 @@ function endGame() {
     $('fail-pct-badge').textContent = pct + '% contamination';
     showScreen('s-fail');
   } else {
-    $('succ-pct').textContent = pct + '%';
+    $('succ-pct').textContent = pct;
     showScreen('s-success');
   }
 }
