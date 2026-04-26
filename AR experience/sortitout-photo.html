@@ -819,7 +819,11 @@ const RF_MIN_SIZE   = 0.18; // detected box must span ≥18% of frame width
 let rfModel = null;
 roboflow.auth({ publishable_key: RF_API_KEY })
   .load({ model: 'wastebasket_trash_detecation', version: 3 })
-  .then(m => { rfModel = m; console.log('Roboflow model ready'); })
+  .then(m => {
+    m.configure({ threshold: RF_THRESHOLD });
+    rfModel = m;
+    console.log('Roboflow model ready');
+  })
   .catch(e => console.warn('Roboflow model load failed:', e));
 
 async function checkBinInFrame(videoEl) {
@@ -827,12 +831,9 @@ async function checkBinInFrame(videoEl) {
   if (!videoEl.videoWidth) return null;
   try {
     const predictions = await rfModel.detect(videoEl);
-    const detected = predictions.some(p =>
-      p.confidence >= RF_THRESHOLD &&
-      p.width / videoEl.videoWidth >= RF_MIN_SIZE
-    );
+    const detected = predictions.some(p => p.bbox.width / videoEl.videoWidth >= RF_MIN_SIZE);
     console.log(`RF: ${predictions.length} prediction(s), detected=${detected}`,
-      predictions.map(p => `${Math.round(p.confidence*100)}% w=${Math.round(p.width/videoEl.videoWidth*100)}%`));
+      predictions.map(p => `${Math.round(p.confidence*100)}% w=${Math.round(p.bbox.width/videoEl.videoWidth*100)}%`));
     return { detected };
   } catch (e) {
     console.error('checkBinInFrame:', e);
