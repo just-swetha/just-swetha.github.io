@@ -905,11 +905,11 @@
         <div class="cs-body">
           <p>I developed two prototypes.</p>
           <p>The first is a working web build demonstrating the core sort-and-explain mechanic. Waste items are launched toward the correct bin in an Angry Birds-style interaction. Wrong sorts trigger a brief explanation before the item resets; correct sorts score points. Built mobile-first in HTML, CSS, and JavaScript, playable in-browser without a download.</p>
-          <p>The second prototype layers the mechanic onto photographs of actual campus bins and offers a video showing recycling happening at the end of low contamination, simulating the AR experience.</p>
+          <p>The second prototype goes further: it uses a custom-trained computer vision model to detect a real bin through the device camera before the game begins, captures a photo of it, and replaces the placeholder bin images with what the player actually scanned. A location discovery screen and a video reward at the end complete the loop.</p>
 
           <div class="cs-callout">
             <p class="cs-callout-label">▸ SCOPE NOTE</p>
-            <p>Full AR implementation, including geofencing, QR trigger, live leaderboard backend, and location-specific item sets, is outside the scope of these prototypes. They are proofs of concept for the interactive layer, not the finished product.</p>
+            <p>Prototype 2 implements live camera-based bin detection using a custom-trained image classifier. What remains outside scope for these prototypes is geofencing, QR triggering, a live leaderboard backend, and location-specific item sets. These are proofs of concept for the interactive and perceptual layer, not a finished product.</p>
           </div>
 
           <div class="cs-embed">
@@ -937,7 +937,7 @@
           <div class="cs-embed">
             <div class="cs-embed-header">
               <span class="cs-embed-title">▸ Prototype 2 · Photo AR Simulation</span>
-              <span class="cs-embed-note">Real bin photos · camera viewfinder UI</span>
+              <span class="cs-embed-note">Live camera · custom CV model · real bin detection</span>
             </div>
             <div class="cs-embed-wrapper" style="background:#0d1117;">
               <iframe
@@ -954,18 +954,8 @@
             <a href="AR experience/sortitout-photo.html" target="_blank" rel="noopener" class="cs-embed-link">
               Open full screen ↗
             </a>
-            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">This prototype shows how the physical bins are scanned and identified before being brought into the game, with a video reward at the end: footage of Ball State's recycling truck and sorting facility, reasserting that the recycling students do here actually goes somewhere.</p>
+            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">The bin detection runs a custom image classifier trained on 590 bin images and 1,049 non-bin images (buildings, people, hallways) across 80 epochs using Google Teachable Machine. The TensorFlow.js model is loaded once and runs entirely on-device with no server calls. When confidence clears 75%, the game captures the bin photo and replaces the placeholder image with what the player actually scanned. A video reward at the end shows footage of Ball State's recycling truck and sorting facility, closing the loop between in-game action and real-world consequence.</p>
           </div>
-
-          <h3 class="cs-sub-title">Computer vision</h3>
-          <p>The bin detection in Prototype 2 is powered by a custom image classifier trained entirely in the browser using Google Teachable Machine, with no server-side inference or ongoing API costs.</p>
-          <p>Training data was sourced from Roboflow's open dataset library. The final model was trained on two classes:</p>
-          <ul class="cs-list">
-            <li><strong>Bin:</strong> 590 images of trash and recycling receptacles across varied angles, distances, and lighting conditions</li>
-            <li><strong>Not Bin:</strong> 1,049 images drawn from buildings, hallways, and people, to reduce false positives in real campus environments</li>
-          </ul>
-          <p>The model was trained for 80 epochs, optimising for accuracy. The exported TensorFlow.js weights are loaded directly in the browser. Once downloaded on first visit, all inference runs locally on the device with no network calls required per detection.</p>
-          <p>When a user points their camera at a bin, the classifier runs every two seconds and reports confidence scores for each class. A detection is confirmed when the "Bin" probability clears a 75% threshold, at which point the game captures a photo of that bin and replaces the static placeholder image with the player's actual environment.</p>
         </div>
       </section>
 
