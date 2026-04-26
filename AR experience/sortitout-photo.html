@@ -849,47 +849,88 @@ const capturedBins = {};
 let dragging = false, launching = false;
 /* ═══ AR SCAVENGER HUNT LOGIC ══════════════════════════════ */
 
+function playPing() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(660, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.22, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.35);
+  } catch(e) {}
+}
+
 function updateARItemPosition() {
-  const card = document.getElementById('item-card');
-  const bar = document.getElementById('game-status-bar');
-  const sText = document.getElementById('status-text');
-  const sIcon = document.getElementById('status-icon');
-  
+  const card = $('item-card');
+  const bar  = $('game-status-bar');
+  const sText = $('status-text');
+  const sIcon = $('status-icon');
+  const radar = $('ar-radar');
+  const radarArrow = $('ar-radar-arrow');
+  const radarLabel = $('ar-radar-label');
+
   if (!card || dragging || launching) return;
   if (!gShuffled.length || gIdx >= gShuffled.length) return;
 
-  const item = gShuffled[gIdx];
-  // Calculate the difference between where the item is and where the phone is pointing
-  let diff = item.bearing - currentHeading;
+  const bearing = itemBearings[gIdx];
 
-  if (diff > 180) diff -= 360;
+  // Fallback: no orientation data — show item at centre so game is still playable
+  if (arFallback) {
+    if (!itemVisible) {
+      itemVisible = true;
+      if (navigator.vibrate) navigator.vibrate(80);
+      playPing();
+    }
+    card.style.opacity = '1';
+    card.style.transform = 'scale(1)';
+    card.style.pointerEvents = 'all';
+    itemX = 170;
+    card.style.left = (itemX - 53) + 'px';
+    if (bar)   { bar.style.borderColor = '#75C962'; bar.classList.remove('status-pulse'); }
+    if (sText) sText.textContent = 'Flick the item into a bin!';
+    if (sIcon) sIcon.textContent = '☝️';
+    if (radar) radar.classList.remove('show');
+    return;
+  }
+
+  let diff = bearing - currentHeading;
+  if (diff > 180)  diff -= 360;
   if (diff < -180) diff += 360;
 
   if (Math.abs(diff) < 40) {
-    // ITEM IS IN VIEW
-    card.style.opacity = "1";
-    card.style.transform = 'scale(1)';
-    card.style.pointerEvents = "all";
-
-    itemX = 170 + (diff * 7);
-    card.style.left = (itemX - 53) + 'px';
-
-    if (bar && sText && sIcon) {
-      bar.style.borderColor = "#75C962";
-      sText.textContent = "Trash Found! Flick it into a bin!";
-      sIcon.textContent = "☝️";
-      bar.classList.remove('status-pulse');
+    // Item is in view
+    if (!itemVisible) {
+      itemVisible = true;
+      if (navigator.vibrate) navigator.vibrate(80);
+      playPing();
     }
+    itemX = 170 + (diff * 7);
+    card.style.left      = (itemX - 53) + 'px';
+    card.style.opacity   = '1';
+    card.style.transform = 'scale(1)';
+    card.style.pointerEvents = 'all';
+    if (bar)   { bar.style.borderColor = '#75C962'; bar.classList.remove('status-pulse'); }
+    if (sText) sText.textContent = 'Found it! Flick into a bin!';
+    if (sIcon) sIcon.textContent = '☝️';
+    if (radar) radar.classList.remove('show');
   } else {
-    // ITEM IS HIDDEN
-    card.style.opacity = "0";
-    card.style.pointerEvents = "none";
-    
-    if (bar && sText && sIcon) {
-      bar.style.borderColor = "rgba(255,255,255,0.1)";
-      bar.classList.add('status-pulse');
-      sIcon.textContent = "🔍";
-      sText.textContent = (diff > 0) ? "Scan to the Right →" : "← Scan to the Left";
+    // Item out of view — keep left updated for smooth re-entry, stay hidden
+    if (itemVisible) itemVisible = false;
+    const hiddenX = 170 + (diff * 7);
+    card.style.left      = (Math.max(0, Math.min(280, hiddenX - 53))) + 'px';
+    card.style.opacity   = '0';
+    card.style.pointerEvents = 'none';
+    if (bar)   { bar.style.borderColor = 'rgba(255,255,255,0.1)'; bar.classList.add('status-pulse'); }
+    if (sIcon) sIcon.textContent = '🔍';
+    if (sText) sText.textContent = diff > 0 ? 'Scan right →' : '← Scan left';
+    if (radar) {
+      radar.classList.add('show');
+      if (radarArrow) radarArrow.textContent = diff > 0 ? '→' : '←';
+      if (radarLabel) radarLabel.textContent = diff > 0 ? 'Look right' : 'Look left';
     }
   }
 }
@@ -912,18 +953,23 @@ async function startARMode() {
 
   // 2. Activate the sensors
   arActive = true;
+
+  // Fallback: if no orientation event fires within 2.5s, show items at centre
+  const fallbackTimer = setTimeout(() => {
+    if (!arOrientationReceived) { arFallback = true; updateARItemPosition(); }
+  }, 2500);
+
   window.addEventListener('deviceorientation', (e) => {
-    // Apple uses webkitCompassHeading, Android uses alpha
+    if (!arOrientationReceived) {
+      arOrientationReceived = true;
+      clearTimeout(fallbackTimer);
+    }
     if (e.webkitCompassHeading !== undefined) {
       currentHeading = e.webkitCompassHeading;
     } else if (e.alpha !== undefined) {
       currentHeading = 360 - e.alpha;
     }
-
-    // 3. Move the trash based on the new heading (only if we aren't currently touching it)
-    if (!dragging && !launching) {
-      updateARItemPosition();
-    }
+    if (!dragging && !launching) updateARItemPosition();
   }, true);
 }
 
@@ -1195,6 +1241,8 @@ function startRecycleScan() {
 function initGame() {
   gScore = 0; gWrong = 0; gIdx = 0;
   gShuffled = shuffle([...ITEMS]);
+  itemBearings = gShuffled.map(() => Math.random() * 360);
+  itemVisible = false;
   updateHUD();
 
   if (capturedBins.trash) {
@@ -1236,16 +1284,12 @@ function loadItem() {
   $('g-prog').textContent = `${gIdx + 1} of ${gShuffled.length}`;
 
   const card = $('item-card');
-  
-  // Set the vertical height (320px is roughly the middle of the screen)
-  itemY = 320; 
-  card.style.top = (itemY - 55) + 'px';
-  
-  // Set initial state
-  card.style.opacity = '0';
+  itemVisible = false;
+  itemY = 250 + Math.floor(Math.random() * 120); // 250–370px, varies per item
+  card.style.top       = (itemY - 55) + 'px';
+  card.style.opacity   = '0';
   card.style.transform = 'scale(0.7)';
-
-  // Let the AR logic take over for the horizontal (left) position
+  card.onpointerdown   = startSling;
   updateARItemPosition();
 }
 
