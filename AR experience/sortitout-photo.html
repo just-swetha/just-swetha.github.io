@@ -348,8 +348,8 @@ body {
   height: 260px;
   background: #487354;
   border-radius: 0 0 55% 55% / 0 0 38% 38%;
-  z-index: 0; /* Move it to the very back */
-  pointer-events: none; /* IMPORTANT: Ensures it doesn't block touches */
+  z-index: 0; /* Send to the very back */
+  pointer-events: none !important; /* Allow touches to pass through */
 }
 .cam-denied {
   position:absolute; bottom:130px; left:16px; right:16px; z-index:400;
@@ -401,15 +401,15 @@ body.cam-denied-show .cam-denied { display:block; }
 
 .item-zone {
   position: absolute; 
-  top: 240px; 
+  top: 0; 
   left: 0; 
   right: 0; 
-  bottom: 100px;
+  bottom: 0;
   display: flex; 
   align-items: center; 
   justify-content: center;
-  z-index: 60; /* Higher than bins */
-  pointer-events: none; /* Allows clicks to pass through to the card itself */
+  z-index: 60; 
+  pointer-events: none; 
 }
 
 .item-card {
@@ -417,8 +417,10 @@ body.cam-denied-show .cam-denied { display:block; }
   background:#fff; border:1.5px solid rgba(43,27,31,.08);
   display:flex; align-items:center; justify-content:center;
   cursor:grab; user-select:none; touch-action:none;
-  position:absolute; z-index:60;
+  position:absolute; z-index:70;
   box-shadow:0 6px 28px rgba(43,27,31,.14);
+  pointer-events: all !important; 
+  touch-action: none;
   
   /* ADD THESE: */
   opacity: 0; 
@@ -934,10 +936,9 @@ const frame = () => document.querySelector('.phone-screen');
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => {
     s.classList.remove('active');
-    s.style.display = 'none'; // Force hide to prevent z-index bleeding
+    s.style.display = 'none'; // Force complete removal from layout
   });
-  // Show target screen
-  const target = document.getElementById(id);
+  const target = $(id);
   target.classList.add('active');
   target.style.display = 'block';
 }
