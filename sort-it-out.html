@@ -857,8 +857,6 @@
             </table>
           </div>
 
-          <p>Sort It Out's game loop runs on three motivational layers: immediate feedback (sort correctly, score points; sort incorrectly, learn why before the item resets), social competition (live leaderboard ranking floors and halls), and collection (a campus-wide stamp map driving students to visit multiple bin locations).</p>
-
           <div class="loop-steps">
             <div class="loop-step">
               <span class="loop-n">01</span>
@@ -934,8 +932,7 @@
             <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">This prototype illustrates the core sorting mechanic: students slingshot waste items toward the correct bin (trash or recycling) to sort their tray.</p>
           </div>
 
-          <p>Prototype 1 confirmed the sorting mechanic was legible and fast enough for a between-class moment. What it could not test was whether grounding that mechanic in the student's physical environment changed what the interaction felt like. A game played against illustrated placeholders is still a game. The question was whether pointing your phone at an actual bin (your bin, at your dining hall) made the stakes feel different.</p>
-          <p>Prototype 2 was built to find out. It opens with a location discovery screen, uses the device camera to detect and photograph a real bin before play begins, and closes with documentary footage of where a sorted item actually goes. The full product is designed around a QR trigger at the physical bin; the prototype approximates that same entry moment using camera-based computer vision detection, which the student reaches by pointing their phone at the bin rather than scanning a code.</p>
+          <p>Prototype 1 confirmed the sort mechanic was legible and fast enough for a between-class moment. What it couldn't test was whether grounding that mechanic in the student's physical environment changed what the interaction felt like. Prototype 2 was built to find out: it opens with a location discovery screen, uses the device camera to detect and photograph a real bin before play begins, and closes with documentary footage of where a sorted item actually goes.</p>
 
           <div class="cs-embed">
             <div class="cs-embed-header">
@@ -957,7 +954,25 @@
             <a href="AR experience/sortitout-photo.html" target="_blank" rel="noopener" class="cs-embed-link">
               Open full screen ↗
             </a>
-            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">The bin detection runs a custom image classifier trained on 590 bin images and 1,049 non-bin images (buildings, people, hallways) across 80 epochs using Google Teachable Machine. The TensorFlow.js model is loaded once and runs entirely on-device with no server calls. When confidence clears 75%, the game captures the bin photo and replaces the placeholder image with what the player actually scanned. A video reward at the end shows footage of Ball State's recycling truck and sorting facility, closing the loop between in-game action and real-world consequence.</p>
+            <div style="padding: 1rem 1.5rem; display:flex; gap:1rem; flex-wrap:wrap; border-top: 1px solid rgba(9,23,64,0.06);">
+              <div style="text-align:center; flex:1; min-width:72px;">
+                <div style="font-family:'Press Start 2P',monospace; font-size:0.7rem; color:var(--teal);">590</div>
+                <div style="font-size:0.78rem; color:rgba(26,26,46,0.45); margin-top:0.3rem;">bin images</div>
+              </div>
+              <div style="text-align:center; flex:1; min-width:72px;">
+                <div style="font-family:'Press Start 2P',monospace; font-size:0.7rem; color:var(--teal);">1,049</div>
+                <div style="font-size:0.78rem; color:rgba(26,26,46,0.45); margin-top:0.3rem;">not-bin images</div>
+              </div>
+              <div style="text-align:center; flex:1; min-width:72px;">
+                <div style="font-family:'Press Start 2P',monospace; font-size:0.7rem; color:var(--teal);">80</div>
+                <div style="font-size:0.78rem; color:rgba(26,26,46,0.45); margin-top:0.3rem;">epochs</div>
+              </div>
+              <div style="text-align:center; flex:1; min-width:72px;">
+                <div style="font-family:'Press Start 2P',monospace; font-size:0.7rem; color:var(--teal);">75%</div>
+                <div style="font-size:0.78rem; color:rgba(26,26,46,0.45); margin-top:0.3rem;">confidence threshold</div>
+              </div>
+            </div>
+            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">Runs entirely on-device via TensorFlow.js. When confidence clears the threshold, the game captures the bin photo and replaces the placeholder with what the player actually scanned. A video reward at the end closes the loop between in-game action and real-world consequence.</p>
           </div>
         </div>
       </section>
@@ -1016,9 +1031,9 @@
 
           <div class="cs-callout">
             <p class="cs-callout-label">▸ WHAT THE NEXT ITERATION ADDRESSES</p>
-            <p><strong>Location specificity.</strong> The current prototype runs the same eight items at every bin. The next version differentiates by location. Woodworth sees different waste patterns than DeHority, and the game's item set should reflect that. Location-specific data from facilities and observation will inform which items are most likely to be misorted at each site, making the intervention more accurate and the narrative more grounded in that specific student's context.</p>
-            <p><strong>Semester-long sustain.</strong> A single play session is not enough to shift a habit. The leaderboard, stamp map, and rotating item sets are designed to bring students back across the semester. The next design challenge is pacing that re-engagement: knowing when to introduce new content, when to raise stakes, and how to keep the experience feeling fresh without demanding too much from a student who has two minutes at a bin.</p>
-            <p><strong>A more specific user.</strong> The current design targets a tech-savvy Ball State student, broad enough to be safe, narrow enough to be meaningless. The next iteration requires a real persona: not a demographic average, but a specific student navigating a specific moment. A junior commuter between classes is a different user than a freshman in the dining hall with time to kill. Each has a different threshold for friction, a different relationship to the leaderboard, and a different reason to care. Designing for both requires choosing which one to prioritise first.</p>
+            <p><strong>Location specificity.</strong> Woodworth sees different waste patterns than DeHority. The next version differentiates the item set by location, using facilities data to surface what's actually misorted at each site.</p>
+            <p><strong>Semester-long sustain.</strong> One session doesn't shift a habit. The leaderboard, stamp map, and rotating item sets are designed to bring students back, but the next challenge is pacing that re-engagement without demanding more than two minutes at a bin.</p>
+            <p><strong>A more specific user.</strong> "Tech-savvy Ball State student" is broad enough to be safe and narrow enough to be meaningless. A junior commuter between classes and a freshman with time in the dining hall have different thresholds for friction and different reasons to care. The next iteration needs to choose which one to design for first.</p>
           </div>
 
           <div class="cs-pull">
