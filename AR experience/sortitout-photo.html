@@ -840,11 +840,12 @@ const ITEMS = [
 
 /* ═══ STATE ═══════════════════════════════════════════════ */
 let gScore = 0, gWrong = 0, gIdx = 0, gShuffled = [];
-let currentHeading = 0; // Tracks which way the phone is pointing
-let arActive = false;   // Prevents starting the sensors twice
-let itemX = 170;        // Stores the horizontal position of the trash
-let itemY = 320;        // Stores the vertical position of the trash
-const capturedBins = {}; // { trash: dataURL, recycle: dataURL } — filled on real detection
+let currentHeading = 0;
+let arActive = false, arOrientationReceived = false, arFallback = false;
+let itemX = 170, itemY = 320;
+let itemVisible = false;
+let itemBearings = [];
+const capturedBins = {};
 let dragging = false, launching = false;
 /* ═══ AR SCAVENGER HUNT LOGIC ══════════════════════════════ */
 
