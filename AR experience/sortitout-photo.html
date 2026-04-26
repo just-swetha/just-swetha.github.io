@@ -341,9 +341,15 @@ body {
 /* ── GAME ─────────────────────────────────────────────────── */
 #s-game { background:#F1E4D2; }
 .game-bg {
-  position:absolute; top:0; left:-8%; right:-8%; height:260px;
-  background:#487354;
-  border-radius:0 0 55% 55% / 0 0 38% 38%;
+  position: absolute; 
+  top: 0; 
+  left: -8%; 
+  right: -8%; 
+  height: 260px;
+  background: #487354;
+  border-radius: 0 0 55% 55% / 0 0 38% 38%;
+  z-index: 0; /* Move it to the very back */
+  pointer-events: none; /* IMPORTANT: Ensures it doesn't block touches */
 }
 .cam-denied {
   position:absolute; bottom:130px; left:16px; right:16px; z-index:400;
@@ -366,10 +372,18 @@ body.cam-denied-show .cam-denied { display:block; }
 .hud-wrong.warn { color:#ffaaaa; }
 .hud-prog  { font-size:10px; font-weight:700; color:rgba(241,228,210,.6); letter-spacing:.07em; }
 
-.bins-top {
-  position:absolute; top:86px; left:0; right:0;
-  display:flex; justify-content:center; gap:20px; padding:0 20px;
+.bins-top { 
+  position: absolute; 
+  top: 86px; 
+  left: 0; 
+  right: 0; 
+  display: flex; 
+  justify-content: center; 
+  gap: 20px; 
+  padding: 0 20px;
+  z-index: 10; /* Lower than item */
 }
+
 .bin-target {
   position:relative; width:130px; height:130px;
   border-radius:12px; overflow:hidden; pointer-events:all;
@@ -386,9 +400,18 @@ body.cam-denied-show .cam-denied { display:block; }
 }
 
 .item-zone {
-  position:absolute; top:240px; left:0; right:0; bottom:100px;
-  display:flex; align-items:center; justify-content:center;
+  position: absolute; 
+  top: 240px; 
+  left: 0; 
+  right: 0; 
+  bottom: 100px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  z-index: 60; /* Higher than bins */
+  pointer-events: none; /* Allows clicks to pass through to the card itself */
 }
+
 .item-card {
   width:110px; height:110px; border-radius:20px;
   background:#fff; border:1.5px solid rgba(43,27,31,.08);
@@ -402,11 +425,12 @@ body.cam-denied-show .cam-denied { display:block; }
   transition: opacity 0.3s ease, transform 0.1s, left 0.1s linear;
   will-change: transform, left, opacity;
 }
-.item-card img { width:70px; height:70px; object-fit:contain; pointer-events:none; filter:drop-shadow(0 4px 8px rgba(43,27,31,.2)); }
+.item-card img { width:70px; height:70px; object-fit:contain; pointer-events:none; filter:drop-shadow(0 4px 8px rgba(43,27,31,.2)); z-index: 70; /* Highest priority */
+  pointer-events: all;}
 .item-card.drag {
   cursor:grabbing;
   box-shadow:0 16px 48px rgba(72,115,84,.35),0 0 0 2px #75C962;
-  z-index:200; transform:scale(1.09) rotate(2deg); transition:none;
+  z-index:1000; transform:scale(1.09) rotate(2deg); transition:none;
 }
 .item-lbl {
   position:absolute; bottom:-28px; left:50%; transform:translateX(-50%);
@@ -419,7 +443,12 @@ body.cam-denied-show .cam-denied { display:block; }
   letter-spacing:.04em; pointer-events:none;
 }
 
-canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
+canvas#traj { 
+  position: absolute; 
+  inset: 0; 
+  pointer-events: none; 
+  z-index: 50; 
+}
 
 .game-toast {
   position:absolute; top:50%; left:50%;
@@ -903,8 +932,14 @@ const $ = id => document.getElementById(id);
 const frame = () => document.querySelector('.phone-screen');
 
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  $(id).classList.add('active');
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none'; // Force hide to prevent z-index bleeding
+  });
+  // Show target screen
+  const target = document.getElementById(id);
+  target.classList.add('active');
+  target.style.display = 'block';
 }
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
