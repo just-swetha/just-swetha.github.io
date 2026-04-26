@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sort It Out — AR Prototype</title>
-<script src="https://cdn.roboflow.com/0.2.26/roboflow.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -812,28 +812,55 @@ function captureFrame(videoEl) {
   return canvas.toDataURL('image/jpeg', 0.9);
 }
 
-const RF_API_KEY   = 'rf_M8Umm1qwd6UD3iBzxJP54S4aSgG3';
-const RF_THRESHOLD  = 0.75;
-const RF_MIN_SIZE   = 0.18; // detected box must span ≥18% of frame width
+const RF_THRESHOLD = 0.75;
+const RF_MIN_SIZE  = 0.18; // detected box must span ≥18% of frame width
+const MODEL_INPUT  = 640;  // model expects 640×640 input
+const MODEL_URL    = './model/model.json';
 
-let rfModel = null;
-roboflow.auth({ publishable_key: RF_API_KEY })
-  .load({ model: 'bin-detection-9heur', version: 1 })
-  .then(m => {
-    m.configure({ threshold: RF_THRESHOLD });
-    rfModel = m;
-    console.log('Roboflow model ready');
-  })
-  .catch(e => console.warn('Roboflow model load failed:', e));
+let tfModel = null;
+tf.loadGraphModel(MODEL_URL)
+  .then(m => { tfModel = m; console.log('TF model ready'); })
+  .catch(e => console.warn('TF model load failed (add model files to AR experience/model/):', e));
 
 async function checkBinInFrame(videoEl) {
-  if (!rfModel) { console.warn('Model not loaded yet'); return null; }
+  if (!tfModel) { console.warn('Model not loaded yet'); return null; }
   if (!videoEl.videoWidth) return null;
   try {
-    const predictions = await rfModel.detect(videoEl);
-    const detected = predictions.some(p => p.bbox.width / videoEl.videoWidth >= RF_MIN_SIZE);
-    console.log(`RF: ${predictions.length} prediction(s), detected=${detected}`,
-      predictions.map(p => `${Math.round(p.confidence*100)}% w=${Math.round(p.bbox.width/videoEl.videoWidth*100)}%`));
+    const input = tf.tidy(() =>
+      tf.browser.fromPixels(videoEl)
+        .resizeBilinear([MODEL_INPUT, MODEL_INPUT])
+        .div(255.0)
+        .expandDims(0) // [1, 640, 640, 3]
+    );
+    const output = await tfModel.executeAsync(input);
+    input.dispose();
+
+    const tensor = Array.isArray(output) ? output[0] : output;
+    const raw = await tensor.array(); // [1, rows, cols] or [1, cols, rows]
+    if (Array.isArray(output)) output.forEach(t => t.dispose()); else output.dispose();
+
+    // raw[0] shape is either [4+classes, num_boxes] or [num_boxes, 4+classes]
+    const data = raw[0];
+    const r = data.length, c = data[0].length;
+    console.log('Output shape:', r, 'x', c);
+
+    let detected = false;
+    if (r < c) {
+      // Standard YOLOv8: [4+classes, num_boxes] — width is row 2, score is row 4
+      for (let i = 0; i < c; i++) {
+        if (data[4][i] >= RF_THRESHOLD && data[2][i] / MODEL_INPUT >= RF_MIN_SIZE) {
+          detected = true; break;
+        }
+      }
+    } else {
+      // Transposed: [num_boxes, 4+classes]
+      for (let i = 0; i < r; i++) {
+        if (data[i][4] >= RF_THRESHOLD && data[i][2] / MODEL_INPUT >= RF_MIN_SIZE) {
+          detected = true; break;
+        }
+      }
+    }
+    console.log(`TF: detected=${detected}`);
     return { detected };
   } catch (e) {
     console.error('checkBinInFrame:', e);
