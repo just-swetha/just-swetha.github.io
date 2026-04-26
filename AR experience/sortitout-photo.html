@@ -351,8 +351,16 @@ body.cam-denied-show .cam-denied { display:block; }
   display:flex; align-items:center; justify-content:center;
   cursor:grab; user-select:none; touch-action:none;
   position:absolute; z-index:60;
-  box-shadow:0 6px 28px rgba(43,27,31,.14),0 0 0 1px rgba(72,115,84,.1);
-  transition:box-shadow .15s, transform .1s; will-change:transform;
+  
+  /* Your existing shadow */
+  box-shadow:0 6px 28px rgba(43,27,31,.14), 0 0 0 1px rgba(72,115,84,.1);
+  
+  /* IMPORTANT: Added opacity and left to the transition list */
+  transition: box-shadow .15s, transform .1s, opacity .3s ease, left .1s linear; 
+  will-change: transform, left, opacity;
+  
+  /* Default to hidden so it only appears when the AR logic finds it */
+  opacity: 0;
 }
 .item-card img { width:70px; height:70px; object-fit:contain; pointer-events:none; filter:drop-shadow(0 4px 8px rgba(43,27,31,.2)); }
 .item-card.drag {
@@ -724,27 +732,70 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
 /* ═══ DATA ════════════════════════════════════════════════ */
 const ITEMS = [
   { name:'Plastic water bottle',   correct:'recycle', img:'bottle.png',
-    fact:'Empty plastic bottles are recyclable in BSU\'s blue bags — rinse them first.' },
+    fact:'Empty plastic bottles are recyclable in BSU\'s blue bags — rinse them first.', bearing: Math.random() * 360 },
   { name:'Aluminum soda can',      correct:'recycle', img:'tin_can.png',
-    fact:'Aluminum cans are accepted at all BSU dining locations. Republic Services picks them up weekly.' },
+    fact:'Aluminum cans are accepted at all BSU dining locations. Republic Services picks them up weekly.', bearing: Math.random() * 360 },
   { name:'Glass kombucha bottle',  correct:'recycle', img:'glass_jar.png',
-    fact:'Glass goes in BSU\'s blue recycling bags. Remove the lid — metal lids go separately.' },
+    fact:'Glass goes in BSU\'s blue recycling bags. Remove the lid — metal lids go separately.', bearing: Math.random() * 360 },
   { name:'Clean cardboard sleeve', correct:'recycle', img:'unused_paper.png',
-    fact:'Clean, dry cardboard is recyclable at Woodworth. Grease or liquid contact means trash.' },
+    fact:'Clean, dry cardboard is recyclable at Woodworth. Grease or liquid contact means trash.', bearing: Math.random() * 360 },
   { name:'Greasy pizza box',       correct:'trash',   img:'pizza_box.png',
-    fact:'Grease contaminates the whole load. This box sends an entire batch to landfill.' },
+    fact:'Grease contaminates the whole load. This box sends an entire batch to landfill.', bearing: Math.random() * 360 },
   { name:'Plastic bag',            correct:'trash',   img:'plastic_bag.png',
-    fact:'Soft plastics jam Republic Services\' sorting machinery. Drop bags at grocery store collection points.' },
+    fact:'Soft plastics jam Republic Services\' sorting machinery. Drop bags at grocery store collection points.', bearing: Math.random() * 360 },
   { name:'Styrofoam to-go cup',    correct:'trash',   img:'styrofoam_cup.png',
-    fact:'Styrofoam is not accepted in BSU blue bags — always landfill at Woodworth.' },
+    fact:'Styrofoam is not accepted in BSU blue bags — always landfill at Woodworth.', bearing: Math.random() * 360 },
   { name:'Used paper napkin',      correct:'trash',   img:'used_napkin.png',
-    fact:'Paper touched by food or liquid is contaminated. It always goes in the trash.' },
+    fact:'Paper touched by food or liquid is contaminated. It always goes in the trash.', bearing: Math.random() * 360 },
 ];
 
 /* ═══ STATE ═══════════════════════════════════════════════ */
 let gScore = 0, gWrong = 0, gIdx = 0, gShuffled = [];
 const capturedBins = {}; // { trash: dataURL, recycle: dataURL } — filled on real detection
 let dragging = false, launching = false;
+/* ═══ AR SCAVENGER HUNT LOGIC ══════════════════════════════ */
+let currentHeading = 0; 
+
+function updateARItemPosition() {
+  const card = $('item-card');
+  if (!card || gIdx >= gShuffled.length || dragging || launching) return;
+
+  const item = gShuffled[gIdx];
+  let diff = item.bearing - currentHeading;
+
+  // Normalize the angle to be between -180 and 180
+  if (diff > 180) diff -= 360;
+  if (diff < -180) diff += 360;
+
+  // Show item if it's within 45 degrees of center
+  if (Math.abs(diff) < 45) {
+    card.style.opacity = "1";
+    card.style.pointerEvents = "all";
+    
+    // Calculate horizontal offset based on phone width (340px)
+    const xOffset = (diff * 5) + 170; 
+    card.style.left = `${xOffset - 53}px`; 
+  } else {
+    card.style.opacity = "0";
+    card.style.pointerEvents = "none";
+  }
+}
+
+async function startARMode() {
+  if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+    try {
+      const permission = await DeviceOrientationEvent.requestPermission();
+      if (permission !== 'granted') return;
+    } catch (e) { console.error(e); }
+  }
+
+  window.addEventListener('deviceorientation', (e) => {
+    currentHeading = e.webkitCompassHeading || (360 - e.alpha);
+    if (!dragging && !launching) {
+      updateARItemPosition();
+    }
+  }, true);
+}
 let itemX = 0, itemY = 0, startX = 0, startY = 0;
 
 const GRAVITY      = 0.1;
@@ -1010,7 +1061,6 @@ function initGame() {
   gShuffled = shuffle([...ITEMS]);
   updateHUD();
 
-  // Replace bin images with photos the player took during scanning
   if (capturedBins.trash) {
     document.querySelector('#bin-trash img').src = capturedBins.trash;
   }
@@ -1021,6 +1071,10 @@ function initGame() {
 
   showScreen('s-game');
   resizeCanvas();
+  
+  // ADD THIS LINE HERE:
+  startARMode(); 
+
   loadItem();
 }
 
@@ -1039,17 +1093,16 @@ function loadItem() {
   $('g-prog').textContent = `${gIdx + 1} of ${gShuffled.length}`;
 
   const card = $('item-card');
-  const c = getItemZoneCenter();
-  itemX = c.x; itemY = c.y;
-  card.style.left = (itemX - 53) + 'px';
-  card.style.top  = (itemY - 53) + 'px';
+  card.style.top = '240px'; 
   card.style.opacity = '0';
   card.style.transform = 'scale(0.7)';
-  card.style.transition = 'opacity .3s, transform .3s';
+  
   requestAnimationFrame(() => {
-    card.style.opacity = '1';
     card.style.transform = 'scale(1)';
+    // The updateARItemPosition function will now handle opacity and left position
+    updateARItemPosition(); 
   });
+  
   card.onpointerdown = startSling;
 }
 
