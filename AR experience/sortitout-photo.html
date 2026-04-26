@@ -308,11 +308,6 @@ body {
   100% { box-shadow: 0 0 0 0 rgba(117, 201, 98, 0); }
 }
 
-/* Ensure other elements are higher */
-#traj { z-index: 2; }
-.bins-top { z-index: 10; }
-.item-zone { z-index: 20; }
-
 .cam-notfound {
   position:absolute; bottom:0; left:0; right:0;
   background:rgba(5,10,10,.94); padding:22px 22px 44px;
@@ -348,8 +343,8 @@ body {
   height: 260px;
   background: #487354;
   border-radius: 0 0 55% 55% / 0 0 38% 38%;
-  z-index: 0; /* Send to the very back */
-  pointer-events: none !important; /* Allow touches to pass through */
+  z-index: 2; /* CHANGED FROM 0 TO 2 */
+  pointer-events: none !important; 
 }
 .cam-denied {
   position:absolute; bottom:130px; left:16px; right:16px; z-index:400;
@@ -427,8 +422,13 @@ body.cam-denied-show .cam-denied { display:block; }
   transition: opacity 0.3s ease, transform 0.1s, left 0.1s linear;
   will-change: transform, left, opacity;
 }
-.item-card img { width:70px; height:70px; object-fit:contain; pointer-events:none; filter:drop-shadow(0 4px 8px rgba(43,27,31,.2)); z-index: 70; /* Highest priority */
-  pointer-events: all;}
+.item-card img { 
+  width:70px; 
+  height:70px; 
+  object-fit:contain; 
+  filter:drop-shadow(0 4px 8px rgba(43,27,31,.2)); 
+  pointer-events:none; /* Keeps the browser from stealing the drag */
+}
 .item-card.drag {
   cursor:grabbing;
   box-shadow:0 16px 48px rgba(72,115,84,.35),0 0 0 2px #75C962;
@@ -691,14 +691,9 @@ canvas#traj {
       </div>
 
   <div class="screen" id="s-game">
-    <div id="game-status-bar" class="game-status-bar">
-  <span id="status-icon">🔍</span>
-  <span id="status-text">Pivot your phone to find the trash</span>
-    </div>
   <video id="game-cam" class="cam-live" autoplay playsinline muted></video>
   <div class="game-bg"></div>
   <div class="cam-denied">📷 Camera access was denied — playing in standard mode. To enable AR, allow camera in your browser settings and reload.</div>
-  
   <canvas id="traj"></canvas>
   
   <div class="sb">
@@ -714,13 +709,34 @@ canvas#traj {
 
   <div class="bins-top">
     <div class="bin-target" id="bin-recycle">
-      <img src="bin-recycle.jpg">
+      <img src="bin-recycle.jpg" alt="Recycle">
+      <div class="bin-arc">
+        <svg viewBox="0 0 130 130" fill="none">
+          <path d="M4 20L4 4L20 4" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+          <path d="M110 4L126 4L126 20" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+          <path d="M4 110L4 126L20 126" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+          <path d="M110 126L126 126L126 110" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
       <div class="bin-tag">Recycle</div>
     </div>
     <div class="bin-target" id="bin-trash">
-      <img src="bin-trash.jpg">
+      <img src="bin-trash.jpg" alt="Trash">
+      <div class="bin-arc">
+        <svg viewBox="0 0 130 130" fill="none">
+          <path d="M4 20L4 4L20 4" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+          <path d="M110 4L126 4L126 20" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+          <path d="M4 110L4 126L20 126" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+          <path d="M110 126L126 126L126 110" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
       <div class="bin-tag">Trash</div>
     </div>
+  </div>
+
+  <div id="game-status-bar" class="game-status-bar">
+    <span id="status-icon">🔍</span>
+    <span id="status-text">Pivot your phone to find the trash</span>
   </div>
 
   <div class="item-zone" id="item-zone">
@@ -735,72 +751,6 @@ canvas#traj {
     <div class="toast-fact" id="toast-f"></div>
   </div>
 </div>
-
-        <div class="bins-top">
-          <div class="bin-target" id="bin-trash">
-            <img src="bin-trash.jpg" alt="Trash">
-            <div class="bin-arc">
-              <svg viewBox="0 0 130 130" fill="none">
-                <path d="M4 20L4 4L20 4" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
-                <path d="M110 4L126 4L126 20" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
-                <path d="M4 110L4 126L20 126" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
-                <path d="M110 126L126 126L126 110" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="bin-tag">🗑️ Trash</div>
-          </div>
-          <div class="bin-target" id="bin-recycle">
-            <img src="bin-recycle.jpg" alt="Recycling">
-            <div class="bin-arc">
-              <svg viewBox="0 0 130 130" fill="none">
-                <path d="M4 20L4 4L20 4" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
-                <path d="M110 4L126 4L126 20" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
-                <path d="M4 110L4 126L20 126" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
-                <path d="M110 126L126 126L126 110" stroke="#75C962" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="bin-tag">♻️ Recycling</div>
-          </div>
-        </div>
-
-        <div class="item-zone" id="item-zone"></div>
-        <div id="item-card" class="item-card">
-          <img id="item-img" src="" alt="">
-          <div class="item-lbl" id="item-lbl"></div>
-        </div>
-        <div class="drag-hint">↑ Drag item to the correct bin above</div>
-
-        <div class="game-toast" id="game-toast">
-          <div class="toast-r" id="toast-r"></div>
-          <div class="toast-f" id="toast-f"></div>
-        </div>
-      </div>
-
-      <div class="screen" id="s-success">
-        <div class="blob-shape"></div>
-        <div class="sb"><span class="sb-time">9:41</span></div>
-        <div class="succ-body">
-          <div class="succ-icon">✅</div>
-          <div class="succ-title">Challenge Complete! You sorted with minimal contamination.</div>
-          <div class="succ-stat">
-            <span class="succ-pct" id="succ-pct">0%</span>
-            <span class="succ-pct-lbl">contamination rate</span>
-          </div>
-          <div class="succ-divider"></div>
-          <div class="succ-recycle-lbl">These items can be recycled here:</div>
-          <div class="succ-items">
-            <div class="succ-item"><img src="bottle.png" alt=""><span>Plastic bottle</span></div>
-            <div class="succ-item"><img src="tin_can.png" alt=""><span>Soda can</span></div>
-            <div class="succ-item"><img src="glass_jar.png" alt=""><span>Glass bottle</span></div>
-            <div class="succ-item"><img src="unused_paper.png" alt=""><span>Cardboard</span></div>
-          </div>
-          <div class="succ-bin-img">
-            <img src="bin-recycle.jpg" alt="Recycling bin">
-            <div class="succ-bin-cap">BSU Blue Recycling Bag</div>
-          </div>
-          <button class="btn-watch" onclick="startVideo()">See where it goes →</button>
-        </div>
-      </div>
 
       <div class="screen" id="s-fail">
         <div class="sb"><span class="sb-time">9:41</span></div>
@@ -1255,12 +1205,24 @@ function getItemZoneCenter() {
   };
 }
 
+// Remove getItemZoneCenter() from these functions and use the AR coordinates
+
+// We need to capture the exact starting X and Y of the item when we touch it
+let startItemX = 0; 
+let startItemY = 0;
+
 function startSling(e) {
   if ($('game-toast').classList.contains('show')) return;
   if (launching) return;
   e.preventDefault();
   dragging = true;
-  startX = e.clientX; startY = e.clientY;
+  startX = e.clientX; 
+  startY = e.clientY;
+  
+  // Capture where the AR logic placed the item
+  startItemX = itemX; 
+  startItemY = itemY;
+
   const card = $('item-card');
   card.style.transition = 'none';
   card.classList.add('drag');
@@ -1270,17 +1232,21 @@ function startSling(e) {
 }
 
 function onPull(clientX, clientY) {
-  const c = getItemZoneCenter();
-  itemX = c.x + (clientX - startX);
-  itemY = c.y + (clientY - startY);
+  // Move relative to where the AR object was placed
+  itemX = startItemX + (clientX - startX);
+  itemY = startItemY + (clientY - startY);
+
   const card = $('item-card');
   card.style.left = (itemX - 53) + 'px';
   card.style.top  = (itemY - 53) + 'px';
-  let vx = (c.x - itemX) * LAUNCH_SCALE;
-  let vy = (c.y - itemY) * LAUNCH_SCALE;
+
+  // Trajectory math
+  let vx = (startItemX - itemX) * LAUNCH_SCALE;
+  let vy = (startItemY - itemY) * LAUNCH_SCALE;
   const spd = Math.sqrt(vx * vx + vy * vy);
   if (spd > 11) { vx = vx / spd * 11; vy = vy / spd * 11; }
-  drawSlingshot(itemX, itemY, vx, vy, c.x, c.y);
+  
+  drawSlingshot(itemX, itemY, vx, vy, startItemX, startItemY);
 }
 
 function onRelease() {
@@ -1290,11 +1256,13 @@ function onRelease() {
   card.classList.remove('drag');
   card.onpointermove = card.onpointerup = card.onpointercancel = null;
   clearArc();
-  const c = getItemZoneCenter();
-  const pullDist = Math.sqrt((c.x - itemX) ** 2 + (c.y - itemY) ** 2);
+  
+  // Check how far it was pulled from its AR anchor
+  const pullDist = Math.sqrt((startItemX - itemX) ** 2 + (startItemY - itemY) ** 2);
   if (pullDist < MIN_PULL) { resetItemPos(); return; }
-  let vx = (c.x - itemX) * LAUNCH_SCALE;
-  let vy = (c.y - itemY) * LAUNCH_SCALE;
+  
+  let vx = (startItemX - itemX) * LAUNCH_SCALE;
+  let vy = (startItemY - itemY) * LAUNCH_SCALE;
   const spd = Math.sqrt(vx * vx + vy * vy);
   if (spd > 11) { vx = vx / spd * 11; vy = vy / spd * 11; }
   launching = true;
@@ -1303,8 +1271,10 @@ function onRelease() {
 }
 
 function resetItemPos() {
-  const c = getItemZoneCenter();
-  itemX = c.x; itemY = c.y;
+  // Return to the AR coordinates, not the center of the screen
+  itemX = startItemX; 
+  itemY = startItemY;
+  
   const card = $('item-card');
   card.style.transition = 'left .4s cubic-bezier(.34,1.56,.64,1), top .4s cubic-bezier(.34,1.56,.64,1), transform .4s';
   card.style.left = (itemX - 53) + 'px';
