@@ -841,8 +841,9 @@ const ITEMS = [
 /* ═══ STATE ═══════════════════════════════════════════════ */
 let gScore = 0, gWrong = 0, gIdx = 0, gShuffled = [];
 let currentHeading = 0;
+let currentTilt = 90; // beta from deviceorientation; 90 = phone upright
 let arActive = false, arOrientationReceived = false, arFallback = false;
-let itemX = 170, itemY = 320;
+let itemX = 170, itemY = 320, itemYBase = 320;
 let itemVisible = false;
 let itemBearings = [];
 const capturedBins = {};
@@ -876,20 +877,32 @@ function updateARItemPosition() {
   if (!card || dragging || launching) return;
   if (!gShuffled.length || gIdx >= gShuffled.length) return;
 
+  // ── Perspective from tilt ──────────────────────────────────
+  // beta ≈ 90 when phone upright; increases toward 180 as phone tilts toward floor
+  // tilt=0  → mid-screen, full size
+  // tilt=60 → lower on screen, ~62% size (looks like it's on the floor farther away)
+  const tilt = Math.max(-20, Math.min(60, currentTilt - 90));
+  itemY = itemYBase + (tilt / 60) * 150;
+  const perspScale = Math.max(0.62, 1.0 - (Math.max(0, tilt) / 60) * 0.38);
+  const shadowOffset = Math.round(6  * perspScale);
+  const shadowBlur   = Math.round(28 * perspScale);
+  card.style.top       = (itemY - 55) + 'px';
+  card.style.boxShadow = `0 ${shadowOffset}px ${shadowBlur}px rgba(43,27,31,${(0.18 * perspScale).toFixed(2)})`;
+
   const bearing = itemBearings[gIdx];
 
-  // Fallback: no orientation data — show item at centre so game is still playable
+  // ── Fallback: no orientation data ─────────────────────────
   if (arFallback) {
     if (!itemVisible) {
       itemVisible = true;
       if (navigator.vibrate) navigator.vibrate(80);
       playPing();
     }
-    card.style.opacity = '1';
-    card.style.transform = 'scale(1)';
-    card.style.pointerEvents = 'all';
     itemX = 170;
-    card.style.left = (itemX - 53) + 'px';
+    card.style.left          = (itemX - 53) + 'px';
+    card.style.opacity       = '1';
+    card.style.transform     = `scale(${perspScale})`;
+    card.style.pointerEvents = 'all';
     if (bar)   { bar.style.borderColor = '#75C962'; bar.classList.remove('status-pulse'); }
     if (sText) sText.textContent = 'Flick the item into a bin!';
     if (sIcon) sIcon.textContent = '☝️';
@@ -902,27 +915,27 @@ function updateARItemPosition() {
   if (diff < -180) diff += 360;
 
   if (Math.abs(diff) < 40) {
-    // Item is in view
+    // ── Item in view ────────────────────────────────────────
     if (!itemVisible) {
       itemVisible = true;
       if (navigator.vibrate) navigator.vibrate(80);
       playPing();
     }
     itemX = 170 + (diff * 7);
-    card.style.left      = (itemX - 53) + 'px';
-    card.style.opacity   = '1';
-    card.style.transform = 'scale(1)';
+    card.style.left          = (itemX - 53) + 'px';
+    card.style.opacity       = '1';
+    card.style.transform     = `scale(${perspScale})`;
     card.style.pointerEvents = 'all';
     if (bar)   { bar.style.borderColor = '#75C962'; bar.classList.remove('status-pulse'); }
     if (sText) sText.textContent = 'Found it! Flick into a bin!';
     if (sIcon) sIcon.textContent = '☝️';
     if (radar) radar.classList.remove('show');
   } else {
-    // Item out of view — keep left updated for smooth re-entry, stay hidden
+    // ── Item out of view ────────────────────────────────────
     if (itemVisible) itemVisible = false;
     const hiddenX = 170 + (diff * 7);
-    card.style.left      = (Math.max(0, Math.min(280, hiddenX - 53))) + 'px';
-    card.style.opacity   = '0';
+    card.style.left          = (Math.max(0, Math.min(280, hiddenX - 53))) + 'px';
+    card.style.opacity       = '0';
     card.style.pointerEvents = 'none';
     if (bar)   { bar.style.borderColor = 'rgba(255,255,255,0.1)'; bar.classList.add('status-pulse'); }
     if (sIcon) sIcon.textContent = '🔍';
@@ -969,6 +982,7 @@ async function startARMode() {
     } else if (e.alpha !== undefined) {
       currentHeading = 360 - e.alpha;
     }
+    if (e.beta !== null && e.beta !== undefined) currentTilt = e.beta;
     if (!dragging && !launching) updateARItemPosition();
   }, true);
 }
@@ -1285,8 +1299,7 @@ function loadItem() {
 
   const card = $('item-card');
   itemVisible = false;
-  itemY = 250 + Math.floor(Math.random() * 120); // 250–370px, varies per item
-  card.style.top       = (itemY - 55) + 'px';
+  itemYBase = 300 + Math.floor(Math.random() * 50); // slight per-item variation; tilt adjusts on top
   card.style.opacity   = '0';
   card.style.transform = 'scale(0.7)';
   card.onpointerdown   = startSling;
