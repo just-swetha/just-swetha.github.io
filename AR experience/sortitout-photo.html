@@ -268,6 +268,50 @@ body {
   border-radius:100px; padding:4px 12px; font-size:10px; font-weight:700;
   color:rgba(117,201,98,.9); white-space:nowrap; z-index:60;
 }
+#game-cam {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1; /* Lowest layer */
+}
+
+.game-status-bar {
+  position: absolute;
+  bottom: 40px;
+  left: 20px;
+  right: 20px;
+  height: 50px;
+  background: rgba(43, 27, 31, 0.85);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #F1E4D2;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 110;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* A pulsing animation to draw attention when they are lost */
+.status-pulse {
+  animation: status-glow 2s infinite;
+}
+
+@keyframes status-glow {
+  0% { box-shadow: 0 0 0 0 rgba(117, 201, 98, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(117, 201, 98, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(117, 201, 98, 0); }
+}
+
+/* Ensure other elements are higher */
+#traj { z-index: 2; }
+.bins-top { z-index: 10; }
+.item-zone { z-index: 20; }
 
 .cam-notfound {
   position:absolute; bottom:0; left:0; right:0;
@@ -351,16 +395,12 @@ body.cam-denied-show .cam-denied { display:block; }
   display:flex; align-items:center; justify-content:center;
   cursor:grab; user-select:none; touch-action:none;
   position:absolute; z-index:60;
+  box-shadow:0 6px 28px rgba(43,27,31,.14);
   
-  /* Your existing shadow */
-  box-shadow:0 6px 28px rgba(43,27,31,.14), 0 0 0 1px rgba(72,115,84,.1);
-  
-  /* IMPORTANT: Added opacity and left to the transition list */
-  transition: box-shadow .15s, transform .1s, opacity .3s ease, left .1s linear; 
+  /* ADD THESE: */
+  opacity: 0; 
+  transition: opacity 0.3s ease, transform 0.1s, left 0.1s linear;
   will-change: transform, left, opacity;
-  
-  /* Default to hidden so it only appears when the AR logic finds it */
-  opacity: 0;
 }
 .item-card img { width:70px; height:70px; object-fit:contain; pointer-events:none; filter:drop-shadow(0 4px 8px rgba(43,27,31,.2)); }
 .item-card.drag {
@@ -619,19 +659,51 @@ canvas#traj { position:absolute; inset:0; pointer-events:none; z-index:50; }
         </div>
       </div>
 
-      <div class="screen" id="s-game">
-        <div class="game-bg"></div>
-        <div class="cam-denied">📷 Camera access was denied — playing in standard mode. To enable AR, allow camera in your browser settings and reload.</div>
-        <canvas id="traj"></canvas>
-        <div class="sb">
-          <span class="sb-time">9:41</span>
-          <span style="font-size:9px;font-weight:700;color:#75C962;letter-spacing:.08em">AR SORT</span>
-        </div>
-        <div class="game-hud">
-          <div class="hud-chip hud-ok">✓ <span id="g-ok">0</span></div>
-          <div class="hud-prog" id="g-prog">1 of 8</div>
-          <div class="hud-chip hud-wrong" id="g-wrong-chip">⚠ <span id="g-wr">0</span> contaminated</div>
-        </div>
+  <div class="screen" id="s-game">
+    <div id="game-status-bar" class="game-status-bar">
+  <span id="status-icon">🔍</span>
+  <span id="status-text">Pivot your phone to find the trash</span>
+    </div>
+  <video id="game-cam" class="cam-live" autoplay playsinline muted></video>
+  <div class="game-bg"></div>
+  <div class="cam-denied">📷 Camera access was denied — playing in standard mode. To enable AR, allow camera in your browser settings and reload.</div>
+  
+  <canvas id="traj"></canvas>
+  
+  <div class="sb">
+    <span class="sb-time">9:41</span>
+    <span style="font-size:9px;font-weight:700;color:#75C962;letter-spacing:.08em">AR SORT</span>
+  </div>
+
+  <div class="game-hud">
+    <div class="hud-chip hud-ok">✓ <span id="g-ok">0</span></div>
+    <div class="hud-prog" id="g-prog">1 of 8</div>
+    <div class="hud-chip hud-wrong" id="g-wrong-chip">⚠ <span id="g-wr">0</span> contaminated</div>
+  </div>
+
+  <div class="bins-top">
+    <div class="bin-target" id="bin-recycle">
+      <img src="bin-recycle.jpg">
+      <div class="bin-tag">Recycle</div>
+    </div>
+    <div class="bin-target" id="bin-trash">
+      <img src="bin-trash.jpg">
+      <div class="bin-tag">Trash</div>
+    </div>
+  </div>
+
+  <div class="item-zone" id="item-zone">
+    <div id="item-card" class="item-card">
+      <img id="item-img" src="">
+      <div class="item-lbl" id="item-lbl"></div>
+    </div>
+  </div>
+
+  <div class="game-toast" id="game-toast">
+    <div class="toast-res" id="toast-r"></div>
+    <div class="toast-fact" id="toast-f"></div>
+  </div>
+</div>
 
         <div class="bins-top">
           <div class="bin-target" id="bin-trash">
@@ -758,31 +830,52 @@ let currentHeading = 0;
 
 function updateARItemPosition() {
   const card = $('item-card');
-  if (!card || gIdx >= gShuffled.length || dragging || launching) return;
+  const bar = $('game-status-bar');
+  const sText = $('status-text');
+  const sIcon = $('status-icon');
+  
+  if (!card || dragging || launching) return;
 
   const item = gShuffled[gIdx];
   let diff = item.bearing - currentHeading;
 
-  // Normalize the angle to be between -180 and 180
   if (diff > 180) diff -= 360;
   if (diff < -180) diff += 360;
 
-  // Show item if it's within 45 degrees of center
-  if (Math.abs(diff) < 45) {
+  if (Math.abs(diff) < 40) {
+    // ITEM IS VISIBLE
     card.style.opacity = "1";
     card.style.pointerEvents = "all";
     
-    // Calculate horizontal offset based on phone width (340px)
-    const xOffset = (diff * 5) + 170; 
-    card.style.left = `${xOffset - 53}px`; 
+    itemX = 170 + (diff * 7); 
+    card.style.left = (itemX - 55) + 'px';
+
+    // Update Status Bar to "Action Mode"
+    bar.style.borderColor = "#75C962";
+    sText.textContent = "Trash Found! Flick it into a bin!";
+    sIcon.textContent = "☝️";
+    bar.classList.remove('status-pulse');
   } else {
+    // ITEM IS HIDDEN
     card.style.opacity = "0";
     card.style.pointerEvents = "none";
+    
+    // Update Status Bar to "Search Mode"
+    bar.style.borderColor = "rgba(255,255,255,0.1)";
+    bar.classList.add('status-pulse');
+    sIcon.textContent = "🔍";
+    
+    if (diff > 0) {
+      sText.textContent = "Scan to the Right →";
+    } else {
+      sText.textContent = "← Scan to the Left";
+    }
   }
 }
 
 async function startARMode() {
-  if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+  // iOS permission check
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
     try {
       const permission = await DeviceOrientationEvent.requestPermission();
       if (permission !== 'granted') return;
@@ -790,7 +883,10 @@ async function startARMode() {
   }
 
   window.addEventListener('deviceorientation', (e) => {
+    // CurrentHeading is global, so updateARItemPosition can see it
     currentHeading = e.webkitCompassHeading || (360 - e.alpha);
+    
+    // Only move the item if the user isn't currently dragging it to a bin
     if (!dragging && !launching) {
       updateARItemPosition();
     }
@@ -1072,9 +1168,16 @@ function initGame() {
   showScreen('s-game');
   resizeCanvas();
   
-  // ADD THIS LINE HERE:
-  startARMode(); 
+  
+  const bar = $('game-status-bar');
+  bar.style.transform = "translateY(100px)"; // Start off-screen
+  
+  setTimeout(() => {
+    bar.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+    bar.style.transform = "translateY(0)"; // Pop up
+  }, 1000);
 
+  startARMode(); 
   loadItem();
 }
 
@@ -1093,17 +1196,17 @@ function loadItem() {
   $('g-prog').textContent = `${gIdx + 1} of ${gShuffled.length}`;
 
   const card = $('item-card');
-  card.style.top = '240px'; 
+  
+  // Set the vertical height (320px is roughly the middle of the screen)
+  itemY = 320; 
+  card.style.top = (itemY - 55) + 'px';
+  
+  // Set initial state
   card.style.opacity = '0';
   card.style.transform = 'scale(0.7)';
-  
-  requestAnimationFrame(() => {
-    card.style.transform = 'scale(1)';
-    // The updateARItemPosition function will now handle opacity and left position
-    updateARItemPosition(); 
-  });
-  
-  card.onpointerdown = startSling;
+
+  // Let the AR logic take over for the horizontal (left) position
+  updateARItemPosition();
 }
 
 /* ═══ SLINGSHOT ═══════════════════════════════════════════ */
