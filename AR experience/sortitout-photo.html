@@ -804,64 +804,90 @@ const ITEMS = [
 
 /* ═══ STATE ═══════════════════════════════════════════════ */
 let gScore = 0, gWrong = 0, gIdx = 0, gShuffled = [];
+let currentHeading = 0; // Tracks which way the phone is pointing
+let arActive = false;   // Prevents starting the sensors twice
+let itemX = 170;        // Stores the horizontal position of the trash
+let itemY = 320;        // Stores the vertical position of the trash
 const capturedBins = {}; // { trash: dataURL, recycle: dataURL } — filled on real detection
 let dragging = false, launching = false;
 /* ═══ AR SCAVENGER HUNT LOGIC ══════════════════════════════ */
 let currentHeading = 0; 
 
 function updateARItemPosition() {
-  const card = $('item-card');
-  const bar = $('game-status-bar');
-  const sText = $('status-text');
-  const sIcon = $('status-icon');
+  const card = document.getElementById('item-card');
+  const bar = document.getElementById('game-status-bar');
+  const sText = document.getElementById('status-text');
+  const sIcon = document.getElementById('status-icon');
   
   if (!card || dragging || launching) return;
 
   const item = gShuffled[gIdx];
+  // Calculate the difference between where the item is and where the phone is pointing
   let diff = item.bearing - currentHeading;
 
   if (diff > 180) diff -= 360;
   if (diff < -180) diff += 360;
 
   if (Math.abs(diff) < 40) {
-    // ITEM IS VISIBLE
+    // ITEM IS IN VIEW
     card.style.opacity = "1";
     card.style.pointerEvents = "all";
     
     itemX = 170 + (diff * 7); 
-    card.style.left = (itemX - 55) + 'px';
+    card.style.left = (itemX - 53) + 'px'; // 53 is half of your 106px card width
 
-    // Update Status Bar to "Action Mode"
-    bar.style.borderColor = "#75C962";
-    sText.textContent = "Trash Found! Flick it into a bin!";
-    sIcon.textContent = "☝️";
-    bar.classList.remove('status-pulse');
+    if (bar && sText && sIcon) {
+      bar.style.borderColor = "#75C962";
+      sText.textContent = "Trash Found! Flick it into a bin!";
+      sIcon.textContent = "☝️";
+      bar.classList.remove('status-pulse');
+    }
   } else {
     // ITEM IS HIDDEN
     card.style.opacity = "0";
     card.style.pointerEvents = "none";
     
-    // Update Status Bar to "Search Mode"
-    bar.style.borderColor = "rgba(255,255,255,0.1)";
-    bar.classList.add('status-pulse');
-    sIcon.textContent = "🔍";
-    
-    if (diff > 0) {
-      sText.textContent = "Scan to the Right →";
-    } else {
-      sText.textContent = "← Scan to the Left";
+    if (bar && sText && sIcon) {
+      bar.style.borderColor = "rgba(255,255,255,0.1)";
+      bar.classList.add('status-pulse');
+      sIcon.textContent = "🔍";
+      sText.textContent = (diff > 0) ? "Scan to the Right →" : "← Scan to the Left";
     }
   }
 }
 
 async function startARMode() {
-  // iOS permission check
-  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+  if (arActive) return; // Don't start it multiple times
+
+  // 1. Check if the device requires explicit permission (iOS 13+ requires this)
+  if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
     try {
       const permission = await DeviceOrientationEvent.requestPermission();
-      if (permission !== 'granted') return;
-    } catch (e) { console.error(e); }
+      if (permission !== 'granted') {
+        alert("Permission to use device orientation was denied. AR mode won't work.");
+        return;
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
+
+  // 2. Activate the sensors
+  arActive = true;
+  window.addEventListener('deviceorientation', (e) => {
+    // Apple uses webkitCompassHeading, Android uses alpha
+    if (e.webkitCompassHeading) {
+      currentHeading = e.webkitCompassHeading;
+    } else if (e.alpha) {
+      currentHeading = 360 - e.alpha; 
+    }
+
+    // 3. Move the trash based on the new heading (only if we aren't currently touching it)
+    if (!dragging && !launching) {
+      updateARItemPosition();
+    }
+  }, true);
+}
 
   window.addEventListener('deviceorientation', (e) => {
     // CurrentHeading is global, so updateARItemPosition can see it
