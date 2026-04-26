@@ -269,6 +269,16 @@
     }
     .cs-callout p:last-child { margin-bottom: 0; }
 
+    .cs-sub-title {
+      font-size: 1.1rem; font-weight: 700; color: var(--navy);
+      margin: 2.5rem 0 0.75rem; letter-spacing: -0.01em;
+    }
+    .cs-list {
+      margin: 0.75rem 0 1.25rem 1.25rem;
+      color: rgba(26,26,46,0.75); line-height: 1.75; font-size: 1rem;
+    }
+    .cs-list li { margin-bottom: 0.4rem; }
+
     /* Research findings grid */
     .findings-grid {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -740,7 +750,7 @@
           </div>
 
           <div class="cs-pull">
-            <p>"Students broadly knew recycling mattered. They did not know, at the moment of holding something over a bin, what Ball State's specific rules were — and existing infrastructure wasn't telling them."</p>
+            <p>"Students broadly knew recycling mattered. They did not know, at the moment of holding something over a bin, what Ball State's specific rules were, and existing infrastructure wasn't telling them."</p>
           </div>
 
           <p>The synthesis: recycling at Ball State is not a logistical problem or an awareness problem. It is a narrative coherence problem. The institutional story of sustainability does not connect, at the moment of disposal, to the student standing over a bin with a greasy cup.</p>
@@ -790,7 +800,7 @@
                 </tr>
                 <tr>
                   <td>Part of a larger storyworld</td>
-                  <td>Sort It Out is one node in a transmedia documentary campaign — the physical touchpoint connecting digital and real-world layers.</td>
+                  <td>Sort It Out is one node in a transmedia documentary campaign: the physical touchpoint connecting digital and real-world layers.</td>
                 </tr>
               </tbody>
             </table>
@@ -811,7 +821,7 @@
         </div>
         <h2 class="cs-section-title">Sort It Out as one node<br><em>in a larger storyworld</em></h2>
         <div class="cs-body">
-          <p>The project is structured as a transmedia campaign. Sort It Out is the spatial node — the only component that can intercept a student at the physical bin.</p>
+          <p>The project is structured as a transmedia campaign. Sort It Out is the spatial node, the only component that can intercept a student at the physical bin.</p>
 
           <div class="cs-table-wrap">
             <p class="cs-table-label">▸ THE FULL TRANSMEDIA SYSTEM</p>
@@ -854,7 +864,7 @@
               <span class="loop-n">01</span>
               <div class="loop-content">
                 <strong>Scan the QR code on the bin</strong>
-                <p>A location-specific splash screen appears: "You're at Woodworth — let's see what ends up here."</p>
+                <p>A location-specific splash screen appears: "You're at Woodworth. Let's see what ends up here."</p>
               </div>
             </div>
             <div class="loop-step">
@@ -911,7 +921,7 @@
               <iframe
                 src="AR experience/sortitout.html"
                 allow="fullscreen"
-                title="Sort It Out: BSU Recycling Game — Prototype 1">
+                title="Sort It Out: BSU Recycling Game, Prototype 1">
               </iframe>
             </div>
             <div class="cs-embed-mobile">
@@ -921,7 +931,7 @@
             <a href="AR experience/sortitout.html" target="_blank" rel="noopener" class="cs-embed-link">
               Open full screen ↗
             </a>
-            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">This prototype illustrates the core sorting mechanic: students slingshot waste items toward the correct bin — trash or recycling — to sort their tray.</p>
+            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">This prototype illustrates the core sorting mechanic: students slingshot waste items toward the correct bin (trash or recycling) to sort their tray.</p>
           </div>
 
           <div class="cs-embed">
@@ -934,7 +944,7 @@
                 src="AR experience/sortitout-photo.html"
                 allow="fullscreen"
                 style="height:820px"
-                title="Sort It Out: BSU Recycling Game — Prototype 2 Photo AR">
+                title="Sort It Out: BSU Recycling Game, Prototype 2 Photo AR">
               </iframe>
             </div>
             <div class="cs-embed-mobile">
@@ -944,8 +954,18 @@
             <a href="AR experience/sortitout-photo.html" target="_blank" rel="noopener" class="cs-embed-link">
               Open full screen ↗
             </a>
-            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">This prototype shows how the physical bins are scanned and identified before being brought into the game, with a video reward at the end — footage of Ball State's recycling truck and sorting facility — reasserting that the recycling students do here actually goes somewhere.</p>
+            <p style="padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: rgba(26,26,46,0.55); line-height: 1.6; margin: 0;">This prototype shows how the physical bins are scanned and identified before being brought into the game, with a video reward at the end: footage of Ball State's recycling truck and sorting facility, reasserting that the recycling students do here actually goes somewhere.</p>
           </div>
+
+          <h3 class="cs-sub-title">Computer vision</h3>
+          <p>The bin detection in Prototype 2 is powered by a custom image classifier trained entirely in the browser using Google Teachable Machine, with no server-side inference or ongoing API costs.</p>
+          <p>Training data was sourced from Roboflow's open dataset library. The final model was trained on two classes:</p>
+          <ul class="cs-list">
+            <li><strong>Bin:</strong> 590 images of trash and recycling receptacles across varied angles, distances, and lighting conditions</li>
+            <li><strong>Not Bin:</strong> 1,049 images drawn from buildings, hallways, and people, to reduce false positives in real campus environments</li>
+          </ul>
+          <p>The model was trained for 80 epochs, optimising for accuracy. The exported TensorFlow.js weights are loaded directly in the browser. Once downloaded on first visit, all inference runs locally on the device with no network calls required per detection.</p>
+          <p>When a user points their camera at a bin, the classifier runs every two seconds and reports confidence scores for each class. A detection is confirmed when the "Bin" probability clears a 75% threshold, at which point the game captures a photo of that bin and replaces the static placeholder image with the player's actual environment.</p>
         </div>
       </section>
 
@@ -995,17 +1015,17 @@
         <h2 class="cs-section-title">What changed, and<br><em>what still needs to.</em></h2>
         <div class="cs-body">
 
-          <p>The hardest design problem in Sort It Out is not the recycling taxonomy. It is finding the balance between flow state, convenience, and education — three things that pull against each other. Push too hard on education and the game feels like a quiz at the worst possible moment. Optimise entirely for flow and students complete a round without retaining anything that changes their next disposal decision. The sorting mechanic lives in the tension between those two failure modes.</p>
+          <p>The hardest design problem in Sort It Out is not the recycling taxonomy. It is finding the balance between flow state, convenience, and education: three things that pull against each other. Push too hard on education and the game feels like a quiz at the worst possible moment. Optimise entirely for flow and students complete a round without retaining anything that changes their next disposal decision. The sorting mechanic lives in the tension between those two failure modes.</p>
 
-          <p>The first prototype solved the mechanism. It demonstrated that the slingshot sort interaction was legible and fast enough to work in a standing, between-class moment. What it did not do was connect the action to consequence — a student could sort eight items correctly and leave having played a game, without feeling that anything was at stake beyond the score.</p>
+          <p>The first prototype solved the mechanism. It demonstrated that the slingshot sort interaction was legible and fast enough to work in a standing, between-class moment. What it did not do was connect the action to consequence. A student could sort eight items correctly and leave having played a game, without feeling that anything was at stake beyond the score.</p>
 
-          <p>Professor feedback named the gap precisely: the game needed to mean something beyond itself, and that meaning had to come from the transmedia system it belongs to. The video reward — a short documentary clip showing where a sorted item actually goes — was the response to that note. It transforms completion from a win screen into an entry point into the campaign's larger story. The sort earns the story; the story earns the next sort.</p>
+          <p>Professor feedback named the gap precisely: the game needed to mean something beyond itself, and that meaning had to come from the transmedia system it belongs to. The video reward, a short documentary clip showing where a sorted item actually goes, was the response to that note. It transforms completion from a win screen into an entry point into the campaign's larger story. The sort earns the story; the story earns the next sort.</p>
 
           <div class="cs-callout">
             <p class="cs-callout-label">▸ WHAT THE NEXT ITERATION ADDRESSES</p>
-            <p><strong>Location specificity.</strong> The current prototype runs the same eight items at every bin. The next version differentiates by location — Woodworth sees different waste patterns than DeHority, and the game's item set should reflect that. Location-specific data from facilities and observation will inform which items are most likely to be misorted at each site, making the intervention more accurate and the narrative more grounded in that specific student's context.</p>
-            <p><strong>Semester-long sustain.</strong> A single play session is not enough to shift a habit. The leaderboard, stamp map, and rotating item sets are designed to bring students back across the semester. The next design challenge is pacing that re-engagement — knowing when to introduce new content, when to raise stakes, and how to keep the experience feeling fresh without demanding too much from a student who has two minutes at a bin.</p>
-            <p><strong>A more specific user.</strong> The current design targets a tech-savvy Ball State student — broad enough to be safe, narrow enough to be meaningless. The next iteration requires a real persona: not a demographic average, but a specific student navigating a specific moment. A junior commuter between classes is a different user than a freshman in the dining hall with time to kill. Each has a different threshold for friction, a different relationship to the leaderboard, and a different reason to care. Designing for both requires choosing which one to prioritise first.</p>
+            <p><strong>Location specificity.</strong> The current prototype runs the same eight items at every bin. The next version differentiates by location. Woodworth sees different waste patterns than DeHority, and the game's item set should reflect that. Location-specific data from facilities and observation will inform which items are most likely to be misorted at each site, making the intervention more accurate and the narrative more grounded in that specific student's context.</p>
+            <p><strong>Semester-long sustain.</strong> A single play session is not enough to shift a habit. The leaderboard, stamp map, and rotating item sets are designed to bring students back across the semester. The next design challenge is pacing that re-engagement: knowing when to introduce new content, when to raise stakes, and how to keep the experience feeling fresh without demanding too much from a student who has two minutes at a bin.</p>
+            <p><strong>A more specific user.</strong> The current design targets a tech-savvy Ball State student, broad enough to be safe, narrow enough to be meaningless. The next iteration requires a real persona: not a demographic average, but a specific student navigating a specific moment. A junior commuter between classes is a different user than a freshman in the dining hall with time to kill. Each has a different threshold for friction, a different relationship to the leaderboard, and a different reason to care. Designing for both requires choosing which one to prioritise first.</p>
           </div>
 
           <div class="cs-pull">
@@ -1022,7 +1042,7 @@
   <footer class="case-footer" id="contact">
     <div class="footer-left">
       <h2>See the<br>other <em>project</em><br>too.</h2>
-      <p>Hanging by a Thread is the other half of this portfolio — a branching visual novel about labour, complicity, and purgatory.</p>
+      <p>Hanging by a Thread is the other half of this portfolio: a branching visual novel about labour, complicity, and purgatory.</p>
     </div>
     <div class="footer-right">
       <a href="hanging-by-a-thread.html" class="footer-link"><span class="footer-arrow"></span>Hanging by a Thread</a>
