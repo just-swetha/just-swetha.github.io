@@ -818,7 +818,7 @@ const RF_MIN_SIZE   = 0.18; // detected box must span ≥18% of frame width
 
 let rfModel = null;
 roboflow.auth({ publishable_key: RF_API_KEY })
-  .load({ model: 'wastebasket_trash_detecation', version: 3 })
+  .load({ model: 'bin-detection-9heur', version: 1 })
   .then(m => {
     m.configure({ threshold: RF_THRESHOLD });
     rfModel = m;
