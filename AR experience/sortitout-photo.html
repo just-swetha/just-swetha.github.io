@@ -826,7 +826,7 @@ async function checkBinInFrame(videoEl) {
   try {
     const predictions = await tmModel.predict(videoEl);
     console.log('TM predictions:', predictions.map(p => `${p.className}: ${p.probability.toFixed(2)}`));
-    const binClass = predictions.find(p => p.className.toLowerCase().includes('bin'));
+    const binClass = predictions.find(p => p.className === 'Bin');
     const detected = binClass && binClass.probability >= RF_THRESHOLD;
     return { detected: !!detected };
   } catch (e) {
