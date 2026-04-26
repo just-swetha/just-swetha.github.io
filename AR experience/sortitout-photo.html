@@ -1279,8 +1279,25 @@ function endGame() {
 }
 
 /* ═══ VIDEO ════════════════════════════════════════════════ */
+let _videoPhase = 1; // 1 = vid1 playing, 2 = vid2 playing
+
 function skipVideo() {
-  $('vid1').pause(); $('vid2').pause(); showScreen('s-end');
+  const v1 = $('vid1'), v2 = $('vid2'), skip = $('vid-skip');
+  if (_videoPhase === 1) {
+    v1.pause(); v1.classList.remove('vis');
+    v1.onended = null;
+    _videoPhase = 2;
+    v2.currentTime = 0;
+    v2.classList.add('vis');
+    const p2 = v2.play();
+    if (p2 && p2.catch) p2.catch(() => { v2.classList.remove('vis'); showScreen('s-end'); });
+    v2.onended = () => { v2.classList.remove('vis'); showScreen('s-end'); };
+    skip.classList.remove('vis');
+    setTimeout(() => { skip.classList.add('vis'); }, 2000);
+  } else {
+    v2.pause(); v2.classList.remove('vis');
+    showScreen('s-end');
+  }
 }
 
 function startVideo() {
@@ -1289,6 +1306,7 @@ function startVideo() {
   v1.classList.remove('vis'); v2.classList.remove('vis');
   v1.currentTime = 0; v2.currentTime = 0;
   skip.classList.remove('vis');
+  _videoPhase = 1;
 
   v1.classList.add('vis');
   const p1 = v1.play();
@@ -1296,6 +1314,7 @@ function startVideo() {
 
   v1.onended = () => {
     v1.classList.remove('vis');
+    _videoPhase = 2;
     v2.classList.add('vis');
     const p2 = v2.play();
     if (p2 && p2.catch) p2.catch(() => { v2.classList.remove('vis'); showScreen('s-end'); });
