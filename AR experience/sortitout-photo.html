@@ -12,7 +12,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
   background: #2B1B1F;
   display: flex; align-items: center; justify-content: center;
-  width: 100%; min-height: 100vh; overflow: hidden;
+  width: 100%; min-height: 100vh; min-height: 100dvh; overflow: hidden;
 }
 
 /* ── Phone shell ──────────────────────────────────────────── */
@@ -577,9 +577,9 @@ canvas#traj {
 .btn-replay:active { opacity:.8; }
 
 /* ── Mobile full-bleed ───────────────────────────────────── */
-@media (max-height:740px),(max-width:380px) {
+@media (max-width:600px) {
   body { background:#000; }
-  .phone-outer { width:100vw; height:100vh; }
+  .phone-outer { width:100vw; height:100vh; height:100dvh; }
   .phone-vol,.phone-power { display:none; }
   .phone-frame { border-radius:0; border:none; box-shadow:none; }
   .phone-screen { border-radius:0; }
