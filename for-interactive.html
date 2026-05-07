@@ -55,11 +55,36 @@
       transition: color 0.2s, border-color 0.2s;
       padding-bottom: 2px;
     }
-    .nav-links a:hover { color: var(--gold); border-color: var(--gold); }
+    .nav-links a:hover,
+    .nav-links a.nav-current { color: var(--gold); border-color: var(--gold); }
     #nav-toggle {
       display: none; background: none; border: none;
       font-size: 1.2rem; cursor: pointer; color: var(--gold);
     }
+
+    /* ── SUB NAV ── */
+    .sub-nav {
+      position: fixed; top: 52px; left: 0; right: 0; z-index: 98;
+      display: flex; align-items: center; gap: 1.25rem;
+      padding: 0.4rem 2.5rem;
+      background: rgba(13,21,48,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,146,58,0.07);
+    }
+    .sub-nav-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.48rem; letter-spacing: 0.1em;
+      color: var(--gold); opacity: 0.55; white-space: nowrap;
+    }
+    .sub-nav-links { display: flex; gap: 1.5rem; }
+    .sub-nav-links a {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: rgba(255,255,255,0.38);
+      transition: color 0.2s;
+    }
+    .sub-nav-links a:hover { color: rgba(255,255,255,0.7); }
+
+    [id] { scroll-margin-top: 92px; }
 
     /* ── HERO ── */
     .hero {
@@ -459,6 +484,7 @@
       .nav-links.open { display: flex; }
       .nav-links a { padding: 0.8rem 0; border-bottom: 1px solid rgba(200,146,58,0.08); }
       .nav-links a:last-child { border-bottom: none; }
+      .sub-nav { display: none; }
       .hero-title { font-size: clamp(0.9rem, 5vw, 1.4rem); }
       .card-content { min-height: 380px; padding: 2rem 1.5rem; }
       .about-section { padding: 5rem 5% 4rem; }
@@ -469,14 +495,23 @@
 
   <!-- NAV -->
   <nav>
-    <a href="https://swethasiva.com" class="nav-home">Swetha Siva</a>
+    <a href="index.html" class="nav-home">Swetha Siva</a>
     <div class="nav-links" id="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#portfolio" class="nav-current">Portfolio</a>
+      <a href="writing.html">Writing</a>
+      <a href="index.html#resume">Résumé</a>
+    </div>
+    <button id="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+  </nav>
+  <div class="sub-nav">
+    <span class="sub-nav-label">▸ Interactive Design</span>
+    <div class="sub-nav-links">
       <a href="#about">About</a>
       <a href="#projects">Work</a>
       <a href="#contact">Contact</a>
     </div>
-    <button id="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
-  </nav>
+  </div>
 
   <!-- HERO -->
   <header class="hero">

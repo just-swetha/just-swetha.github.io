@@ -11,6 +11,7 @@
       --pink: #BF047E;
       --teal: #038C8C;
       --navy: #091740;
+      --gold: #C8923A;
       --white: #ffffff;
       --offwhite: #f7f4f0;
     }
@@ -31,7 +32,31 @@
     .nav-home:hover { color: var(--pink); }
     .nav-links { display: flex; gap: 2rem; }
     .nav-links a { font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy); padding-bottom: 2px; border-bottom: 2px solid transparent; transition: border-color 0.2s, color 0.2s; }
-    .nav-links a:hover { color: var(--pink); border-color: var(--pink); }
+    .nav-links a:hover,
+    .nav-links a.nav-current { color: var(--pink); border-bottom-color: var(--pink); }
+
+    /* SUB NAV */
+    .sub-nav {
+      position: fixed; top: 56px; left: 0; right: 0; z-index: 98;
+      display: flex; align-items: center; gap: 1.25rem;
+      padding: 0.35rem 3rem;
+      background: rgba(247,244,240,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px dashed rgba(9,23,64,0.12);
+    }
+    .sub-nav-label {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.2em; color: var(--gold); white-space: nowrap;
+    }
+    .sub-nav-links { display: flex; gap: 1.5rem; }
+    .sub-nav-links a {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: rgba(9,23,64,0.38);
+      transition: color 0.2s;
+    }
+    .sub-nav-links a:hover { color: var(--navy); }
+
+    [id] { scroll-margin-top: 96px; }
 
     /* HERO */
     .hero {
@@ -60,8 +85,9 @@
 
     /* SECTION LABEL */
     .section-label { display: flex; align-items: center; gap: 1.5rem; padding: 3rem 5% 1.5rem; }
-    .section-label-text { font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.25em; color: var(--pink); white-space: nowrap; }
-    .section-label-line { flex: 1; height: 2px; background: var(--pink); opacity: 0.3; }
+    .section-label-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.25em; color: var(--gold); white-space: nowrap; }
+    .section-label-text::before { content: '▸ '; color: var(--gold); }
+    .section-label-line { flex: 1; height: 2px; background: var(--navy); opacity: 0.08; }
 
     /* CARDS */
     .projects { padding: 0 5% 6rem; display: flex; flex-direction: column; gap: 2.5rem; }
@@ -192,13 +218,22 @@
 <body>
 
   <nav>
-    <a href="https://swethasiva.com" class="nav-home">Swetha Siva</a>
+    <a href="index.html" class="nav-home">Swetha Siva</a>
     <div class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#portfolio" class="nav-current">Portfolio</a>
+      <a href="writing.html">Writing</a>
+      <a href="index.html#resume">Résumé</a>
+    </div>
+  </nav>
+  <div class="sub-nav">
+    <span class="sub-nav-label">Communications</span>
+    <div class="sub-nav-links">
       <a href="#projects">Work</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
     </div>
-  </nav>
+  </div>
 
   <header class="hero">
     <div class="hero-text">

@@ -56,7 +56,31 @@
       border-bottom:1px solid transparent; padding-bottom:2px;
       transition: color 0.2s, border-color 0.2s;
     }
-    .nav-links a:hover { color:#091740; border-color:#091740; }
+    .nav-links a:hover,
+    .nav-links a.nav-current { color:#091740; border-color:#091740; }
+
+    /* ── SUB NAV ── */
+    .sub-nav {
+      position: fixed; top:56px; left:0; right:0; z-index:98;
+      display:flex; align-items:center; gap:1.25rem;
+      padding:0.35rem 3rem;
+      background:rgba(247,244,240,0.97);
+      backdrop-filter:blur(12px);
+      border-bottom:1px dashed rgba(9,23,64,0.12);
+    }
+    .sub-nav-label {
+      font-size:0.65rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.2em; color:var(--pink); white-space:nowrap;
+    }
+    .sub-nav-links { display:flex; gap:1.5rem; }
+    .sub-nav-links a {
+      font-size:0.72rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.08em; color:rgba(9,23,64,0.38);
+      transition:color 0.2s;
+    }
+    .sub-nav-links a:hover { color:#091740; }
+
+    [id] { scroll-margin-top:96px; }
 
     /* ── HERO ── */
     .hero {
@@ -404,14 +428,23 @@
 
   <!-- NAV -->
   <nav>
-    <a href="https://swethasiva.com" class="nav-home">Swetha Siva</a>
+    <a href="index.html" class="nav-home">Swetha Siva</a>
     <div class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#portfolio">Portfolio</a>
+      <a href="writing.html" class="nav-current">Writing</a>
+      <a href="index.html#resume">Résumé</a>
+    </div>
+  </nav>
+  <div class="sub-nav">
+    <span class="sub-nav-label">Writing</span>
+    <div class="sub-nav-links">
       <a href="#books">Books</a>
       <a href="#fiction">Fiction</a>
       <a href="#poetry">Poetry</a>
       <a href="#teaching">Teaching</a>
     </div>
-  </nav>
+  </div>
 
   <!-- HERO -->
   <header class="hero">
