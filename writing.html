@@ -43,6 +43,7 @@
       transition: color 0.2s;
     }
     .nav-home:hover { color: var(--pink); }
+    .nav-context { font-family: 'Crimson Pro', serif; font-size: 0.9rem; font-weight: 400; letter-spacing: 0.03em; text-transform: none; color: var(--gold); font-style: italic; opacity: 0.85; }
     .nav-links { display:flex; gap:2rem; }
     .nav-links a {
       font-size: 0.875rem; font-weight:700; text-transform:uppercase;
@@ -426,11 +427,10 @@
 
   <!-- NAV -->
   <nav>
-    <a href="index.html" class="nav-home">Swetha Siva</a>
+    <a href="index.html" class="nav-home">Swetha Siva<span class="nav-context">. Writing</span></a>
     <div class="nav-links">
       <a href="index.html#about">About</a>
-      <a href="index.html#portfolio">Portfolio</a>
-      <a href="writing.html" class="nav-current">Writing</a>
+      <a href="index.html#portfolio" class="nav-current">Portfolio</a>
       <a href="index.html#resume">Résumé</a>
     </div>
   </nav>
