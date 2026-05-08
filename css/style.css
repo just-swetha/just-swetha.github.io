@@ -90,12 +90,12 @@ img { border: none; }
 }
 .nav-dropdown {
   display: none;
-  position: absolute; top: calc(100% + 0.75rem); left: 50%;
+  position: absolute; top: 100%; left: 50%;
   transform: translateX(-50%);
   background: rgba(247,244,240,0.98);
   backdrop-filter: blur(12px);
   border: 1px dashed rgba(9,23,64,0.15);
-  padding: 0.5rem 0;
+  padding: 0.75rem 0 0.5rem;
   min-width: 190px;
   list-style: none;
   z-index: 200;

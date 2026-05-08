@@ -53,8 +53,13 @@
     }
     .nav-links a:hover,
     .nav-links a.nav-current { color: var(--pink); border-bottom-color: var(--pink); }
+    .nav-has-dropdown { position: relative; display: flex; align-items: center; }
+    .nav-has-dropdown > a::after { content: ' ▾'; font-size: 0.6em; opacity: 0.5; }
+    .nav-dropdown { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: rgba(247,244,240,0.98); backdrop-filter: blur(12px); border: 1px dashed rgba(9,23,64,0.15); padding: 0.75rem 0 0.5rem; min-width: 190px; list-style: none; z-index: 200; }
+    .nav-dropdown li a { display: block; padding: 0.6rem 1.25rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(9,23,64,0.6); border: none !important; transition: color 0.15s, background 0.15s; }
+    .nav-dropdown li a:hover { color: var(--pink); background: rgba(191,4,126,0.04); }
+    .nav-has-dropdown:hover .nav-dropdown, .nav-has-dropdown:focus-within .nav-dropdown { display: block; }
 
-    /* ── SUB NAV ── */
     [id] { scroll-margin-top:60px; }
 
     /* ── HERO ── */
@@ -429,7 +434,14 @@
     <a href="index.html" class="nav-home">Swetha Siva<span class="nav-context">. Writing</span></a>
     <div class="nav-links">
       <a href="#about">About</a>
-      <a href="index.html#portfolio" class="nav-current">Portfolio</a>
+      <div class="nav-has-dropdown">
+        <a href="index.html#portfolio" class="nav-current">Portfolio</a>
+        <ul class="nav-dropdown">
+          <li><a href="for-interactive.html">Interactive Narrative</a></li>
+          <li><a href="for-comms.html">Communications</a></li>
+          <li><a href="writing.html">Writing</a></li>
+        </ul>
+      </div>
       <a href="index.html#resume">Résumé</a>
     </div>
   </nav>
