@@ -37,27 +37,7 @@
     .nav-links a.nav-current { color: var(--pink); border-bottom-color: var(--pink); }
 
     /* SUB NAV */
-    .sub-nav {
-      position: fixed; top: 56px; left: 0; right: 0; z-index: 98;
-      display: flex; align-items: center; gap: 1.25rem;
-      padding: 0.35rem 3rem;
-      background: rgba(247,244,240,0.97);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px dashed rgba(9,23,64,0.12);
-    }
-    .sub-nav-label {
-      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.2em; color: var(--gold); white-space: nowrap;
-    }
-    .sub-nav-links { display: flex; gap: 1.5rem; }
-    .sub-nav-links a {
-      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em; color: rgba(9,23,64,0.38);
-      transition: color 0.2s;
-    }
-    .sub-nav-links a:hover { color: var(--navy); }
-
-    [id] { scroll-margin-top: 96px; }
+    [id] { scroll-margin-top: 60px; }
 
     /* HERO */
     .hero {
@@ -221,19 +201,12 @@
   <nav>
     <a href="index.html" class="nav-home">Swetha Siva<span class="nav-context">. Communications</span></a>
     <div class="nav-links">
-      <a href="index.html#about">About</a>
+      <a href="#about">About</a>
       <a href="index.html#portfolio" class="nav-current">Portfolio</a>
       <a href="index.html#resume">Résumé</a>
     </div>
   </nav>
-  <div class="sub-nav">
-    <span class="sub-nav-label">Communications</span>
-    <div class="sub-nav-links">
-      <a href="#projects">Work</a>
-      <a href="#skills">Skills</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </div>
+
 
   <header class="hero">
     <div class="hero-text">
@@ -650,7 +623,7 @@
     </div>
   </section>
 
-  <section class="about-me" aria-label="About">
+  <section class="about-me" id="about" aria-label="About">
     <div class="about-inner">
       <div class="about-text">
         <p class="about-eyebrow">About</p>

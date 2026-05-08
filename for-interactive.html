@@ -56,27 +56,7 @@
     #nav-toggle { display: none; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--navy); }
 
     /* ── SUB NAV ── */
-    .sub-nav {
-      position: fixed; top: 52px; left: 0; right: 0; z-index: 98;
-      display: flex; align-items: center; gap: 1.25rem;
-      padding: 0.4rem 2.5rem;
-      background: rgba(247,244,240,0.97);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px dashed rgba(9,23,64,0.12);
-    }
-    .sub-nav-label {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.48rem; letter-spacing: 0.1em;
-      color: var(--gold); white-space: nowrap;
-    }
-    .sub-nav-links { display: flex; gap: 1.5rem; }
-    .sub-nav-links a {
-      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em; color: rgba(9,23,64,0.38); transition: color 0.2s;
-    }
-    .sub-nav-links a:hover { color: var(--navy); }
-
-    [id] { scroll-margin-top: 92px; }
+    [id] { scroll-margin-top: 60px; }
 
     /* ── HERO ── light bg, pixel grid stays */
     .hero {
@@ -355,8 +335,7 @@
       .nav-links.open { display: flex; }
       .nav-links a { padding: 0.8rem 0; border-bottom: 1px dashed rgba(9,23,64,0.08); color: var(--navy); }
       .nav-links a:last-child { border-bottom: none; }
-      .sub-nav { display: none; }
-      .hero-title { font-size: clamp(0.85rem, 4.5vw, 1.3rem); }
+.hero-title { font-size: clamp(0.85rem, 4.5vw, 1.3rem); }
       .card-content { padding: 1.5rem; }
       .about-section { padding: 5rem 5% 4rem; }
     }
@@ -368,20 +347,12 @@
   <nav>
     <a href="index.html" class="nav-home">Swetha Siva<span class="nav-context">. Interactive Narrative</span></a>
     <div class="nav-links" id="nav-links">
-      <a href="index.html#about">About</a>
+      <a href="#about">About</a>
       <a href="index.html#portfolio" class="nav-current">Portfolio</a>
       <a href="index.html#resume">Résumé</a>
     </div>
     <button id="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
   </nav>
-  <div class="sub-nav">
-    <span class="sub-nav-label">▸ Interactive Design</span>
-    <div class="sub-nav-links">
-      <a href="#about">About</a>
-      <a href="#projects">Work</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </div>
 
   <!-- HERO -->
   <header class="hero">
