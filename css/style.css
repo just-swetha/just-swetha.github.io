@@ -81,6 +81,42 @@ img { border: none; }
   border-bottom-color: #BF047E;
   background: transparent;
 }
+/* Portfolio dropdown */
+.nav-has-dropdown { position: relative; }
+.nav-has-dropdown > a::after {
+  content: ' ▾';
+  font-size: 0.6em; vertical-align: middle;
+  opacity: 0.5;
+}
+.nav-dropdown {
+  display: none;
+  position: absolute; top: calc(100% + 0.75rem); left: 50%;
+  transform: translateX(-50%);
+  background: rgba(247,244,240,0.98);
+  backdrop-filter: blur(12px);
+  border: 1px dashed rgba(9,23,64,0.15);
+  padding: 0.5rem 0;
+  min-width: 190px;
+  list-style: none;
+  z-index: 200;
+}
+.nav-dropdown li a {
+  display: block;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: rgba(9,23,64,0.6);
+  border-bottom: none !important;
+  transition: color 0.15s, background 0.15s;
+}
+.nav-dropdown li a:hover {
+  color: #BF047E;
+  background: rgba(191,4,126,0.04);
+  border-bottom: none !important;
+}
+.nav-has-dropdown:hover .nav-dropdown,
+.nav-has-dropdown:focus-within .nav-dropdown { display: block; }
+
 .nav-wordmark {
   font-family: 'Hind Madurai', sans-serif;
   font-size: 1rem; text-transform: uppercase;
