@@ -240,5 +240,12 @@
         <script>
             AOS.init();
         </script>
+        <script>
+          document.querySelectorAll('.nav-has-dropdown').forEach(el => {
+            let t;
+            el.addEventListener('mouseenter', () => { clearTimeout(t); el.classList.add('open'); });
+            el.addEventListener('mouseleave', () => { t = setTimeout(() => el.classList.remove('open'), 200); });
+          });
+        </script>
     </body>
 </html>
