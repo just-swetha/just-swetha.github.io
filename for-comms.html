@@ -11,7 +11,7 @@
       --pink: #BF047E;
       --teal: #038C8C;
       --navy: #091740;
-      --gold: #C8923A;
+      --gold: #BF047E;
       --white: #ffffff;
       --offwhite: #f7f4f0;
     }
@@ -47,21 +47,100 @@
 
     /* HERO */
     .hero {
-      min-height: 100vh; display: grid; grid-template-columns: repeat(6, 1fr);
-      background: linear-gradient(345deg, hsl(0deg 36% 61%) 0%, hsl(347deg 48% 56%) 12%, hsl(334deg 57% 49%) 22%, hsl(309deg 56% 44%) 32%, hsl(206deg 100% 43%) 41%, hsl(188deg 100% 35%) 49%, hsl(174deg 94% 34%) 57%, hsl(174deg 94% 34%) 66%, hsl(174deg 94% 34%) 74%, hsl(187deg 100% 28%) 83%, hsl(202deg 100% 23%) 91%, hsl(225deg 75% 14%) 100%);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       overflow: hidden;
     }
-    .hero-text { grid-column: 1/5; align-self: center; padding: 8rem 3rem 4rem 5rem; color: var(--white); }
-    .hero-eyebrow { font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.7; margin-bottom: 1.5rem; }
-    .hero-name { font-family: 'Hind Madurai', sans-serif; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.9; text-transform: uppercase; margin-bottom: 1.5rem; }
-    .hero-name em { font-style: normal; color: var(--navy); -webkit-text-stroke: 2px var(--white); }
-    .hero-tagline { font-family: 'DM Serif Display', serif; font-size: clamp(1.1rem, 2vw, 1.5rem); font-style: italic; max-width: 480px; line-height: 1.5; opacity: 0.9; }
-    .hero-deco { grid-column: 5/7; align-self: stretch; display: flex; align-items: center; justify-content: center; padding: 8rem 2rem 4rem; }
-    .hero-deco-box { border: 3px dashed rgba(255,255,255,0.4); padding: 2.5rem 2rem; text-align: center; color: var(--white); max-width: 240px; }
-    .hero-deco-box p { font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.7; margin-bottom: 1rem; }
-    .hero-deco-box .stat { font-family: 'Hind Madurai', sans-serif; font-size: 3.5rem; line-height: 1; display: block; }
-    .hero-deco-box .stat-label { font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; display: block; margin-top: 0.25rem; }
-    .hero-scroll { grid-column: 1/7; text-align: center; padding-bottom: 2rem; color: rgba(255,255,255,0.5); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.2em; align-self: end; }
+    .hero-left {
+      background: var(--offwhite);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 9rem 4rem 4rem 5rem;
+      position: relative;
+      border-right: 4px dashed rgba(9,23,64,0.12);
+    }
+    .hero-left::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px; background: var(--pink);
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.25em; color: var(--pink);
+      margin-bottom: 2rem; padding: 0;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .hero-eyebrow::after { content: ''; width: 32px; height: 1px; background: var(--pink); display: block; }
+    .hero-name {
+      font-family: 'Hind Madurai', sans-serif;
+      font-size: clamp(3.5rem, 6vw, 6.5rem);
+      line-height: 0.92; text-transform: uppercase;
+      color: var(--navy); margin-bottom: 2rem;
+    }
+    .hero-name em { font-style: normal; color: var(--pink); }
+    .hero-tagline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1rem, 1.6vw, 1.3rem);
+      font-style: italic; max-width: 420px;
+      line-height: 1.65; color: rgba(9,23,64,0.6);
+      padding: 0;
+    }
+    .hero-scroll {
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em;
+      color: rgba(9,23,64,0.3); margin-top: 3rem; padding: 0;
+    }
+    .hero-right {
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      padding: 4rem 3.5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-right::before {
+      content: 'Tools & Software';
+      position: absolute; top: 2rem; left: 3.5rem;
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.25em; color: rgba(255,255,255,0.2);
+    }
+    .tool-cloud {
+      display: flex; flex-wrap: wrap;
+      gap: 0.75rem; align-content: center; align-items: center;
+    }
+    .tool-tag {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      padding: 0.55rem 1.1rem;
+      display: inline-block; white-space: nowrap;
+      transition: transform 0.2s;
+    }
+    .tool-tag.t-pink  { background: var(--pink); color: #fff; }
+    .tool-tag.t-teal  { background: var(--teal); color: #fff; }
+    .tool-tag.t-outline { border: 2px dashed rgba(255,255,255,0.4); color: rgba(255,255,255,0.7); }
+    .tool-tag.t-ghost { color: rgba(255,255,255,0.25); font-size: 0.65rem; letter-spacing: 0.12em; }
+    /* --rot custom property lets keyframes reference each tag's rotation */
+    .tool-cloud .tool-tag            { --rot: 0deg; transform: rotate(var(--rot)); }
+    .tool-cloud .tool-tag:nth-child(2)  { --rot: -1.5deg; }
+    .tool-cloud .tool-tag:nth-child(3)  { --rot: 1deg; }
+    .tool-cloud .tool-tag:nth-child(5)  { --rot: -1deg; }
+    .tool-cloud .tool-tag:nth-child(7)  { --rot: 1.5deg; }
+    .tool-cloud .tool-tag:hover         { transform: translateY(-2px) rotate(0deg) !important; }
+
+    /* One-time staggered entrance — skipped when prefers-reduced-motion is set (WCAG 2.3.3) */
+    @media (prefers-reduced-motion: no-preference) {
+      @keyframes tagDrop {
+        from { opacity: 0; transform: translateY(-28px) rotate(var(--rot)); }
+        to   { opacity: 1; transform: translateY(0)     rotate(var(--rot)); }
+      }
+      .tool-cloud .tool-tag { animation: tagDrop 0.4s ease both; }
+      .tool-cloud .tool-tag:nth-child(1) { animation-delay: 0.05s; }
+      .tool-cloud .tool-tag:nth-child(2) { animation-delay: 0.15s; }
+      .tool-cloud .tool-tag:nth-child(3) { animation-delay: 0.25s; }
+      .tool-cloud .tool-tag:nth-child(4) { animation-delay: 0.35s; }
+      .tool-cloud .tool-tag:nth-child(5) { animation-delay: 0.45s; }
+      .tool-cloud .tool-tag:nth-child(6) { animation-delay: 0.55s; }
+      .tool-cloud .tool-tag:nth-child(7) { animation-delay: 0.65s; }
+      .tool-cloud .tool-tag:nth-child(8) { animation-delay: 0.75s; }
+    }
 
     /* INTRO */
     .intro { background: var(--white); color: var(--navy); padding: 5rem; }
@@ -145,7 +224,6 @@
     .hero-eyebrow { animation: fadeUp 0.6s ease both; }
     .hero-name    { animation: fadeUp 0.6s 0.15s ease both; }
     .hero-tagline { animation: fadeUp 0.6s 0.3s ease both; }
-    .hero-deco-box { animation: fadeUp 0.6s 0.45s ease both; }
 
     /* Carousel */
     .carousel { position: relative; width: 100%; overflow: hidden; }
@@ -190,8 +268,9 @@
 
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
-      .hero-text { grid-column: 1/7; padding: 7rem 2rem 2rem; }
-      .hero-deco { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 7rem 2rem 3rem; }
+      .hero-right { min-height: 40vh; }
       .intro { padding: 3rem 2rem; }
       .section-label { padding: 2.5rem 2rem 1rem; }
       .projects { padding: 0 2% 4rem; }
@@ -222,12 +301,24 @@
 
 
   <header class="hero">
-    <div class="hero-text">
+    <div class="hero-left">
       <p class="hero-eyebrow">Communications Portfolio</p>
       <h1 class="hero-name">Swetha<br><em>Siva</em></h1>
       <p class="hero-tagline">Multimedia production, brand design, and content strategy — video, graphics, editorial, and interactive work that reaches every audience with the right message in the right format.</p>
+      <p class="hero-scroll">↓ Scroll to explore</p>
     </div>
-    <p class="hero-scroll">↓ Scroll to explore</p>
+    <div class="hero-right">
+      <div class="tool-cloud">
+        <span class="tool-tag t-pink">Adobe Photoshop</span>
+        <span class="tool-tag t-outline">Adobe Illustrator</span>
+        <span class="tool-tag t-teal">InDesign</span>
+        <span class="tool-tag t-outline">Premiere Pro</span>
+        <span class="tool-tag t-outline">After Effects</span>
+        <span class="tool-tag t-teal">Canva</span>
+        <span class="tool-tag t-outline">WordPress / CMS</span>
+        <span class="tool-tag t-pink">HTML &amp; CSS</span>
+      </div>
+    </div>
   </header>
 
   <main>
