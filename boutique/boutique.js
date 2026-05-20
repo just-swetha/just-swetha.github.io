@@ -14,11 +14,11 @@ const TOASTS = [
 const CATEGORIES = {
   'cute-black-dresses': {
     label: 'Cute Black Dresses',
-    subtitle: 'for the evenings that ask for something a little wicked.',
+    subtitle: 'for a cute iwiwi cat so she looks even cuter.',
   },
   sarees: {
     label: 'Sarees',
-    subtitle: 'drape, drift, devastate.',
+    subtitle: 'because iwiwi cat likes shiny dwesss.',
   },
 };
 
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     allListings = data.listings;
   } catch (_) {
     document.getElementById('main-content').innerHTML =
-      '<div class="loading-state">Something went wrong. The koala is looking into it.</div>';
+      '<div class="loading-state">Something went wrong. The koal is looking into it.</div>';
     return;
   }
 
@@ -103,9 +103,9 @@ function buildHome() {
   return `
     <div class="home-hero">
       <h1>The Purrfect Boutique</h1>
-      <p class="home-tagline">Curated by a koala. For a cat of impeccable taste.</p>
+      <p class="home-tagline">Curated by a koal for a cat of impeccable taste.</p>
       <div class="home-intro">
-        <p>Welcome in. The koala has been busy: combing through rails, holding things up to the light, putting things back, picking them up again. Everything here was chosen with you specifically in mind.</p>
+        <p>Welcome in. The koal has been busy: combing through rails, holding things up to the light, putting things back, picking them up again. Everything here was chosen with cat cat specifically in mind.</p>
         <p>Browse at your leisure. Tap the heart on anything you'd like, and send your picks when you're ready. The rest is a surprise. 🐾</p>
       </div>
     </div>
@@ -136,7 +136,7 @@ function buildNotFound() {
   return `
     <div class="not-found">
       <h2>This room is empty.</h2>
-      <p>The koala doesn't know what you're looking for. Try the link you were sent.</p>
+      <p>The koal doesn't know what you're looking for. Try the link you were sent.</p>
       <a href="#" class="back-link">← back home</a>
     </div>
   `;
@@ -147,7 +147,7 @@ function buildCard(item) {
   const url = safeUrl(item.sourceUrl);
   return `
     <article class="card${item.koalaPick ? ' card--koala-pick' : ''}" data-id="${escAttr(item.id)}">
-      ${item.koalaPick ? `<div class="koala-badge">🐨 the koala picked this one herself</div>` : ''}
+      ${item.koalaPick ? `<div class="koala-badge">🐨 the koal thinks this would be especially cute on cat</div>` : ''}
       <div class="card-image-wrap">
         <img
           src="../${escAttr(item.image)}"
@@ -323,7 +323,7 @@ function renderModalContent(view, extraData) {
         <h2 class="modal-title" id="modal-title">Your picks</h2>
         <div class="empty-favs">
           <p>Nothing here yet.</p>
-          <p>The koala is patient. She didn't spend all that time curating for nothing.</p>
+          <p>The koal is waiting for u to choose things, u feral cat.</p>
         </div>
       `;
       return;
@@ -346,9 +346,9 @@ function renderModalContent(view, extraData) {
 
     el.innerHTML = `
       <h2 class="modal-title" id="modal-title">Your picks</h2>
-      <p class="modal-intro">Here's what you've gathered so far. Take your time: add a note if there's something I should know (a size, an occasion, a "this one specifically"), and send it over when you're ready.</p>
+      <p class="modal-intro">Here's what you've gathered so far. Take your time. Add a note if there's something koal should know (a size, an occasion, a "this one specifically"), and send it over when you're ready.</p>
       <ul class="picks-list">${itemRows}</ul>
-      <label class="note-label" for="koala-note">A note for the koala (optional)</label>
+      <label class="note-label" for="koala-note">A note for the koal (optional) (leaf accepted but not required)</label>
       <textarea id="koala-note" class="note-textarea" placeholder="anything you'd like me to know..."></textarea>
       <button class="send-btn" data-action="send-picks">send my picks 🐾</button>
     `;
@@ -362,8 +362,8 @@ function renderModalContent(view, extraData) {
     el.innerHTML = `
       <div class="confirmation">
         <h2 id="modal-title">Delivered 🐾✨</h2>
-        <p>Your picks are on their way. The koala has noted them carefully and will be in touch.</p>
-        <p>Thank you for trusting the house with your taste.</p>
+        <p>Your picks are on their way. The koal has noted them carefully and will be in touch.</p>
+        <p>Thank u for letting her catch thimgs.</p>
       </div>
     `;
   }
@@ -376,7 +376,7 @@ function renderModalContent(view, extraData) {
 
     el.innerHTML = `
       <div class="fallback-panel">
-        <h3 id="modal-title">Hmm, something went wrong.</h3>
+        <h3 id="modal-title">Hmm, something went wrong. Maybe koal fell off twee.</h3>
         <p class="modal-intro">Here are your picks. Copy and send them directly:</p>
         <ul class="fallback-list">${itemRows}</ul>
         <button class="copy-btn" data-action="copy-picks">copy to clipboard</button>
