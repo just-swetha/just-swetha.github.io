@@ -530,21 +530,22 @@ button {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  background: var(--charcoal);
-  color: var(--cream);
-  border: none;
+  background: var(--white);
+  color: var(--charcoal);
+  border: 1.5px solid var(--blush);
   border-radius: 2rem;
   padding: 0.62rem 1.15rem;
   font-size: 0.8rem;
   font-family: var(--font-sans);
   font-weight: 300;
   z-index: 200;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.22);
-  transition: background var(--ease), transform var(--ease);
+  box-shadow: 0 4px 20px rgba(63, 61, 86, 0.15);
+  transition: background var(--ease), border-color var(--ease), transform var(--ease);
 }
 
 .fav-counter:hover {
-  background: var(--charcoal-mid);
+  background: var(--pale);
+  border-color: var(--charcoal-light);
   transform: translateY(-1px);
 }
 

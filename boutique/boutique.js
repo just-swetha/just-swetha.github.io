@@ -111,7 +111,7 @@ function buildHome() {
         </div>
       </div>
       <div class="hero-illustration" aria-hidden="true">
-        <img src="../images/welcome-cats.svg" alt="" class="welcome-cats">
+        <img src="../images/raincat.png" alt="" class="welcome-cats">
       </div>
     </div>
     <div class="category-grid">${tiles}</div>
