@@ -109,6 +109,9 @@ function buildHome() {
         <p>Browse at your leisure. Tap the heart on anything you'd like, and send your picks when you're ready. The rest is a surprise. 🐾</p>
       </div>
     </div>
+    <div class="hero-illustration" aria-hidden="true">
+      <img src="../images/welcome-cats.svg" alt="" class="welcome-cats">
+    </div>
     <div class="category-grid">${tiles}</div>
   `;
 }

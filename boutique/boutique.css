@@ -1,16 +1,16 @@
 :root {
-  --cream: #F9F5F0;
-  --pale: #F3EDE7;
-  --blush: #EDD5C3;
-  --charcoal: #2D2A26;
-  --charcoal-mid: #4A4642;
-  --charcoal-light: #7A756F;
-  --sage: #8B9E7E;
-  --rose: #C4786A;
-  --rose-light: rgba(196, 120, 106, 0.1);
+  --cream: #F4F2FB;
+  --pale: #ECEAF7;
+  --blush: #D5D1EE;
+  --charcoal: #3F3D56;
+  --charcoal-mid: #5C5A72;
+  --charcoal-light: #9290A8;
+  --sage: #6C63FF;
+  --rose: #E0607A;
+  --rose-light: rgba(224, 96, 122, 0.1);
   --white: #FFFFFF;
-  --shadow-sm: 0 2px 12px rgba(45, 42, 38, 0.06);
-  --shadow-md: 0 6px 28px rgba(45, 42, 38, 0.11);
+  --shadow-sm: 0 2px 12px rgba(63, 61, 86, 0.07);
+  --shadow-md: 0 6px 28px rgba(63, 61, 86, 0.13);
   --radius: 4px;
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'DM Sans', system-ui, sans-serif;
@@ -84,10 +84,9 @@ button {
 }
 
 .wordmark-cat {
-  width: 20px;
-  height: 24px;
+  height: 36px;
+  width: auto;
   flex-shrink: 0;
-  color: var(--charcoal);
 }
 
 @media (min-width: 640px) {
@@ -864,11 +863,22 @@ button {
   text-align: center;
 }
 
-.sleeping-cat {
-  width: 82px;
-  height: 42px;
-  color: var(--blush);
+.playful-cat {
+  height: 90px;
+  width: auto;
+  max-width: 100%;
   margin-bottom: 0.5rem;
+}
+
+.hero-illustration {
+  padding: 1.5rem 0 0.5rem;
+}
+
+.welcome-cats {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  display: block;
 }
 
 .footer-text {
