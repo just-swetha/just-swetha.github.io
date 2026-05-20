@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>The Purrfect Boutique</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="boutique.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="#" class="wordmark" aria-label="The Purrfect Boutique, home">
+      <svg class="wordmark-cat" viewBox="0 0 22 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <polygon points="2,9 5,1 9,9" fill="currentColor"/>
+        <polygon points="13,9 17,1 20,9" fill="currentColor"/>
+        <ellipse cx="11" cy="13" rx="8.5" ry="7.5" fill="currentColor"/>
+        <ellipse cx="11" cy="23" rx="7" ry="6" fill="currentColor"/>
+        <path d="M18 26 Q25 20 22 13" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span>The Purrfect Boutique</span>
+    </a>
+  </header>
+
+  <main id="main-content" role="main">
+    <div class="loading-state">the koala is fetching your finds...</div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <button id="fav-btn" class="fav-counter" aria-label="Open favorites">
+    <span id="fav-label">your picks 🐾</span>
+  </button>
+
+  <div id="fav-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" aria-label="Close favorites">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <svg class="sleeping-cat" viewBox="0 0 110 55" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M18 47 Q4 38 7 23 Q11 10 23 17" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <ellipse cx="55" cy="44" rx="36" ry="12.5" fill="currentColor"/>
+      <circle cx="80" cy="31" r="14" fill="currentColor"/>
+      <polygon points="67,20 73,8 81,19" fill="currentColor"/>
+      <polygon points="80,19 87,8 93,20" fill="currentColor"/>
+      <path d="M75 31 Q80 28 85 31" stroke="var(--cream)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <text x="94" y="16" font-size="9" fill="currentColor" opacity="0.4" font-family="Georgia, serif" font-style="italic">z z</text>
+    </svg>
+    <p class="footer-text">The Purrfect Boutique — a private collection, curated with love.</p>
+    <p class="footer-sub">(proprietor: one very dedicated koala.)</p>
+  </footer>
+
+  <script src="boutique.js"></script>
+</body>
+</html>

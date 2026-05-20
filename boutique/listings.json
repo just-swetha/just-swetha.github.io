@@ -1,0 +1,169 @@
+{
+  "listings": [
+    {
+      "id": "dress-001",
+      "title": "HERE&NOW Floral Print Fit & Flare Dress",
+      "brand": "HERE&NOW",
+      "category": "cute-black-dresses",
+      "image": "images/herenow-floral-fit-flare.jpg",
+      "sourceUrl": "https://www.myntra.com/dresses/here%26now/herenow-floral-print-fit--flare-dress/41049562/buy",
+      "retailer": "Myntra",
+      "curatorNote": "A solid black bodice that lets the skirt do all the talking: sunflowers, poppies, and leaves rioting across the hem like a garden that got into something wonderful. The tie-shoulder detail makes it feel considered rather than casual.",
+      "koalaPick": false
+    },
+    {
+      "id": "dress-002",
+      "title": "Jakanary Flared Sleeve Ruffled Net Fit & Flare Maxi Dress",
+      "brand": "Jakanary",
+      "category": "cute-black-dresses",
+      "image": "images/jakanary-net-maxi.jpg",
+      "sourceUrl": "https://www.myntra.com/dresses/jakanary/jakanary-flared-sleeve-ruffled-net-fit--flare-maxi-dress/35715397/buy",
+      "retailer": "Myntra",
+      "curatorNote": "All net and drama. The sleeves billow just enough to feel like you are moving through fog at a party. The kind of dress that photographs beautifully without trying.",
+      "koalaPick": false
+    },
+    {
+      "id": "dress-003",
+      "title": "Aayu Georgette A-Line Midi Dress",
+      "brand": "Aayu",
+      "category": "cute-black-dresses",
+      "image": "images/aayu-georgette-midi.jpg",
+      "sourceUrl": "https://www.myntra.com/dresses/aayu/aayu-georgette-a-line-midi-dress/21850870/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Swiss dot georgette with ruffled flutter sleeves. It looks delicate but wears easy, and the tiered hem catches light and movement in equal measure. One of those pieces that looks more expensive than it is.",
+      "koalaPick": false
+    },
+    {
+      "id": "dress-004",
+      "title": "Justin Whyte Puff Sleeve Jacquard Fit & Flare Midi Dress",
+      "brand": "Justin Whyte",
+      "category": "cute-black-dresses",
+      "image": "images/justinwhyte-jacquard-midi.jpg",
+      "sourceUrl": "https://www.myntra.com/dresses/justin+whyte/justin-whyte-puff-sleeve-jacquard-fit--flare-midi-dress/28449416/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Gold thread woven into black lace, puff sleeves, and a midi length that hits exactly right. This one is for the evenings when you want to arrive and be noticed. Quietly spectacular.",
+      "koalaPick": false
+    },
+    {
+      "id": "dress-005",
+      "title": "Aditi's Couture A-Line Sweetheart Neck Midi Dress",
+      "brand": "Aditi's Couture",
+      "category": "cute-black-dresses",
+      "image": "images/aditiscouture-velvet-midi.jpg",
+      "sourceUrl": "https://www.myntra.com/ethnic-dresses/aditis+couture/aditis-couture-a-line-sweetheart-neck-midi-dress/42034413/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Deep black velvet with tiny white embroidered figures at the neckline. There is something almost storybook about it. The puff sleeves and sweetheart neck make it feel festive without trying too hard.",
+      "koalaPick": false
+    },
+    {
+      "id": "dress-006",
+      "title": "Curvy Street Black Net A-Line Dress",
+      "brand": "Curvy Street",
+      "category": "cute-black-dresses",
+      "image": "images/curvystreet-net-aline.jpg",
+      "sourceUrl": "https://www.myntra.com/dresses/curvy+street/curvy-street-black-net-a-line-dress/20980306/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Layers of black net over a fitted bodice embroidered with blue and purple flowers. This one has real presence. Floor-length and sleeveless, it moves like it knows exactly what it is doing.",
+      "koalaPick": false
+    },
+    {
+      "id": "dress-007",
+      "title": "Sangria Floral Embroidered Georgette Sequined Empire Dress",
+      "brand": "Sangria",
+      "category": "cute-black-dresses",
+      "image": "images/sangria-embroidered-empire.jpg",
+      "sourceUrl": "https://www.myntra.com/ethnic-dresses/sangria/sangria-floral-embroidered-georgette-sequined-empire-dress/35252454/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Silver and blush floral embroidery on sheer georgette sleeves, with a midi hem that floats rather than falls. The kind of thing you wear to a wedding and spend the whole evening getting complimented on.",
+      "koalaPick": false
+    },
+    {
+      "id": "dress-008",
+      "title": "Athena Women Black Fit & Flare Dress",
+      "brand": "Athena",
+      "category": "cute-black-dresses",
+      "image": "images/athena-fit-flare.jpg",
+      "sourceUrl": "https://www.myntra.com/dresses/athena/athena-women-black-fit--flare-dress/1755949/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Clean, structured, and quietly elegant. A wrap-front bodice with gold leaf applique at the waist and a skirt that holds its shape beautifully. The koala picked this one herself and she has excellent taste.",
+      "koalaPick": true
+    },
+    {
+      "id": "dress-009",
+      "title": "Milost Women Black Dress",
+      "brand": "Milost",
+      "category": "cute-black-dresses",
+      "image": "images/milost-black-dress.jpg",
+      "sourceUrl": "https://www.myntra.com/dresses/milost/milost-women-black-dresses/35940701/buy",
+      "retailer": "Myntra",
+      "curatorNote": "A high neck, puff sleeves, and an asymmetric hem that gives this understated dress a quiet edge. No embellishment, no fuss. Just a very good cut that does all the work.",
+      "koalaPick": false
+    },
+    {
+      "id": "saree-001",
+      "title": "Rachna Striped Woven Design Leheriya Zari Ready-to-Wear Saree",
+      "brand": "Rachna",
+      "category": "sarees",
+      "image": "images/rachna-leheriya-saree.jpg",
+      "sourceUrl": "https://www.myntra.com/sarees/rachna/rachna-striped-woven-design-leheriya-zari-ready-to-wear-saree/27652564/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Navy and teal in a leheriya stripe, finished with a gold zari border. Ready-to-wear means no pins, no fuss, no asking someone to help you drape it at 7pm. Effortless in every sense.",
+      "koalaPick": false
+    },
+    {
+      "id": "saree-002",
+      "title": "Anouk Woven Design Zari Silk Blend Banarasi Saree",
+      "brand": "Anouk",
+      "category": "sarees",
+      "image": "images/anouk-banarasi-multicolour.jpg",
+      "sourceUrl": "https://www.myntra.com/sarees/anouk/anouk-woven-design-zari-silk-blend-banarasi-saree/40299304/buy",
+      "retailer": "Myntra",
+      "curatorNote": "A Banarasi in jewel-box colours: cobalt, crimson, gold, and violet in a bold checked weave with a heavy zari pallu. The kind of saree that photographs like a painting and feels like a celebration.",
+      "koalaPick": false
+    },
+    {
+      "id": "saree-003",
+      "title": "Anouk Woven Design Zari Silk Blend Banarasi Saree",
+      "brand": "Anouk",
+      "category": "sarees",
+      "image": "images/anouk-banarasi-orange-teal.jpg",
+      "sourceUrl": "https://www.myntra.com/sarees/anouk/anouk-woven-design-zari-silk-blend-banarasi-saree/40299306/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Marigold and teal in a checked silk weave, with a richly worked pallu in deep rose and gold. Warm, festive, and completely beautiful. The colours together are like a South Indian wedding morning.",
+      "koalaPick": false
+    },
+    {
+      "id": "saree-004",
+      "title": "Santipur Taant Checked Woven Design Zari Pure Cotton Saree",
+      "brand": "Santipur Taant Saree",
+      "category": "sarees",
+      "image": "images/santipur-taant-checked.jpg",
+      "sourceUrl": "https://www.myntra.com/sarees/santipur+taant+saree/santipur-taant-saree-checked-woven-design-zari-pure-cotton-saree-with-blouse-piece/41371559/buy",
+      "retailer": "Myntra",
+      "curatorNote": "A Santipur Taant, pure cotton and handwoven, with navy and sky checks and small gold butis scattered across the weave. Light enough to wear all day and beautiful enough to wear anywhere. Comes with a blouse piece.",
+      "koalaPick": false
+    },
+    {
+      "id": "saree-005",
+      "title": "Mitera Checked Zari Organza Handloom Banarasi Saree",
+      "brand": "Mitera",
+      "category": "sarees",
+      "image": "images/mitera-organza-banarasi.jpg",
+      "sourceUrl": "https://www.myntra.com/sarees/mitera/mitera-checked-zari-organza-handloom-banarasi-saree/33376184/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Organza Banarasi in a silver-grey base with meenakari florals in blush, blue, and chartreuse. The kind of palette you do not expect to work, but absolutely does. Luminous under evening light.",
+      "koalaPick": false
+    },
+    {
+      "id": "saree-006",
+      "title": "HERE&NOW Checked Zari Silk Blend Banarasi Saree",
+      "brand": "HERE&NOW",
+      "category": "sarees",
+      "image": "images/herenow-banarasi-purple.jpg",
+      "sourceUrl": "https://www.myntra.com/sarees/here%26now/herenow-checked-zari-silk-blend-banarasi-saree/40678019/buy",
+      "retailer": "Myntra",
+      "curatorNote": "Deep wine-purple with a wide teal and gold zari border in a geometric temple pattern. Structured, regal, and completely striking. The contrast between the body and the border is what makes it.",
+      "koalaPick": false
+    }
+  ]
+}

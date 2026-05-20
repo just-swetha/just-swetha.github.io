@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Boutique Admin</title>
+  <style>
+    :root {
+      --cream: #F9F5F0;
+      --charcoal: #2D2A26;
+      --sage: #8B9E7E;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+      font-size: 15px;
+    }
+    h1 { font-size: 1.4rem; margin-bottom: 0.4rem; font-weight: 500; }
+    .subtitle { font-size: 0.85rem; color: #666; margin-bottom: 2.5rem; line-height: 1.6; }
+    label { display: block; font-size: 0.8rem; color: #555; margin-bottom: 0.3rem; margin-top: 1.2rem; font-weight: 500; }
+    label:first-of-type { margin-top: 0; }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.55rem 0.8rem;
+      border: 1px solid #d8cfc8;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      background: #fff;
+      color: var(--charcoal);
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--charcoal);
+    }
+    textarea { min-height: 110px; resize: vertical; line-height: 1.6; }
+    .checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 1.2rem; }
+    .checkbox-row input { width: auto; }
+    .checkbox-row label { margin: 0; }
+    .hint { font-size: 0.75rem; color: #888; margin-top: 0.25rem; }
+    button.generate {
+      margin-top: 2rem;
+      background: var(--charcoal);
+      color: #F9F5F0;
+      border: none;
+      border-radius: 4px;
+      padding: 0.75rem 1.75rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    button.generate:hover { background: #4A4642; }
+    #output-wrap { margin-top: 2rem; display: none; }
+    #output-wrap h2 { font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem; }
+    pre {
+      background: #fff;
+      border: 1px solid #d8cfc8;
+      border-radius: 4px;
+      padding: 1rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+    button.copy {
+      margin-top: 0.6rem;
+      background: var(--sage);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 0.55rem 1.25rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    button.copy:hover { background: #7a8e6e; }
+    #copy-status { font-size: 0.78rem; color: var(--sage); margin-top: 0.4rem; height: 1em; }
+    hr { border: none; border-top: 1px solid #d8cfc8; margin: 2.5rem 0; }
+    .instructions { font-size: 0.82rem; color: #666; line-height: 1.7; }
+    .instructions code { background: #ede8e2; padding: 0.1em 0.3em; border-radius: 3px; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+
+  <h1>Boutique Admin: Listing Generator</h1>
+  <p class="subtitle">
+    Fill in the fields and click Generate. Copy the output JSON entry and paste it into the
+    <code>listings</code> array in <code>boutique/listings.json</code>.
+    Do not include the trailing comma on the last entry.
+  </p>
+
+  <label for="a-id">ID (kebab-case)</label>
+  <input type="text" id="a-id" placeholder="dress-010 or saree-007">
+
+  <label for="a-title">Title</label>
+  <input type="text" id="a-title" placeholder="Brand Name Descriptive Product Title">
+
+  <label for="a-brand">Brand</label>
+  <input type="text" id="a-brand" placeholder="Brand Name">
+
+  <label for="a-category">Category</label>
+  <select id="a-category">
+    <option value="cute-black-dresses">cute-black-dresses</option>
+    <option value="sarees">sarees</option>
+  </select>
+  <p class="hint">To add a new category: add an entry here AND add it to the CATEGORIES object in boutique.js.</p>
+
+  <label for="a-image">Image filename (no path prefix)</label>
+  <input type="text" id="a-image" placeholder="brand-descriptor.jpg">
+  <p class="hint">Save the file to <code>/images/</code> at the root of the repo. Use the save-image.sh script to download from a URL.</p>
+
+  <label for="a-url">Source URL</label>
+  <input type="url" id="a-url" placeholder="https://...">
+
+  <label for="a-retailer">Retailer</label>
+  <input type="text" id="a-retailer" placeholder="Myntra">
+
+  <label for="a-note">Curator note</label>
+  <textarea id="a-note" placeholder="Write the curator note here. Keep the voice warm, considered, and specific to the piece."></textarea>
+
+  <div class="checkbox-row">
+    <input type="checkbox" id="a-koala">
+    <label for="a-koala">Mark as Koala's Pick (shows the 🐨 badge)</label>
+  </div>
+
+  <button class="generate" onclick="generate()">Generate JSON entry</button>
+
+  <div id="output-wrap">
+    <h2>Copy this into listings.json:</h2>
+    <pre id="output"></pre>
+    <button class="copy" onclick="copyOutput()">Copy to clipboard</button>
+    <p id="copy-status"></p>
+  </div>
+
+  <hr>
+
+  <div class="instructions">
+    <p><strong>How to add a new listing manually:</strong></p>
+    <ol style="margin: 0.75rem 0 0 1.25rem; line-height: 2;">
+      <li>Save the product image to <code>/images/</code></li>
+      <li>Add a JSON entry to <code>boutique/listings.json</code> inside the <code>"listings"</code> array</li>
+      <li>Commit and push. GitHub Pages deploys within ~30 seconds.</li>
+    </ol>
+
+    <p style="margin-top: 1.5rem;"><strong>To add a new category:</strong></p>
+    <ol style="margin: 0.75rem 0 0 1.25rem; line-height: 2;">
+      <li>Pick a kebab-case slug (e.g. <code>jumpsuits</code>)</li>
+      <li>Add it to the <code>CATEGORIES</code> object in <code>boutique.js</code> with a label and subtitle</li>
+      <li>Use that slug as the <code>category</code> field in your listing entries</li>
+    </ol>
+
+    <p style="margin-top: 1.5rem;"><strong>Web3Forms setup:</strong></p>
+    <ol style="margin: 0.75rem 0 0 1.25rem; line-height: 2;">
+      <li>Create a free account at web3forms.com</li>
+      <li>Get your access key from the dashboard</li>
+      <li>Replace <code>YOUR_WEB3FORMS_ACCESS_KEY_HERE</code> at the top of <code>boutique.js</code></li>
+    </ol>
+  </div>
+
+  <script>
+    function generate() {
+      const imageInput = document.getElementById('a-image').value.trim().replace(/^images\//, '');
+      const entry = {
+        id: document.getElementById('a-id').value.trim(),
+        title: document.getElementById('a-title').value.trim(),
+        brand: document.getElementById('a-brand').value.trim(),
+        category: document.getElementById('a-category').value,
+        image: 'images/' + imageInput,
+        sourceUrl: document.getElementById('a-url').value.trim(),
+        retailer: document.getElementById('a-retailer').value.trim(),
+        curatorNote: document.getElementById('a-note').value.trim(),
+        koalaPick: document.getElementById('a-koala').checked,
+      };
+
+      const lines = JSON.stringify(entry, null, 6)
+        .split('\n')
+        .map((l, i) => i === 0 ? '    ' + l : '    ' + l)
+        .join('\n');
+
+      document.getElementById('output').textContent = lines + ',';
+      document.getElementById('output-wrap').style.display = 'block';
+    }
+
+    function copyOutput() {
+      const text = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const status = document.getElementById('copy-status');
+        status.textContent = 'Copied.';
+        setTimeout(() => { status.textContent = ''; }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
