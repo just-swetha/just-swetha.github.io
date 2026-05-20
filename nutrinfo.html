@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nutrinfo · Case Study · Swetha Siva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a0f1e;
+    --navy-mid: #111827;
+    --navy-light: #1a2540;
+    --green: #3aaa66;
+    --green-light: #7de3b0;
+    --teal: #2dd4bf;
+    --text: #e8e4d9;
+    --text-dim: #8b9ab0;
+    --text-muted: #4a5568;
+    --border: rgba(58,170,102,0.22);
+    --border-dim: rgba(255,255,255,0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(10,15,30,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-dim);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  nav a { color: var(--text-dim); text-decoration: none; }
+  nav a:hover { color: var(--green); }
+  .nav-steps { display: flex; gap: 1.5rem; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, #0a1a0f 0%, #0a0f1e 60%, #0a1a12 100%);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(58,170,102,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(45,212,191,0.06) 0%, transparent 50%);
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em;
+    color: var(--green); text-transform: uppercase;
+    margin-bottom: 1.5rem; position: relative;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    line-height: 0.95;
+    color: var(--text);
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em { color: var(--green-light); font-style: italic; }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    position: relative; margin-bottom: 2rem;
+  }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    padding: 4px 10px; border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--text-dim); text-transform: uppercase;
+  }
+  .hero-desc {
+    max-width: 560px;
+    font-size: 1.1rem; color: var(--text-dim);
+    position: relative;
+    border-left: 2px solid var(--green);
+    padding-left: 1.25rem;
+  }
+
+  /* STAT STRIP */
+  .stat-strip {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    border-top: 1px solid var(--border-dim);
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .stat-item {
+    padding: 2rem 1.5rem;
+    border-right: 1px solid var(--border-dim);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem; color: var(--green);
+    display: block; line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--text-dim); text-transform: uppercase;
+  }
+
+  /* SECTIONS */
+  .section {
+    max-width: 960px; margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+  .section-header {
+    display: flex; align-items: baseline; gap: 1rem;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; color: var(--green);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 3px 8px; border: 1px solid var(--border);
+  }
+  .section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    color: var(--text); font-weight: 400;
+  }
+  .section h2 em { color: var(--green-light); font-style: italic; }
+  .prose {
+    font-size: 1rem; color: var(--text-dim);
+    line-height: 1.8; max-width: 680px;
+  }
+  .prose + .prose { margin-top: 1.25rem; }
+
+  /* CONSTRAINT CARD */
+  .constraint-card {
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; line-height: 1.7;
+    color: var(--text);
+  }
+  .constraint-card strong {
+    color: var(--green); display: block;
+    font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+
+  /* PULLQUOTE */
+  .pullquote {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    color: var(--text); font-weight: 400;
+    font-style: italic;
+    border-left: 3px solid var(--green-light);
+    padding: 1.5rem 2rem;
+    margin: 2.5rem 0;
+    background: rgba(58,170,102,0.05);
+    line-height: 1.5;
+  }
+
+  /* INSIGHT GRID */
+  .insight-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem; margin: 2rem 0;
+  }
+  .insight-card {
+    background: var(--navy-light);
+    border: 1px solid var(--border-dim);
+    padding: 1.5rem;
+  }
+  .insight-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--green); text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .insight-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+  /* FINDINGS GRID: research finding → feature */
+  .finding-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px; background: var(--border-dim);
+    border: 1px solid var(--border-dim);
+    margin: 2.5rem 0; overflow: hidden;
+  }
+  .finding-card {
+    background: var(--navy-mid);
+    padding: 1.75rem 1.5rem;
+  }
+  .finding-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em;
+    color: var(--green); text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .finding-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem; color: var(--text);
+    margin-bottom: 0.5rem; line-height: 1.3;
+  }
+  .finding-feature {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; color: var(--text-muted);
+    letter-spacing: 0.05em; margin-top: 0.75rem;
+    padding-top: 0.75rem; border-top: 1px solid var(--border-dim);
+  }
+  .finding-feature span { color: var(--green-light); }
+
+  /* SOURCE GRID */
+  .source-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem; margin: 2rem 0;
+  }
+  .source-card {
+    background: var(--navy-light);
+    border: 1px solid var(--border-dim);
+    padding: 1.25rem;
+  }
+  .source-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--green);
+    margin-bottom: 0.4rem;
+  }
+  .source-note { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+  /* DESIGN THINKING DIAGRAM */
+  .dt-section {
+    background: var(--navy-light);
+    border-top: 1px solid var(--border-dim);
+    border-bottom: 1px solid var(--border-dim);
+    padding: 3rem 2rem;
+  }
+  .dt-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--green); text-align: center; margin-bottom: 2rem;
+  }
+  .dt-inner { max-width: 900px; margin: 0 auto; }
+  .dt-inner svg { overflow: visible; display: block; width: 100%; }
+  .dt-hex-link { cursor: pointer; text-decoration: none; }
+  .dt-hex-link polygon { transition: filter 0.18s; }
+  .dt-hex-link:hover polygon { filter: brightness(1.22); }
+
+  /* SCREENSHOT GRID */
+  .screenshot-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border-dim);
+    border: 1px solid var(--border-dim);
+    margin: 2.5rem 0; overflow: hidden;
+  }
+  .screenshot-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+  .screenshot-item { position: relative; overflow: hidden; cursor: zoom-in; background: var(--navy-mid); }
+  .screenshot-item img { width: 100%; height: 220px; object-fit: cover; display: block; transition: transform 0.3s; }
+  .screenshot-item:hover img { transform: scale(1.04); }
+  .screenshot-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 0.5rem 0.75rem;
+    background: rgba(10,15,30,0.75);
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    color: var(--text-dim); letter-spacing: 0.06em;
+  }
+
+  /* LIGHTBOX */
+  #lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(10,15,30,0.95); z-index: 1000;
+    align-items: center; justify-content: center;
+    padding: 2rem; cursor: zoom-out;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img { max-width: 100%; max-height: 85vh; object-fit: contain; display: block; border: 1px solid var(--border); }
+
+  /* FIGMA EMBED */
+  .embed-block { margin: 2.5rem 0; border: 1px solid var(--border); }
+  .embed-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.6rem 1.25rem;
+    background: var(--navy-light);
+    border-bottom: 1px solid var(--border-dim);
+    font-family: 'DM Mono', monospace; font-size: 11px;
+  }
+  .embed-title { color: var(--green); letter-spacing: 0.08em; }
+  .embed-note { color: var(--text-muted); }
+  .figma-facade {
+    background: var(--navy-mid);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 380px; cursor: pointer; text-align: center; padding: 2rem; gap: 1rem;
+  }
+  .facade-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--text); }
+  .facade-btn {
+    background: none; border: 1px solid var(--green); color: var(--green);
+    font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.1em;
+    padding: 0.75rem 2rem; cursor: pointer; text-transform: uppercase;
+    transition: background 0.2s, color 0.2s;
+  }
+  .facade-btn:hover { background: var(--green); color: var(--navy); }
+  .facade-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 0.06em; }
+  .embed-footer {
+    padding: 0.6rem 1.25rem;
+    border-top: 1px solid var(--border-dim);
+    font-family: 'DM Mono', monospace; font-size: 11px;
+  }
+  .embed-footer a { color: var(--text-dim); text-decoration: none; letter-spacing: 0.06em; }
+  .embed-footer a:hover { color: var(--green); }
+
+  /* NEXT ITERATION */
+  .next-list {
+    list-style: none; margin: 1.5rem 0;
+  }
+  .next-list li {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: 14px; color: var(--text-dim);
+  }
+  .next-list li:last-child { border-bottom: none; }
+  .next-list li::before {
+    content: '→';
+    color: var(--teal); font-family: 'DM Mono', monospace;
+    flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* FOOTER NAV */
+  .footer-nav {
+    border-top: 1px solid var(--border-dim);
+    padding: 3rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    max-width: 960px; margin: 0 auto;
+  }
+  .footer-nav a {
+    color: var(--green); text-decoration: none;
+    letter-spacing: 0.08em;
+  }
+  .footer-nav a:hover { color: var(--green-light); }
+
+  .divider {
+    border: none; border-top: 1px solid var(--border-dim);
+    margin: 0;
+  }
+
+  /* SCROLL FADE IN */
+  .fade-in {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    nav .nav-steps { display: none; }
+    .screenshot-grid { grid-template-columns: repeat(2, 1fr); }
+    .screenshot-grid.two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="for-design.html">← Design Portfolio</a>
+  <div class="nav-steps">
+    <a href="#empathy">Empathize</a>
+    <a href="#define">Define</a>
+    <a href="#ideate">Ideate</a>
+    <a href="#prototype">Prototype</a>
+    <a href="#test">Test</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">▸ App UI Design · Case Study</div>
+  <h1>Nutr<em>info</em></h1>
+  <div class="hero-meta">
+    <span class="tag">Mobile App</span>
+    <span class="tag">UX Research</span>
+    <span class="tag">UI Design</span>
+    <span class="tag">EMDD 650 · 2026</span>
+  </div>
+  <p class="hero-desc">A mobile app helping graduate students make informed, affordable food choices. Grounded in five empathy interviews and built across two prototype rounds.</p>
+</section>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-item">
+    <span class="stat-num">5</span>
+    <span class="stat-label">Interviews</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">4</span>
+    <span class="stat-label">Key Findings</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">2</span>
+    <span class="stat-label">Prototype Rounds</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">4</span>
+    <span class="stat-label">Usability Testers</span>
+  </div>
+</div>
+
+<!-- DESIGN THINKING DIAGRAM -->
+<div class="dt-section">
+  <p class="dt-label">▸ Design Process</p>
+  <div class="dt-inner">
+    <svg viewBox="0 0 1000 200" aria-label="Design thinking process: Empathize, Define, Ideate, Prototype, Test">
+      <defs>
+        <marker id="ah" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 Z" fill="rgba(255,255,255,0.32)"/>
+        </marker>
+        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#3aaa66"/><stop offset="100%" stop-color="#2e9456"/>
+        </linearGradient>
+        <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#28a05e"/><stop offset="100%" stop-color="#1e8249"/>
+        </linearGradient>
+        <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1e8249"/><stop offset="100%" stop-color="#15663a"/>
+        </linearGradient>
+        <linearGradient id="g4" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#15663a"/><stop offset="100%" stop-color="#0d4a28"/>
+        </linearGradient>
+        <linearGradient id="g5" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0d4a28"/><stop offset="100%" stop-color="#051a0f"/>
+        </linearGradient>
+      </defs>
+      <!-- Arrows -->
+      <line x1="155" y1="100" x2="244" y2="100" stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#ah)"/>
+      <line x1="355" y1="100" x2="444" y2="100" stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#ah)"/>
+      <line x1="555" y1="100" x2="644" y2="100" stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#ah)"/>
+      <line x1="755" y1="100" x2="844" y2="100" stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#ah)"/>
+      <!-- Upper arcs -->
+      <path d="M 100,45 C 100,-20 500,-20 500,45" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" stroke-dasharray="5,5" marker-end="url(#ah)"/>
+      <path d="M 300,45 C 300,-30 900,-30 900,45" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" stroke-dasharray="5,5" marker-end="url(#ah)"/>
+      <!-- Lower arcs -->
+      <path d="M 300,155 C 300,218 700,218 700,155" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" stroke-dasharray="5,5" marker-end="url(#ah)"/>
+      <path d="M 500,155 C 500,228 900,228 900,155" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" stroke-dasharray="5,5" marker-end="url(#ah)"/>
+      <!-- Hex 1: Empathize -->
+      <a href="#empathy" class="dt-hex-link" aria-label="Empathize">
+        <polygon points="100,45 155,72.5 155,127.5 100,155 45,127.5 45,72.5" fill="url(#g1)"/>
+        <g transform="translate(100,100)" fill="white">
+          <path d="M0,10 C0,10 -16,1 -16,-6 C-16,-13 -11,-16 -6,-16 C-3,-16 0,-13 0,-13 C0,-13 3,-16 6,-16 C11,-16 16,-13 16,-6 C16,1 0,10 0,10Z"/>
+        </g>
+        <text x="100" y="175" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="1.2">EMPATHIZE</text>
+      </a>
+      <!-- Hex 2: Define -->
+      <a href="#define" class="dt-hex-link" aria-label="Define">
+        <polygon points="300,45 355,72.5 355,127.5 300,155 245,127.5 245,72.5" fill="url(#g2)"/>
+        <g transform="translate(300,100)" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="0" cy="0" r="12"/>
+          <circle cx="0" cy="0" r="4" fill="white" stroke="none"/>
+          <line x1="0" y1="-17" x2="0" y2="-13"/>
+          <line x1="0" y1="13" x2="0" y2="17"/>
+          <line x1="-17" y1="0" x2="-13" y2="0"/>
+          <line x1="13" y1="0" x2="17" y2="0"/>
+        </g>
+        <text x="300" y="175" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="1.2">DEFINE</text>
+      </a>
+      <!-- Hex 3: Ideate -->
+      <a href="#ideate" class="dt-hex-link" aria-label="Ideate">
+        <polygon points="500,45 555,72.5 555,127.5 500,155 445,127.5 445,72.5" fill="url(#g3)"/>
+        <g transform="translate(500,100)" fill="white">
+          <path d="M4,-17 L-9,3 H1 L-2,17 L13,-3 H3 Z"/>
+        </g>
+        <text x="500" y="175" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="1.2">IDEATE</text>
+      </a>
+      <!-- Hex 4: Prototype -->
+      <a href="#prototype" class="dt-hex-link" aria-label="Prototype">
+        <polygon points="700,45 755,72.5 755,127.5 700,155 645,127.5 645,72.5" fill="url(#g4)"/>
+        <g transform="translate(700,100)" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+          <rect x="-16" y="-12" width="32" height="20" rx="2"/>
+          <line x1="0" y1="8" x2="0" y2="14"/>
+          <line x1="-8" y1="14" x2="8" y2="14"/>
+        </g>
+        <text x="700" y="175" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="1.2">PROTOTYPE</text>
+      </a>
+      <!-- Hex 5: Test -->
+      <a href="#test" class="dt-hex-link" aria-label="Test">
+        <polygon points="900,45 955,72.5 955,127.5 900,155 845,127.5 845,72.5" fill="url(#g5)"/>
+        <g transform="translate(900,100)" fill="white">
+          <circle cx="-7" cy="-10" r="5"/>
+          <circle cx="7" cy="-10" r="5"/>
+          <path d="M-17,12 C-17,4 -12,0 -7,0 C-4,0 -1.5,1.5 0,3 C1.5,1.5 4,0 7,0 C12,0 17,4 17,12"/>
+        </g>
+        <text x="900" y="175" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="1.2">TEST</text>
+      </a>
+    </svg>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- EMPATHIZE -->
+<section class="section fade-in" id="empathy">
+  <div class="section-header">
+    <span class="step-num">Step 01</span>
+    <h2>A scanning app for India, or <em>was it?</em></h2>
+  </div>
+
+  <p class="prose">The project began with a specific observation: many Indian consumers, particularly Gen X, experience genuine anxiety confronted with chemical-sounding ingredient labels. The initial concept was a scanning app to decode those labels, with doctor-led commentary.</p>
+  <p class="prose">Five semi-structured interviews with Midwest graduate students changed everything. The participants: four international students, one domestic, ages 20 to 30. They were not primarily worried about ingredient literacy. They were worried about cost, speed, and cultural fit.</p>
+
+  <div class="source-grid">
+    <div class="source-card">
+      <div class="source-title">5 participants</div>
+      <div class="source-note">Four international, one domestic. Four Master's, one PhD. All enrolled at Midwest universities.</div>
+    </div>
+    <div class="source-card">
+      <div class="source-title">20-30 min sessions</div>
+      <div class="source-note">Semi-structured protocol covering personal definitions of "healthy," grocery habits, and financial constraints.</div>
+    </div>
+    <div class="source-card">
+      <div class="source-title">Core question</div>
+      <div class="source-note">What actually prevents graduate students from eating the way they want to?</div>
+    </div>
+    <div class="source-card">
+      <div class="source-title">The pivot</div>
+      <div class="source-note">From label literacy for Indian consumers to cost-conscious, culturally neutral food support for all grad students.</div>
+    </div>
+  </div>
+
+  <div class="pullquote">The problem was not "people don't understand what's in their food." It was: "people can't consistently afford or find food that fits their own definition of healthy."</div>
+</section>
+
+<hr class="divider">
+
+<!-- DEFINE -->
+<section class="section fade-in" id="define">
+  <div class="section-header">
+    <span class="step-num">Step 02</span>
+    <h2>Four findings that <em>rewrote the brief</em></h2>
+  </div>
+
+  <div class="constraint-card">
+    <strong>▸ Problem Statement</strong>
+    Graduate students, particularly international students adjusting to unfamiliar food systems, struggle to make informed, affordable, and culturally appropriate food choices because existing nutritional tools are too slow, too prescriptive, and too costly in their implied dietary standards.
+  </div>
+
+  <div class="finding-grid">
+    <div class="finding-card">
+      <div class="finding-num">Finding 01</div>
+      <div class="finding-title">"Healthy" is culturally constructed, not universal</div>
+      <div class="insight-text" style="font-size:12px;color:var(--text-dim);margin-top:0.4rem;line-height:1.5;">Each participant defined healthy differently. Organic certification, unprocessed ingredients, cultural familiarity: no single definition held.</div>
+      <div class="finding-feature">Feature: <span>Plain-language ingredient descriptions. No good/bad rating system.</span></div>
+    </div>
+    <div class="finding-card">
+      <div class="finding-num">Finding 02</div>
+      <div class="finding-title">Financial cost is the primary barrier</div>
+      <div class="insight-text" style="font-size:12px;color:var(--text-dim);margin-top:0.4rem;line-height:1.5;">Cost was a more urgent concern than nutritional knowledge across multiple participants.</div>
+      <div class="finding-feature">Feature: <span>Coupons page. Meal suggestions from saved ingredients.</span></div>
+    </div>
+    <div class="finding-card">
+      <div class="finding-num">Finding 03</div>
+      <div class="finding-title">Speed and low friction are non-negotiable</div>
+      <div class="insight-text" style="font-size:12px;color:var(--text-dim);margin-top:0.4rem;line-height:1.5;">Students use their phones in supermarket aisles, between classes, while cooking. A long onboarding leads to immediate abandonment.</div>
+      <div class="finding-feature">Feature: <span>"Use as Guest" access. Scan from the home screen, no account required.</span></div>
+    </div>
+    <div class="finding-card">
+      <div class="finding-num">Finding 04</div>
+      <div class="finding-title">Users want actionable outputs, not just facts</div>
+      <div class="insight-text" style="font-size:12px;color:var(--text-dim);margin-top:0.4rem;line-height:1.5;">Knowing what an ingredient is was not enough. Every piece of information needed to connect to a practical next step.</div>
+      <div class="finding-feature">Feature: <span>Save/Skip CTAs on results. Profile-driven meal suggestions. Coupon clipping.</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- IDEATE -->
+<section class="section fade-in" id="ideate">
+  <div class="section-header">
+    <span class="step-num">Step 03</span>
+    <h2>Storyboard first, <em>then sketch</em></h2>
+  </div>
+
+  <p class="prose">A six-panel storyboard traced the primary design scenario: Ravi, a composite persona from the research, standing in a supermarket uncertain about a product's ingredients. The storyboard confirmed the scan-first flow and surfaced an early question about guest users with no saved ingredients.</p>
+
+  <div class="screenshot-grid two-col">
+    <div class="screenshot-item" onclick="openLightbox('images/nutrinfo/image1.png')">
+      <img src="images/nutrinfo/image1.png" alt="Hand-drawn storyboard for the Nutrinfo design scenario">
+      <span class="screenshot-caption">Storyboard: Ravi at the supermarket</span>
+    </div>
+    <div class="screenshot-item" style="cursor:default;">
+      <div style="padding:2rem;height:220px;display:flex;flex-direction:column;justify-content:center;gap:1.2rem;">
+        <div>
+          <div class="insight-label" style="margin-bottom:0.4rem;">Describe, do not prescribe</div>
+          <div class="insight-text">Present ingredient facts neutrally. Let users apply their own health frameworks.</div>
+        </div>
+        <div>
+          <div class="insight-label" style="margin-bottom:0.4rem;">Reduce friction at every touchpoint</div>
+          <div class="insight-text">Guest access. One-tap scanning. Persistent bottom navigation throughout.</div>
+        </div>
+        <div>
+          <div class="insight-label" style="margin-bottom:0.4rem;">Connect information to action</div>
+          <div class="insight-text">Every ingredient explanation, saved item, and coupon leads the user to a practical next step.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROTOTYPE -->
+<section class="section fade-in" id="prototype">
+  <div class="section-header">
+    <span class="step-num">Step 04</span>
+    <h2>Paper to <em>pixels</em></h2>
+  </div>
+
+  <p class="prose">Round one: hand-drawn wireframes testing information architecture and navigation flow. Eight primary screens covering the full core user journey. Round two: a mid-fidelity Figma prototype with a complete visual identity: deep forest green, clean typography, photographic imagery throughout.</p>
+
+  <div class="screenshot-grid">
+    <div class="screenshot-item" onclick="openLightbox('images/nutrinfo/image2.png')">
+      <img src="images/nutrinfo/image2.png" alt="Paper prototype: Login screen">
+      <span class="screenshot-caption">Login screen: equal-weight "Use as Guest"</span>
+    </div>
+    <div class="screenshot-item" onclick="openLightbox('images/nutrinfo/image6.png')">
+      <img src="images/nutrinfo/image6.png" alt="Paper prototype: Ingredient Lookup screen">
+      <span class="screenshot-caption">Ingredient Lookup with scan CTA</span>
+    </div>
+    <div class="screenshot-item" onclick="openLightbox('images/nutrinfo/image10.png')">
+      <img src="images/nutrinfo/image10.png" alt="Paper prototype: Ingredient result screen">
+      <span class="screenshot-caption">Ingredient result: Save / Skip CTAs</span>
+    </div>
+    <div class="screenshot-item" onclick="openLightbox('images/nutrinfo/image12.png')">
+      <img src="images/nutrinfo/image12.png" alt="Paper prototype: Profile screen">
+      <span class="screenshot-caption">Profile: saved ingredients and meal suggestions</span>
+    </div>
+    <div class="screenshot-item" onclick="openLightbox('images/nutrinfo/image13.png')">
+      <img src="images/nutrinfo/image13.png" alt="Paper prototype: Coupons screen">
+      <span class="screenshot-caption">Coupons with retailer-specific deals</span>
+    </div>
+    <div class="screenshot-item" onclick="openLightbox('images/nutrinfo/image14.png')">
+      <img src="images/nutrinfo/image14.png" alt="Paper prototype: Recipe detail screen">
+      <span class="screenshot-caption">Recipe detail: checkbox ingredient list</span>
+    </div>
+  </div>
+
+  <div class="embed-block">
+    <div class="embed-header">
+      <span class="embed-title">▸ Mid-Fidelity Prototype</span>
+      <span class="embed-note">Figma · interactive</span>
+    </div>
+    <div class="figma-facade" id="figma-facade" onclick="loadFigma()">
+      <p class="facade-title">Nutrinfo · Mid-Fidelity Prototype</p>
+      <button class="facade-btn">▶ &nbsp;Click to load prototype</button>
+      <p class="facade-note">Opens the Figma embed in this frame.</p>
+    </div>
+    <div class="embed-footer"><a href="https://www.figma.com/design/NVXJkByqJkFWMGrgRv9ReW/Mid-Fidelity-Prototype?node-id=0-1&t=AbN9eioY03yL5nOz-1" target="_blank" rel="noopener">Open in Figma ↗</a></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TEST -->
+<section class="section fade-in" id="test">
+  <div class="section-header">
+    <span class="step-num">Step 05</span>
+    <h2>What four testers <em>actually did</em></h2>
+  </div>
+
+  <p class="prose">Four graduate students (two American, two international, ages 23 to 27) completed two scenario-based tasks using a think-aloud protocol. The core flow held. But four patterns emerged that required structural changes.</p>
+
+  <div class="insight-grid">
+    <div class="insight-card">
+      <div class="insight-label">High priority</div>
+      <div class="insight-text">Scan feature overlooked. Users scrolled the homepage looking for more content rather than scanning immediately.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-label">High priority</div>
+      <div class="insight-text">Coupons not findable in bottom nav. Hidden inside the hamburger menu, both domestic and international participants missed it entirely.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-label">Medium priority</div>
+      <div class="insight-text">Terminology confusion: "Favorites" vs. "Added" created uncertainty about what was saved and where to find it.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-label">Medium priority</div>
+      <div class="insight-text">Meal suggestions appeared generic. Users did not know they were generated from their saved ingredients.</div>
+    </div>
+  </div>
+
+  <div class="pullquote">The core flow was sound. What testers needed was better signposting: where to start, where to find things, and why a suggestion was surfaced for them specifically.</div>
+
+  <ul class="next-list">
+    <li>Add three onboarding splash screens foregrounding the scan feature and communicating the app's three value propositions before the login screen</li>
+    <li>Move Coupons into the bottom navigation bar as the highest-priority structural change</li>
+    <li>Standardise terminology to "Saved Ingredients" throughout the app</li>
+    <li>Add a contextual label to the Meal Suggestions section: "Based on your saved ingredients"</li>
+    <li>Fix safe-area insets causing design cutoff on mobile screens</li>
+  </ul>
+</section>
+
+<hr class="divider">
+
+<div class="footer-nav">
+  <span>© Swetha Siva 2026 · Nutrinfo</span>
+  <div style="display:flex;gap:2rem;">
+    <a href="sort-it-out.html">Sort It Out →</a>
+    <a href="for-design.html">← Design Portfolio</a>
+  </div>
+</div>
+
+<div id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  function loadFigma() {
+    const facade = document.getElementById('figma-facade');
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FNVXJkByqJkFWMGrgRv9ReW%2FMid-Fidelity-Prototype%3Fnode-id%3D0-1%26t%3DAbN9eioY03yL5nOz-1';
+    iframe.allowFullscreen = true;
+    iframe.frameBorder = '0';
+    iframe.style.cssText = 'width:100%;height:580px;display:block;border:none;';
+    facade.replaceWith(iframe);
+  }
+</script>
+
+</body>
+</html>
