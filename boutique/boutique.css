@@ -132,9 +132,16 @@ button {
 
 /* ---- Home view ---- */
 
+.home-hero-wrap {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  padding: 4rem 0 2.5rem;
+}
+
 .home-hero {
-  padding: 4rem 0 3rem;
-  max-width: 580px;
+  flex: 1;
+  min-width: 0;
 }
 
 .home-hero h1 {
@@ -871,14 +878,25 @@ button {
 }
 
 .hero-illustration {
-  padding: 1.5rem 0 0.5rem;
+  flex: 0 0 auto;
 }
 
 .welcome-cats {
-  width: 100%;
-  max-width: 560px;
+  width: 400px;
+  max-width: 100%;
   height: auto;
   display: block;
+}
+
+@media (max-width: 720px) {
+  .home-hero-wrap {
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 1.5rem;
+  }
+  .welcome-cats {
+    width: 100%;
+  }
 }
 
 .footer-text {

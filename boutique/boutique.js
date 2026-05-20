@@ -101,16 +101,18 @@ function buildHome() {
   }).join('');
 
   return `
-    <div class="home-hero">
-      <h1>The Purrfect Boutique</h1>
-      <p class="home-tagline">Curated by a koal for a cat of impeccable taste.</p>
-      <div class="home-intro">
-        <p>Welcome in. The koal has been busy: combing through rails, holding things up to the light, putting things back, picking them up again. Everything here was chosen with cat cat specifically in mind.</p>
-        <p>Browse at your leisure. Tap the heart on anything you'd like, and send your picks when you're ready. The rest is a surprise. 🐾</p>
+    <div class="home-hero-wrap">
+      <div class="home-hero">
+        <h1>The Purrfect Boutique</h1>
+        <p class="home-tagline">Curated by a koal for a cat of impeccable taste.</p>
+        <div class="home-intro">
+          <p>Welcome in. The koal has been busy: combing through rails, holding things up to the light, putting things back, picking them up again. Everything here was chosen with cat cat specifically in mind.</p>
+          <p>Browse at your leisure. Tap the heart on anything you'd like, and send your picks when you're ready. The rest is a surprise. 🐾</p>
+        </div>
       </div>
-    </div>
-    <div class="hero-illustration" aria-hidden="true">
-      <img src="../images/welcome-cats.svg" alt="" class="welcome-cats">
+      <div class="hero-illustration" aria-hidden="true">
+        <img src="../images/welcome-cats.svg" alt="" class="welcome-cats">
+      </div>
     </div>
     <div class="category-grid">${tiles}</div>
   `;
