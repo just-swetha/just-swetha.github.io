@@ -253,6 +253,23 @@
     .carousel .video-frame video { width: 100%; height: auto; display: block; }
     .carousel .video-frame--short { width: auto; max-width: none; }
     .carousel .video-frame--short video { height: min(440px, 68vh); width: auto; display: block; }
+    .carousel-prev, .carousel-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      z-index: 5; background: none; border: none; cursor: pointer;
+      font-size: 0.85rem; font-weight: 700; padding: 0.5rem 0.65rem;
+      line-height: 1; transition: opacity 0.2s, color 0.2s;
+    }
+    .carousel-prev { left: 0.6rem; }
+    .carousel-next { right: 0.6rem; }
+    .carousel[data-theme="dark"] .carousel-prev,
+    .carousel[data-theme="dark"] .carousel-next { color: rgba(255,255,255,0.45); }
+    .carousel[data-theme="dark"] .carousel-prev:hover,
+    .carousel[data-theme="dark"] .carousel-next:hover { color: #fff; }
+    .carousel[data-theme="light"] .carousel-prev,
+    .carousel[data-theme="light"] .carousel-next { color: rgba(9,23,64,0.35); }
+    .carousel[data-theme="light"] .carousel-prev:hover,
+    .carousel[data-theme="light"] .carousel-next:hover { color: var(--navy); }
+    .carousel-prev.hidden, .carousel-next.hidden { opacity: 0; pointer-events: none; }
 
     /* ABOUT */
     .about-me { background: var(--offwhite); padding: 6rem 5%; border-top: 1px solid rgba(9,23,64,0.08); }
@@ -306,7 +323,7 @@
     <div class="hero-left">
       <p class="hero-eyebrow">Communications Portfolio</p>
       <h1 class="hero-name">Swetha<br><em>Siva</em></h1>
-      <p class="hero-tagline">Content strategy that works like a unified story—consistent video, graphic design, editorial pieces, and interactive work that create tailored entry points for each target audience.</p>
+      <p class="hero-tagline">My content strategy is designed as a narrative. I weave videos, graphics, articles, and interactive pieces together into a larger narrative, and the pieces act as entry points targetting different kinds of users.</p>
       <p class="hero-scroll">↓ Scroll to explore</p>
     </div>
     <div class="hero-right">
@@ -345,7 +362,7 @@
     </div>
     <div class="sp-content">
       <p class="sp-eyebrow">Communications Strategy</p>
-      <p class="sp-text">Not every audience reads. Not every message lands the same way. Not every idea fits in a caption. A communications strategy earns attention by finding each audience where they already are. Each format in this campaign was chosen for a specific person and a specific moment in their day.</p>
+      <p class="sp-text">As a storyteller who understands transmedia principles, I know how stories can be shaped for different platforms, genres, and places. Using tools like empathy research, user profiles, journey mapping and co-creation sessions, I make persuasive material that goes beyond conveying information, and invites stakeholders to participate in an organization's stories.</p>
       <div class="sp-formats">
         <a href="#video" class="sp-tile">
           <span class="sp-tile-label">Video</span>
@@ -835,6 +852,40 @@
       .ic-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 3rem; flex-wrap: wrap; }
       .ic-link { display: inline-block; background: #005f5f; color: white; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; padding: 1rem 2rem; white-space: nowrap; transition: background 0.2s, transform 0.2s; text-decoration: none; }
       .ic-link:hover { background: var(--pink); transform: translateY(-2px); }
+
+      /* Newsletter scroll annotation zone */
+      .nl-scroll-zone { position: relative; height: 260vh; }
+      .nl-sticky-stage {
+        position: sticky; top: 0; height: 100vh;
+        background: #091740;
+        display: flex; align-items: center; justify-content: center;
+        overflow: hidden;
+      }
+      .nl-laptop-wrap { position: relative; width: 100%; padding: 2rem 2rem 3.5rem; display: flex; flex-direction: column; align-items: center; }
+      .nl-annotation {
+        position: absolute; z-index: 20;
+        display: flex; align-items: center;
+        opacity: 0; pointer-events: none;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+      .nl-annotation.nl-ann-right { flex-direction: row; left: calc(50% + 440px); transform: translateX(16px); }
+      .nl-annotation.nl-ann-left  { flex-direction: row-reverse; right: calc(50% + 440px); transform: translateX(-16px); }
+      .nl-annotation.visible { opacity: 1; transform: translateX(0); pointer-events: auto; }
+      .nl-ann-dot  { width: 8px; height: 8px; border-radius: 50%; background: var(--pink); flex-shrink: 0; }
+      .nl-ann-line { width: 36px; height: 1px; border-top: 1.5px dashed var(--pink); flex-shrink: 0; }
+      .nl-ann-pill {
+        background: var(--offwhite); border: 1.5px dashed rgba(191,4,126,0.35);
+        padding: 10px 14px; width: 210px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+      }
+      .nl-ann-num   { font-family: 'Hind Madurai', sans-serif; font-size: 0.6rem; font-weight: 700; color: var(--pink); letter-spacing: 0.15em; display: block; margin-bottom: 3px; }
+      .nl-ann-title { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--navy); margin: 0 0 5px; }
+      .nl-ann-text  { font-size: 0.67rem; line-height: 1.55; color: rgba(9,23,64,0.65); margin: 0; }
+      @media (max-width: 1100px) {
+        .nl-scroll-zone { height: auto; }
+        .nl-sticky-stage { position: relative; height: auto; overflow: visible; }
+        .nl-annotation { display: none; }
+      }
     </style>
 
         <!-- LIGHTBOX -->
@@ -866,13 +917,33 @@
       document.querySelectorAll('.carousel').forEach(function(carousel) {
         var track = carousel.querySelector('.carousel-track');
         var dots  = carousel.querySelectorAll('.carousel-dot');
-        dots.forEach(function(dot, i) {
-          dot.addEventListener('click', function() {
-            track.querySelectorAll('video').forEach(function(v) { v.pause(); });
-            track.style.transform = 'translateX(-' + (100 * i) + '%)';
-            dots.forEach(function(d, j) { d.classList.toggle('active', j === i); });
-          });
-        });
+        var total = dots.length;
+        var current = 0;
+
+        var prev = document.createElement('button');
+        prev.className = 'carousel-prev hidden';
+        prev.setAttribute('aria-label', 'Previous slide');
+        prev.textContent = '<';
+        var next = document.createElement('button');
+        next.className = 'carousel-next';
+        next.setAttribute('aria-label', 'Next slide');
+        next.textContent = '>';
+        if (total <= 1) next.classList.add('hidden');
+        carousel.appendChild(prev);
+        carousel.appendChild(next);
+
+        function goTo(i) {
+          track.querySelectorAll('video').forEach(function(v) { v.pause(); });
+          current = i;
+          track.style.transform = 'translateX(-' + (100 * current) + '%)';
+          dots.forEach(function(d, j) { d.classList.toggle('active', j === current); });
+          prev.classList.toggle('hidden', current === 0);
+          next.classList.toggle('hidden', current === total - 1);
+        }
+
+        dots.forEach(function(dot, i) { dot.addEventListener('click', function() { goTo(i); }); });
+        prev.addEventListener('click', function() { if (current > 0) goTo(current - 1); });
+        next.addEventListener('click', function() { if (current < total - 1) goTo(current + 1); });
       });
     </script>
 
