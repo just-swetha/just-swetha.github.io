@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Swetha Siva — Writing</title>
+  <title>Swetha Siva: Writing</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@700&family=Poppins:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
@@ -53,10 +53,10 @@
     }
     .nav-links a:hover,
     .nav-links a.nav-current { color: var(--pink); border-bottom-color: var(--pink); }
-    .nav-has-dropdown { position: relative; display: flex; align-items: center; }
+    .nav-has-dropdown { position: relative; display: flex; align-items: center; align-self: stretch; }
     .nav-has-dropdown > a::after { content: ' ▾'; font-size: 0.6em; opacity: 0.5; }
-    .nav-dropdown { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: rgba(247,244,240,0.98); backdrop-filter: blur(12px); border: 1px dashed rgba(9,23,64,0.15); padding: 0.75rem 0 0.5rem; min-width: 190px; list-style: none; z-index: 200; }
-    .nav-dropdown::before { content: ''; position: absolute; top: -12px; left: 0; right: 0; height: 12px; }
+    .nav-dropdown { display: none; position: absolute; top: calc(100% + 2px); left: 50%; transform: translateX(-50%); background: rgba(247,244,240,0.98); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px dashed rgba(9,23,64,0.15); padding: 0.75rem 0 0.5rem; min-width: 190px; list-style: none; z-index: 200; }
+    .nav-dropdown::before { content: ''; position: absolute; top: -14px; left: 0; right: 0; height: 14px; }
     .nav-dropdown li a { display: block; padding: 0.6rem 1.25rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(9,23,64,0.6); border: none !important; transition: color 0.15s, background 0.15s; }
     .nav-dropdown li a:hover { color: var(--pink); background: rgba(191,4,126,0.04); }
     .nav-has-dropdown.open .nav-dropdown { display: block; }
@@ -453,10 +453,6 @@
     <div class="hero-content">
       <p class="hero-eyebrow">Writing</p>
       <h1 class="hero-title">Stories that sit<br>at the <em>edge</em> of<br>the possible.</h1>
-      <div class="hero-bio">
-        <p>Swetha Siva is a fiction writer and poet whose work moves between speculative and literary modes — rooted in South Asian landscapes, queer longing, and the systems that shape who gets to tell their story.</p>
-        <p>She holds an MFA in Creative Writing (Fiction) from the University of Miami and has taught creative writing at the university level. Her fiction and poetry have appeared in publications including <em>It Gets Even Better: Stories of Queer Possibility</em>, <em>Out of Print</em>, <em>Dust Poetry</em>, and <em>Particle</em> magazine.</p>
-      </div>
       <p class="hero-scroll">↓ Scroll to explore</p>
     </div>
   </header>
@@ -474,8 +470,8 @@
         <h2 class="book-title">Goldspun</h2>
         <p class="book-publisher">Meraki Press</p>
         <div class="book-desc">
-          <p>Every story started with a prayer to the gods — except mine. In fact, a peasant's story wasn't written at all. But I was going to change that.</p>
-          <p>A peasant girl born into a world that denies her the right to read or write finds an unlikely ally in Aavirai, a scholar who defies the royal family to give her the one thing that could change everything: the Golden Kurinji flower. As the royal family hunts them across the kingdom, the two must complete an impossible task or lose their lives — and everything they've fought for.</p>
+          <p>Every story started with a prayer to the gods, except mine. In fact, a peasant's story wasn't written at all. But I was going to change that.</p>
+          <p>A peasant girl born into a world that denies her the right to read or write finds an unlikely ally in Aavirai, a scholar who defies the royal family to give her the one thing that could change everything: the Golden Kurinji flower. As the royal family hunts them across the kingdom, the two must complete an impossible task or lose their lives, and everything they've fought for.</p>
           <p>A story about who gets to be a scholar, who gets to hold power, and what it costs to defy the order you were born into.</p>
         </div>
         <a href="https://merakipresspub.wixsite.com/merakipress/online-store/Goldspun-by-Swetha-S-p464877011" target="_blank" rel="noopener" class="book-link">Buy the book ↗</a>
@@ -487,7 +483,7 @@
       <span class="wip-tag">Novel in progress</span>
       <h3 class="wip-title">Leave Now and Return Tomorrow</h3>
       <div class="wip-desc">
-        <p>A literary speculative novel set in Then Madurai, a fantastical Tamil city suspended between past and future. The story follows Veera through a choose-your-own-adventure structure — branching paths, contested histories, and a city that remembers differently depending on who you ask.</p>
+        <p>A literary speculative novel set in Then Madurai, a fantastical Tamil city suspended between past and future. The story follows Veera through a choose-your-own-adventure structure: branching paths, contested histories, and a city that remembers differently depending on who you ask.</p>
         <p>Completed at 91,000 words. Currently in revision.</p>
       </div>
     </div>
@@ -501,7 +497,7 @@
       <div class="pub-item">
         <div>
           <p class="pub-title"><a href="https://speculativelyqueer.com/our-books/it-gets-even-better-stories-of-queer-possibility/">unchartered territories</a></p>
-          <p class="pub-venue">It Gets Even Better: Stories of Queer Possibility — Speculatively Queer</p>
+          <p class="pub-venue">It Gets Even Better: Stories of Queer Possibility, Speculatively Queer</p>
         </div>
         <span class="pub-year">2022</span>
       </div>
@@ -550,13 +546,13 @@
     <div class="teaching-grid">
       <div class="teaching-block">
         <p class="teaching-inst">University of Miami</p>
-        <h3 class="teaching-course">ENG 209 — Speculative Creative Writing</h3>
-        <p class="teaching-desc">An undergraduate creative writing course exploring speculative modes — science fiction, fantasy, horror, and the uncanny — as tools for writing about the present. Students read across a range of speculative traditions and developed original work through guided critique.</p>
+        <h3 class="teaching-course">ENG 209: Speculative Creative Writing</h3>
+        <p class="teaching-desc">An undergraduate creative writing course exploring speculative modes (science fiction, fantasy, horror, and the uncanny) as tools for writing about the present. Students read across a range of speculative traditions and developed original work through guided critique.</p>
         <p class="teaching-date">2022 – 2025</p>
       </div>
       <div class="teaching-block">
         <p class="teaching-inst">University of Miami</p>
-        <h3 class="teaching-course">ENG 290 — Beginning Fiction Workshop</h3>
+        <h3 class="teaching-course">ENG 290: Beginning Fiction Workshop</h3>
         <p class="teaching-desc">An introductory fiction workshop grounded in close reading and Socratic discussion. Students developed short fiction across multiple drafts, with emphasis on building community in the classroom and learning to give and receive substantive feedback.</p>
         <p class="teaching-date">2022 – 2025</p>
       </div>
@@ -569,14 +565,13 @@
       <div class="about-text">
         <p class="about-eyebrow">About</p>
         <div class="about-bio">
-          <p>Swetha Siva is a fiction writer and poet whose work moves between speculative and literary modes — rooted in South Asian landscapes, queer longing, and the systems that shape who gets to tell their story.</p>
-          <p>She holds an MFA in Creative Writing (Fiction) from the University of Miami, where she taught speculative fiction and beginning fiction workshops. Her work appears in publications including <em>It Gets Even Better: Stories of Queer Possibility</em>, <em>Dust Poetry</em>, <em>Out of Print</em>, and <em>Particle</em> magazine. Her novel <em>Goldspun</em> was published by Meraki Press.</p>
+          <p>Swetha S. is a native of Coimbatore, a small city in India. They have a BA in English with Creative Writing from Malaysia and an MFA from the US, where they currently live. Her work appears in publications including <em>It Gets Even Better: Stories of Queer Possibility</em>, <em>Dust Poetry</em>, <em>Out of Print</em>, and <em>Particle</em> magazine. Her novel <em>Goldspun</em> was published by Meraki Press. She is currently working on an interactive novel exploring the fluidity of queerness.</p>
         </div>
       </div>
       <div class="about-credentials">
         <ul class="about-cred-list">
           <li>
-            <span class="cred-degree">MFA, Creative Writing — Fiction</span>
+            <span class="cred-degree">MFA, Creative Writing: Fiction</span>
             <span class="cred-school">University of Miami · 2025</span>
           </li>
           <li>
@@ -616,7 +611,7 @@
     document.querySelectorAll('.nav-has-dropdown').forEach(el => {
       let t;
       el.addEventListener('mouseenter', () => { clearTimeout(t); el.classList.add('open'); });
-      el.addEventListener('mouseleave', () => { t = setTimeout(() => el.classList.remove('open'), 200); });
+      el.addEventListener('mouseleave', () => { t = setTimeout(() => el.classList.remove('open'), 350); });
     });
   </script>
 
