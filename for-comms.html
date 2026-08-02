@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Communications portfolio of Swetha Siva — content strategy, newsletter design, social media, video, and editorial work for Ball State University Sponsored Projects Administration." />
   <title>Swetha Siva — Communications Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,10 +37,10 @@
     .nav-links a { font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy); padding-bottom: 2px; border-bottom: 2px solid transparent; transition: border-color 0.2s, color 0.2s; }
     .nav-links a:hover,
     .nav-links a.nav-current { color: var(--pink); border-bottom-color: var(--pink); }
-    .nav-has-dropdown { position: relative; display: flex; align-items: center; }
+    .nav-has-dropdown { position: relative; display: flex; align-items: center; align-self: stretch; }
     .nav-has-dropdown > a::after { content: ' ▾'; font-size: 0.6em; opacity: 0.5; }
-    .nav-dropdown { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: rgba(247,244,240,0.98); backdrop-filter: blur(12px); border: 1px dashed rgba(9,23,64,0.15); padding: 0.75rem 0 0.5rem; min-width: 190px; list-style: none; z-index: 200; }
-    .nav-dropdown::before { content: ''; position: absolute; top: -12px; left: 0; right: 0; height: 12px; }
+    .nav-dropdown { display: none; position: absolute; top: calc(100% + 2px); left: 50%; transform: translateX(-50%); background: rgba(247,244,240,0.98); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px dashed rgba(9,23,64,0.15); padding: 0.75rem 0 0.5rem; min-width: 190px; list-style: none; z-index: 200; }
+    .nav-dropdown::before { content: ''; position: absolute; top: -14px; left: 0; right: 0; height: 14px; }
     .nav-dropdown li a { display: block; padding: 0.6rem 1.25rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(9,23,64,0.6); border: none !important; transition: color 0.15s, background 0.15s; }
     .nav-dropdown li a:hover { color: var(--pink); background: rgba(191,4,126,0.04); }
     .nav-has-dropdown.open .nav-dropdown { display: block; }
@@ -47,7 +49,7 @@
 
     /* HERO */
     .hero {
-      min-height: 100vh;
+      min-height: 100vh; min-height: 100svh;
       display: grid;
       grid-template-columns: 1fr 1fr;
       overflow: hidden;
@@ -286,8 +288,13 @@
     .honor-name { font-size: 0.875rem; font-weight: 700; color: var(--navy); line-height: 1.3; }
     .honor-meta { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--navy); opacity: 0.45; }
 
+    @media (max-width: 1024px) {
+      .about-inner { gap: 3rem; }
+    }
+
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.25rem; }
       .hero { grid-template-columns: 1fr; }
       .hero-left { padding: 7rem 2rem 3rem; }
       .hero-right { min-height: 40vh; }
@@ -296,8 +303,19 @@
       .projects { padding: 0 2% 4rem; }
       .card-visual, .card-visual-grid, .card-visual-duo { grid-column: 1/7 !important; grid-row: 1 !important; min-height: 220px; }
       .card-body { grid-column: 1/7 !important; grid-row: 2 !important; padding: 2rem !important; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .ic-inner { flex-direction: column; align-items: flex-start; }
+      .sp-tile { min-width: 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
       footer { grid-template-columns: 1fr; padding: 3rem 2rem; gap: 2rem; }
       .footer-copy { grid-column: 1; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0.9rem 1rem; }
+      .nav-home { font-size: 0.95rem; }
+      .nav-links { gap: 0.9rem; }
+      .nav-links a { font-size: 0.78rem; }
+      .sp-tile { min-width: 100%; }
     }
   </style>
 </head>
@@ -945,6 +963,16 @@
         dots.forEach(function(dot, i) { dot.addEventListener('click', function() { goTo(i); }); });
         prev.addEventListener('click', function() { if (current > 0) goTo(current - 1); });
         next.addEventListener('click', function() { if (current < total - 1) goTo(current + 1); });
+
+        var touchStartX = 0;
+        carousel.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+        carousel.addEventListener('touchend', function(e) {
+          var dx = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(dx) > 40) {
+            if (dx < 0 && current < total - 1) goTo(current + 1);
+            if (dx > 0 && current > 0) goTo(current - 1);
+          }
+        }, { passive: true });
       });
     </script>
 
@@ -970,7 +998,7 @@
     <div class="about-inner">
       <div class="about-text">
         <p class="about-eyebrow">About</p>
-        <p class="about-bio">I'm a communication strategist and multimedia designer working at the intersection of story, research, and emerging media. Currently pursuing an MA in Emerging Media Design and Development at Ball State University, I develop outreach and communication strategy for Sponsored Projects Administration while building interactive narratives, visual novels, and transmedia experiences. My background in fiction writing and narrative design shapes how I approach every medium. I bring skills across platforms and formats to meet audiences where they are. I'm a published author, an interactive experience designer, and someone who believes transmedia storytelling isn't just a craft — it's a strategy.</p>
+        <p class="about-bio">I'm a communication strategist and multimedia designer working at the intersection of story, research, and emerging media. Currently pursuing an MA in Emerging Media Design and Development at Ball State University, I develop outreach and communication strategy for Sponsored Projects Administration while building interactive narratives, visual novels, and transmedia experiences. My background in fiction writing and narrative design shapes how I approach every medium. I bring skills across platforms and formats to meet audiences where they are.</p>
       </div>
       <div class="about-credentials">
         <ul class="about-cred-list">
@@ -1014,7 +1042,7 @@
   <footer id="contact">
     <div class="footer-left">
       <h2>Let's<br><em>work</em><br>together.</h2>
-      <p>I'm currently open to communications, outreach, and editorial opportunities. Get in touch — I'd love to hear about your work.</p>
+      <p>I'm currently open to communications, outreach, and editorial opportunities. Get in touch. I'd love to hear about your work.</p>
     </div>
     <div class="footer-right">
       <a href="https://www.linkedin.com/in/swetha-siva" class="footer-link" target="_blank"><span class="footer-link-arrow"></span>LinkedIn</a>
@@ -1027,7 +1055,7 @@
     document.querySelectorAll('.nav-has-dropdown').forEach(el => {
       let t;
       el.addEventListener('mouseenter', () => { clearTimeout(t); el.classList.add('open'); });
-      el.addEventListener('mouseleave', () => { t = setTimeout(() => el.classList.remove('open'), 200); });
+      el.addEventListener('mouseleave', () => { t = setTimeout(() => el.classList.remove('open'), 350); });
     });
   </script>
 
